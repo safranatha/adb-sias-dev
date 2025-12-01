@@ -1,4 +1,5 @@
 <?php
+use App\Livewire\UserManagement\Index;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -48,7 +49,23 @@ Route::middleware(['auth'])->group(function () {
         ->name('two-factor.show');
 });
 
+// user management
+Route::get('/user-management', Index::class)->middleware(['auth', 'role:Super Admin'])->name('user-management.index');
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ⚠️⚠️🔴🔴FORTIFY AUTH DO NOT CHANGE ⚠️⚠️🔴🔴
 Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
     $enableViews = config('fortify.views', true);
 
@@ -94,7 +111,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
             ->name('password.update');
     }
 
-    // Registration...
+    // Registration (HANYA ROLE SUPER ADMIN YANG BISA AKSES)
     if (Features::enabled(Features::registration())) {
         if ($enableViews) {
             Route::get(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'create'])

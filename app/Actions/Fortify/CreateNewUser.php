@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Spatie\Permission\Models\Role;
+
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -18,6 +20,7 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
+        // dd($input);
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
@@ -28,12 +31,23 @@ class CreateNewUser implements CreatesNewUsers
                 Rule::unique(User::class),
             ],
             'password' => $this->passwordRules(),
+            'role' => ['required', 'string', Rule::exists('roles', 'name')],
+            'permissions' => ['array'],
+            'permissions.*' => ['string', Rule::exists('permissions', 'name')],
+
         ])->validate();
 
-        return User::create([
+        $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => $input['password'],
         ]);
+
+        $user->assignRole($input['role']);
+
+        $user->givePermissionTo($input['permissions']);
+
+
+        return $user;
     }
 }

@@ -8,12 +8,18 @@
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
             <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
-                <x-app-logo />
+                {{-- <x-app-logo /> --}}
+                Dashboard Adibanuwa
             </a>
 
-            <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Platform')" class="grid">
+            <flux:navlist variant="outline" class="mt-5">
+                <flux:navlist.group class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                </flux:navlist.group>
+            </flux:navlist>
+            <flux:navlist variant="outline">
+                <flux:navlist.group class="grid">
+                    <flux:navlist.item icon="user-group" :href="route('user-management.index')" :current="request()->routeIs('user-management.index')" wire:navigate>{{ __('User Management') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 
