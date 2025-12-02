@@ -47,7 +47,84 @@
                             </td>
 
                             <td class="px-4 py-3">
-                                <flux:button icon="pencil"></flux:button>
+                                {{-- modal trigger --}}
+                                <flux:modal.trigger name="edit-user-{{ $user->id }}">
+                                    {{-- button edit --}}
+                                    <flux:button icon="pencil" class="mr-2" wire:click="edit({{ $user->id }})"></flux:button>
+
+                                </flux:modal.trigger>
+
+                                {{-- modal form --}}
+                                <flux:modal name="edit-user-{{ $user->id }}" class="max-w-2xl">
+                                    <form wire:submit.prevent="update">
+                                        <flux:heading size="lg">Edit User</flux:heading>
+                                        {{-- Name Field --}}
+                                        <flux:field>
+                                            <flux:label>Name</flux:label>
+                                            <flux:input wire:model="name" placeholder="Enter user name" />
+                                        </flux:field>
+
+
+                                        {{-- Email Field --}}
+                                        <flux:field>
+                                            <flux:label class="mt-3">Email</flux:label>
+                                            <flux:input type="email" wire:model="email"
+                                                placeholder="Enter user email" />
+                                        </flux:field>
+
+                                        {{-- Password Field --}}
+                                        <flux:field>
+                                            <flux:label class="mt-3">Password</flux:label>
+                                            <flux:input type="password" wire:model="password"
+                                                placeholder="Leave blank to keep current password" />
+                                        </flux:field>
+
+                                        {{-- Password Confirmation Field --}}
+                                        <flux:field>
+                                            <flux:label class="mt-3">Confirm Password</flux:label>
+                                            <flux:input type="password" wire:model="password_confirmation"
+                                                placeholder="Confirm new password" />
+                                        </flux:field>
+
+                                        {{-- Role Field --}}
+                                        <flux:field>
+                                            <flux:label class="mt-3">Role</flux:label>
+                                            <flux:select wire:model="role" placeholder="Select role">
+                                                @foreach ($roles as $r)
+                                                    <flux:select.option value="{{ $r->name }}">
+                                                        {{ ucfirst($r->name) }}
+                                                    </flux:select.option>
+                                                @endforeach
+                                            </flux:select>
+                                        </flux:field>
+
+                                        {{-- Permissions Field --}}
+                                        <flux:field>
+                                            {{-- <x-multi-select label="Permission" name="permissions" :options="$permissions->pluck('name', 'name')"
+                                                placeholder="Pilih permission" /> --}}
+                                            <flux:label class="mt-3">Permission</flux:label>
+                                            <div
+                                                class="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto border rounded-lg p-4 mt-1">
+                                                @foreach ($allpermissions as $permission)
+                                                    <label class="flex items-center gap-2 text-sm">
+                                                        <input type="checkbox" wire:model="permissions"
+                                                            value="{{ $permission->name }}"
+                                                            class="rounded border-gray-300">
+                                                        {{ ucfirst(str_replace('-', ' ', $permission->name)) }}
+                                                    </label>
+                                                @endforeach
+                                            </div>
+
+                                        </flux:field>
+
+                                        <flux:spacer />
+                                        <flux:button type="submit"  class="mt-6" variant="primary">
+                                            Update User
+                                        </flux:button>
+                                    </form>
+                                </flux:modal>
+
+                                {{-- button delete --}}
                                 <flux:button icon="trash" variant="danger" wire:click="delete({{ $user->id }})"
                                     onclick="return confirm('Yakin hapus user?')"></flux:button>
                             </td>
