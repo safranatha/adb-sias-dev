@@ -50,7 +50,7 @@
                                 {{-- modal trigger --}}
                                 <flux:modal.trigger name="edit-user-{{ $user->id }}">
                                     {{-- button edit --}}
-                                    <flux:button icon="pencil" class="mr-2" wire:click="edit({{ $user->id }})"></flux:button>
+                                    <flux:button icon="pencil" class="mr-2" wire:click="edit({{ $user->id }})" variant="primary" color="yellow"></flux:button>
 
                                 </flux:modal.trigger>
 
