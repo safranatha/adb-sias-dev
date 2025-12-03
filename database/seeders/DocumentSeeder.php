@@ -15,8 +15,8 @@ class DocumentSeeder extends Seeder
      */
     public function run(): void
     {
-        // Tender::factory(10)->create();
-        // SuratPenawaranHarga::factory(10)->create();
+        Tender::factory(10)->create();
+        SuratPenawaranHarga::factory(10)->create();
         Proposal::factory(10)->create();
     }
 }
