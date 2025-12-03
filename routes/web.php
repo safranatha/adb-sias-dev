@@ -1,5 +1,7 @@
 <?php
 use App\Livewire\UserManagement\Index;
+use App\Livewire\Proposal\Index as ProposalIndex;
+use App\Livewire\Tender\Index as TenderIndex;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -14,7 +16,7 @@ use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 use Laravel\Fortify\Http\Controllers\ProfileInformationController;
 use Laravel\Fortify\Http\Controllers\RecoveryCodeController;
 // use Laravel\Fortify\Http\Controllers\RegisteredUserController;
-// import dari controller
+// override function RegisterUserController dari controller
 use App\Http\Controllers\RegisteredUserController;
 use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticatedSessionController;
 use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticationController;
@@ -54,9 +56,11 @@ Route::middleware(['auth'])->group(function () {
 // user management
 Route::get('/user-management', Index::class)->middleware(['auth', 'role:Super Admin'])->name('user-management.index');
 
+// proposal
+Route::get('/proposal', ProposalIndex::class)->middleware(['auth'])->name('proposal.index');
 
-
-
+// tender
+Route::get('/tender',TenderIndex::class)->middleware(['auth'])->name('tender.index');
 
 
 
