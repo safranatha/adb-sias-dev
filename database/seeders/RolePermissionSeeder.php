@@ -72,9 +72,16 @@ class RolePermissionSeeder extends Seeder
         $create_permission_penggandaan = Permission::create(['name' => 'create penggandaan']);
         $disposisi_permission_penggandaan = Permission::create(['name' => 'disposisi penggandaan']);
 
+        // view projek
+        $view_permission_projek = Permission::create(['name' => 'view projek']);
+
+        // view tender
+        $view_permission_tender = Permission::create(['name' => 'view tender']);
+
         // Assign permissions to roles
         // $adminRole->givePermissionTo($editPermission, $viewPermission);
         // $userRole->givePermissionTo($viewPermission);
+
 
         // Assign role to user
         $user = User::find(1); // Example user with ID 1
