@@ -74,9 +74,13 @@ class RolePermissionSeeder extends Seeder
 
         // view projek
         $view_permission_projek = Permission::create(['name' => 'view projek']);
+        // create projek
+        $create_permission_projek = Permission::create(['name' => 'create projek']);
 
         // view tender
         $view_permission_tender = Permission::create(['name' => 'view tender']);
+        // create tender
+        $create_permission_tender = Permission::create(['name' => 'create tender']);
 
         // Assign permissions to roles
         // $adminRole->givePermissionTo($editPermission, $viewPermission);
