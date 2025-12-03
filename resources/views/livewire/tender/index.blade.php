@@ -27,6 +27,9 @@
                     @endif
                 </tbody>
             </table>
+            <div class=" pl-1 m-2">
+                {{ $tenders->links() }}
+            </div>
         </div>
     </div>
 

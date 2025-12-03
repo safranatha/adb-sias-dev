@@ -10,7 +10,7 @@ class Index extends Component
     public function render()
     {
         return view('livewire.tender.index', [
-            'tenders' => Tender::all(),
+            'tenders' => Tender::paginate(5),
         ]);
     }
 }
