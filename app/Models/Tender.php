@@ -23,4 +23,7 @@ class Tender extends Model
     public function surat_penawaran_harga() :HasOne{
         return $this->hasOne(SuratPenawaranHarga::class);
     }
+    public function internal_memo() :HasOne{
+        return $this->hasOne(InternalMemo::class);
+    }
 }
