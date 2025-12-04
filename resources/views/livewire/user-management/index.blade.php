@@ -20,6 +20,7 @@
             <thead class="bg-gray-100 text-black">
                 <tr>
                     <th class="px-4 py-3 font-medium">Nama</th>
+                    <th class="px-4 py-3 font-medium">Email</th>
                     <th class="px-4 py-3 font-medium">Role</th>
                     <th class="px-4 py-3 font-medium">Action</th>
                 </tr>
@@ -36,7 +37,8 @@
                     @foreach ($users as $user)
                         <tr>
                             <td class="px-4 py-3">{{ $user->name }}</td>
-
+                            <td class="px-4 py-3">{{ $user->email }}</td>
+                            
                             <td class="px-4 py-3">
                                 {{-- kalau pakai Spatie Roles --}}
                                 @foreach ($user->roles as $role)
