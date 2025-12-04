@@ -52,6 +52,12 @@ class Index extends Component
         $this->proposal_id = $id;
     }
 
+    public function download($id){
+        $proposal = Proposal::findOrFail($id);
+
+        return response()->download(public_path('storage/' . $proposal->file_path_proposal));
+    }
+
     public function update()
     {
 
