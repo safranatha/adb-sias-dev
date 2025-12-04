@@ -27,6 +27,7 @@ class TenderFactory extends Factory
                 ]) . ' ' . fake()->numerify('Tahun ####')
             ),
             'nama_klien' => fake()->name(),
+            'status' => fake()->randomElement(['Gagal', 'Berhasil', 'Dalam Proses']),
         ];
     }
 }
