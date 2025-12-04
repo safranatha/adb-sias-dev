@@ -1,4 +1,14 @@
-<div class="max-w-8xl mx-auto mt-8">
+<div class="max-w-8xl mx-auto mt-8" x-data="{
+    closeModal(id) {
+        if (id === 'store') {
+            $flux.modal('store-proposal').close();
+        } else {
+            $flux.modal('edit-proposal-' + id).close();
+        }
+    }
+}" @modal-closed.window="closeModal($event.detail.id)">
+
+
     @can('create proposal')
         <flux:modal.trigger name="store-proposal">
             <flux:button class="mb-4">Add Proposal</flux:button>
@@ -114,8 +124,8 @@
                                     </flux:modal.trigger>
 
                                     {{-- modal form --}}
-                                    <flux:modal name="edit-proposal-{{ $item->id }}" class="max-w-2xl">
-                                        <form wire:submit.prevent="update({{ $item->id }})">
+                                    <flux:modal name="edit-proposal-{{ $item->id }}">
+                                        <form wire:submit.prevent="update">
                                             <flux:field>
                                                 <flux:label class="mt-3">Nama Proposal</flux:label>
                                                 <flux:input wire:model="nama_proposal" />

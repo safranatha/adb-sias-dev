@@ -52,7 +52,8 @@ class Index extends Component
         $this->proposal_id = $id;
     }
 
-    public function download($id){
+    public function download($id)
+    {
         $proposal = Proposal::findOrFail($id);
 
         return response()->download(public_path('storage/' . $proposal->file_path_proposal));
@@ -60,14 +61,33 @@ class Index extends Component
 
     public function update()
     {
+        // Validasi hanya field yang diisi
+        $rules = [];
+        if ($this->nama_proposal) {
+            $rules['nama_proposal'] = ['required', 'string', 'max:255'];
+        }
+        if ($this->file_path_proposal instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
+            $rules['file_path_proposal'] = ['file', 'mimes:pdf', 'max:10240'];
+        }
+
+        if (!empty($rules)) {
+            $this->validate($rules);
+        }
+
+        $proposal = Proposal::findOrFail($this->proposal_id);
 
         if ($this->nama_proposal) {
-            Proposal::findOrFail($this->proposal_id)->update([
+            $proposal->update([
                 'nama_proposal' => $this->nama_proposal,
             ]);
         }
 
         if ($this->file_path_proposal instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
+            // Hapus file lama jika ada
+            if ($proposal->file_path_proposal && file_exists(public_path('storage/' . $proposal->file_path_proposal))) {
+                unlink(public_path('storage/' . $proposal->file_path_proposal));
+            }
+
             $original = $this->file_path_proposal->getClientOriginalName();
             $timestamp = time();
             $format_timestamp = date('g i a,d-m-Y', $timestamp);
@@ -75,17 +95,14 @@ class Index extends Component
 
             $path = $this->file_path_proposal->storeAs('proposals', $filename, 'public');
 
-            Proposal::findOrFail($this->proposal_id)->update([
+            $proposal->update([
                 'file_path_proposal' => $path,
             ]);
         }
 
-
         session()->flash('success', 'Proposal berhasil diupdate!');
-
+        $this->dispatch('modal-closed', id: $this->proposal_id);
         $this->resetForm();
-
-        return redirect()->route('proposal.index');
     }
 
 
@@ -114,7 +131,8 @@ class Index extends Component
 
         session()->flash('success', 'Proposal berhasil diupload!');
 
-        return redirect()->route('proposal.index');
+        $this->dispatch('modal-closed', id: 'store');
+        // return redirect()->route('proposal.index');
     }
 
 
@@ -122,7 +140,10 @@ class Index extends Component
     {
         // dd(Proposal::all());
         return view('livewire.proposal.index', [
-            'proposals' => Proposal::with(['tender', 'user'])->paginate(5),
+            'proposals' => Proposal::with(['tender', 'user'])
+                ->orderBy('created_at', 'desc')
+                ->paginate(5),
+
             'tenders' => Tender::where('status', 'Dalam Proses')
                 ->doesntHave('proposal')
                 ->get(),
