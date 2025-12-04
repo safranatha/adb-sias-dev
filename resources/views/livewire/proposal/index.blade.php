@@ -1,4 +1,4 @@
-<div class="max-w-6xl mx-auto mt-8">
+<div class="max-w-8xl mx-auto mt-8">
     @can('create proposal')
         <flux:modal.trigger name="store-proposal">
             <flux:button class="mb-4">Add Proposal</flux:button>
@@ -67,7 +67,10 @@
                     <th class="px-4 py-3 font-medium">Creator</th>
                     <th class="px-4 py-3 font-medium">Validator</th>
                     @can('validate proposal')
-                        <th class="px-4 py-3 font-medium">Action</th>
+                        <th class="px-4 py-3 font-medium">Validate</th>
+                    @endcan
+                    @can('create proposal')
+                        <th class="px-4 py-3 font-medium">Edit</th>
                     @endcan
                 </tr>
             </thead>
@@ -100,6 +103,46 @@
                                     <flux:button icon="check" class="mr-2" variant="primary" color="green">
                                     </flux:button>
                                     <flux:button icon="x-mark" variant="danger"></flux:button>
+                                </td>
+                            @endcan
+
+                            @can('create proposal')
+                                <td>
+                                    <flux:modal.trigger name="edit-proposal-{{ $item->id }}">
+                                        <flux:button icon="pencil" class="mr-2" wire:click="edit({{ $item->id }})"
+                                            variant="primary" color="yellow"></flux:button>
+                                    </flux:modal.trigger>
+
+                                    {{-- modal form --}}
+                                    <flux:modal name="edit-proposal-{{ $item->id }}" class="max-w-2xl">
+                                        <form wire:submit.prevent="update({{ $item->id }})">
+                                            <flux:field>
+                                                <flux:label class="mt-3">Nama Proposal</flux:label>
+                                                <flux:input wire:model="nama_proposal" />
+                                                @error('nama_proposal')
+                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                @enderror
+                                            </flux:field>
+
+                                            <flux:field>
+                                                <flux:label class="mt-3">File Proposal</flux:label>
+
+                                                @if ($file_path_proposal)
+                                                    <p class="text-sm mb-2">
+                                                        File saat ini: {{ basename($file_path_proposal) }}
+                                                    </p>
+                                                @endif
+                                                <flux:input type="file" wire:model="file_path_proposal" />
+                                                @error('file_proposal')
+                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                @enderror
+                                            </flux:field>
+
+                                            <flux:button type="submit" class="mt-6" variant="primary">
+                                                Update
+                                            </flux:button>
+                                        </form>
+                                    </flux:modal>
                                 </td>
                             @endcan
                         </tr>

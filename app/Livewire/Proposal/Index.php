@@ -17,7 +17,8 @@ class Index extends Component
     public $tender_id;
     public $nama_proposal;
     public $file_path_proposal;
-
+    public $proposal_id;
+    public $isEditing = false;
 
     protected $rules = [
         'tender_id' => ['required', 'exists:tenders,id'],
@@ -25,13 +26,75 @@ class Index extends Component
         'file_path_proposal' => ['required', 'file', 'mimes:pdf', 'max:10240'],
     ];
 
+    public function mount()
+    {
+        // Reset properties
+        $this->resetForm();
+    }
+
+    public function resetForm()
+    {
+        $this->tender_id = '';
+        $this->nama_proposal = '';
+        $this->file_path_proposal = '';
+        $this->isEditing = false;
+        $this->proposal_id = null;
+
+    }
+
+    public function edit($id)
+    {
+        $proposal = Proposal::findOrFail($id);
+        $this->tender_id = $proposal->tender_id;
+        $this->nama_proposal = $proposal->nama_proposal;
+        $this->file_path_proposal = $proposal->file_path_proposal;
+        $this->isEditing = true;
+        $this->proposal_id = $id;
+    }
+
+    public function update()
+    {
+
+        if ($this->nama_proposal) {
+            Proposal::findOrFail($this->proposal_id)->update([
+                'nama_proposal' => $this->nama_proposal,
+            ]);
+        }
+
+        if ($this->file_path_proposal instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
+            $original = $this->file_path_proposal->getClientOriginalName();
+            $timestamp = time();
+            $format_timestamp = date('g i a,d-m-Y', $timestamp);
+            $filename = "Revision" . "_" . $format_timestamp . "_" . $original;
+
+            $path = $this->file_path_proposal->storeAs('proposals', $filename, 'public');
+
+            Proposal::findOrFail($this->proposal_id)->update([
+                'file_path_proposal' => $path,
+            ]);
+        }
+
+
+        session()->flash('success', 'Proposal berhasil diupdate!');
+
+        $this->resetForm();
+
+        return redirect()->route('proposal.index');
+    }
+
+
     public function store()
     {
         // dd($this->tender_id, $this->nama_proposal, $this->file_path_proposal);
         $this->validate();
 
         // save to laravel storage
-        $path = $this->file_path_proposal->store('proposals', 'public');
+        $original = $this->file_path_proposal->getClientOriginalName();
+        $timestamp = time();
+        $format_timestamp = date('g i a,d-m-Y', $timestamp);
+        $filename = "New" . "_" . $format_timestamp . "_" . $original;
+        // store to laravel storage
+        $path = $this->file_path_proposal->storeAs('proposals', $filename, 'public');
 
         // save to database
         Proposal::create([
