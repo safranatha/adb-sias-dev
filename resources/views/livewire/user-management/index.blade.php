@@ -3,16 +3,12 @@
         <flux:button class="mb-4">Register</flux:button>
     </a>
 
-    {{-- success message after post created --}}
     @if (session('success'))
-        <div class="bg-green-100 text-green-800 px-4 py-2 rounded mb-3 successMsg">
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 2000)"
+            x-transition:leave="transition ease-out duration-500" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0" class="bg-green-100 text-green-800 px-4 py-2 rounded mb-3">
             {{ session('success') }}
         </div>
-        <script>
-            setTimeout(() => {
-                document.getElementsByClassName('successMsg')?.remove();
-            }, 200);
-        </script>
     @endif
 
     <div class="overflow-x-auto rounded-xl border border-gray-200">

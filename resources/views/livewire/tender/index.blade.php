@@ -36,15 +36,13 @@
     @endcan
 
     @if (session('success'))
-        <div class="bg-green-100 text-green-800 px-4 py-2 rounded mb-3 successMsg">
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 2000)"
+            x-transition:leave="transition ease-out duration-500" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0" class="bg-green-100 text-green-800 px-4 py-2 rounded mb-3">
             {{ session('success') }}
         </div>
-        <script>
-            setTimeout(() => {
-                document.getElementsByClassName('successMsg')?.remove();
-            }, 200);
-        </script>
     @endif
+
 
     <div class="overflow-x-auto rounded-xl border border-gray-200">
         <table class="w-full text-sm text-center">
@@ -104,7 +102,8 @@
                                 </flux:modal>
                             </td>
                             <td class="px-4 py-3">
-                                <flux:button icon="information-circle" class="mr-2" href="{{ route('tender.detail', $item->id) }}"></flux:button>
+                                <flux:button icon="information-circle" class="mr-2"
+                                    href="{{ route('tender.detail', $item->id) }}"></flux:button>
                             </td>
                         </tr>
                     @endforeach
