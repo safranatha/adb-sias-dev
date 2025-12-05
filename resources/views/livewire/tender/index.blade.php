@@ -53,8 +53,8 @@
                     <th class="px-4 py-3 font-medium">Nama Tender</th>
                     <th class="px-4 py-3 font-medium">Nama Klien</th>
                     <th class="px-4 py-3 font-medium">Status</th>
-                    <th class="px-4 py-3 font-medium">Detail</th>
                     <th class="px-4 py-3 font-medium">Edit</th>
+                    <th class="px-4 py-3 font-medium">Detail</th>
                 </tr>
             </thead>
 
@@ -71,9 +71,6 @@
                             <td class="px-4 py-3">{{ $item->nama_tender }}</td>
                             <td class="px-4 py-3">{{ $item->nama_klien }}</td>
                             <td class="px-4 py-3"> {{ $item->status }}</td>
-                            <td class="px-4 py-3">
-                                <flux:button icon="information-circle" class="mr-2"></flux:button>
-                            </td>
                             <td class="px-4 py-3">
                                 <flux:modal.trigger name="edit-tender-{{ $item->id }}">
                                     <flux:button icon="pencil" class="mr-2" wire:click="edit({{ $item->id }})"
@@ -105,6 +102,9 @@
                                         </flux:button>
                                     </form>
                                 </flux:modal>
+                            </td>
+                            <td class="px-4 py-3">
+                                <flux:button icon="information-circle" class="mr-2" href="{{ route('tender.detail', $item->id) }}"></flux:button>
                             </td>
                         </tr>
                     @endforeach

@@ -2,6 +2,7 @@
 use App\Livewire\UserManagement\Index;
 use App\Livewire\Proposal\Index as ProposalIndex;
 use App\Livewire\Tender\Index as TenderIndex;
+use App\Livewire\Tender\Detail as TenderDetail;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -62,7 +63,8 @@ Route::get('/proposal', ProposalIndex::class)->middleware(['auth'])->name('propo
 // tender
 Route::get('/tender',TenderIndex::class)->middleware(['auth'])->name('tender.index');
 
-
+// detail tender
+Route::get('/tender/{id}',TenderDetail::class)->middleware(['auth'])->name('tender.detail');
 
 
 
