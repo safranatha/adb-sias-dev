@@ -30,25 +30,29 @@
             </flux:navlist>
         @endif
 
-        @can('view tender')
-            <flux:navlist variant="outline">
-                <flux:navlist.group class="grid">
-                    <flux:navlist.item icon="clipboard-document-list" :href="route('tender.index')"
-                        :current="request()->routeIs('tender.index')" wire:navigate>{{ __('Tender') }}
-                    </flux:navlist.item>
-                </flux:navlist.group>
-            </flux:navlist>
-        @endcan
+        <flux:navlist variant="outline">
+            <flux:navlist.group class="grid">
+                <flux:navlist.item icon="clipboard-document-list" :href="route('tender.index')"
+                    :current="request()->routeIs('tender.index')" wire:navigate>{{ __('Tender') }}
+                </flux:navlist.item>
+            </flux:navlist.group>
+        </flux:navlist>
 
-        @can('view proposal')
-            <flux:navlist variant="outline">
-                <flux:navlist.group class="grid">
-                    <flux:navlist.item icon="document-text" :href="route('proposal.index')"
-                        :current="request()->routeIs('proposal.index')" wire:navigate>{{ __('Proposal') }}
-                    </flux:navlist.item>
-                </flux:navlist.group>
-            </flux:navlist>
-        @endcan
+        <flux:navlist variant="outline">
+            <flux:navlist.group class="grid">
+                <flux:navlist.item icon="document-text" :href="route('proposal.index')"
+                    :current="request()->routeIs('proposal.index')" wire:navigate>{{ __('Proposal') }}
+                </flux:navlist.item>
+            </flux:navlist.group>
+        </flux:navlist>
+
+        <flux:navlist variant="outline">
+            <flux:navlist.group class="grid">
+                <flux:navlist.item icon="banknotes" :href="route('surat-penawaran-harga.index')"
+                    :current="request()->routeIs('surat-penawaran-harga.index')" wire:navigate>{{ __('Surat Penawaran Harga') }}
+                </flux:navlist.item>
+            </flux:navlist.group>
+        </flux:navlist>
 
         <flux:spacer />
 
