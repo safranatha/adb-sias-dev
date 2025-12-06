@@ -63,8 +63,14 @@
             x-transition:leave-end="opacity-0" class="bg-green-100 text-green-800 px-4 py-2 rounded mb-3">
             {{ session('success') }}
         </div>
+    @elseif (session('error'))
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 2000)"
+            x-transition:leave="transition ease-out duration-500" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0" class="bg-red-100 text-red-800 px-4 py-2 rounded mb-3">
+            {{ session('error') }}
+        </div>
     @endif
-    
+
     <div class="overflow-x-auto rounded-xl border border-gray-200">
         <table class="w-full text-sm text-center">
             <thead class="bg-gray-100 text-black">
@@ -141,7 +147,7 @@
                                                     </p>
                                                 @endif
                                                 <flux:input type="file" wire:model="file_path_proposal" />
-                                                @error('file_proposal')
+                                                @error('file_path_proposal')
                                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                                 @enderror
                                             </flux:field>

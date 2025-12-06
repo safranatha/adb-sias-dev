@@ -56,7 +56,17 @@ class Index extends Component
     {
         $proposal = Proposal::findOrFail($id);
 
-        return response()->download(public_path('storage/' . $proposal->file_path_proposal));
+        if (!$proposal) {
+            return session()->flash('error', 'Proposal tidak ditemukan.');
+        }
+
+        $file_path=public_path('storage/' . $proposal->file_path_proposal);
+        
+        if (!file_exists($file_path)) {
+            return session()->flash('error', 'File Proposal tidak ditemukan di storage.');
+        }
+
+        return response()->download($file_path);
     }
 
     public function update()
@@ -127,11 +137,11 @@ class Index extends Component
             'file_path_proposal' => $path,
         ]);
 
-        $this->reset();
-
         session()->flash('success', 'Proposal berhasil diupload!');
 
         $this->dispatch('modal-closed', id: 'store');
+
+        $this->resetForm();
         // return redirect()->route('proposal.index');
     }
 
