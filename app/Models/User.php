@@ -67,4 +67,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Proposal::class);
     }
+
+    public function surat_penawaran_hargas()
+    {
+        return $this->hasMany(Tender::class);
+    }
 }
