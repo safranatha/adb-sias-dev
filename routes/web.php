@@ -3,6 +3,7 @@ use App\Livewire\UserManagement\Index;
 use App\Livewire\Proposal\Index as ProposalIndex;
 use App\Livewire\Tender\Index as TenderIndex;
 use App\Livewire\Tender\Detail as TenderDetail;
+use App\Livewire\SuratPenawaranHarga\Index as SuratPenawaranHargaIndex;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -66,6 +67,8 @@ Route::get('/tender',TenderIndex::class)->middleware(['auth'])->name('tender.ind
 // detail tender
 Route::get('/tender/{id}',TenderDetail::class)->middleware(['auth'])->name('tender.detail');
 
+// surat penawaran harga
+Route::get('/surat-penawaran-harga',SuratPenawaranHargaIndex::class)->middleware(['auth'])->name('surat-penawaran-harga.index');
 
 
 

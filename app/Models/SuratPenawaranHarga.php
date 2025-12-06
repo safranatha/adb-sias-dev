@@ -19,4 +19,9 @@ class SuratPenawaranHarga extends Model
     {
         return $this->belongsTo(Tender::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
