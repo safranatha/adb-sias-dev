@@ -122,7 +122,7 @@
 
                             @can('create surat penawaran harga')
                                 <td>
-                                    <flux:modal.trigger name="edit-proposal-{{ $item->id }}">
+                                    <flux:modal.trigger name="edit-sph-{{ $item->id }}">
                                         <flux:button icon="pencil" class="mr-2" wire:click="edit({{ $item->id }})"
                                             variant="primary" color="yellow"></flux:button>
                                     </flux:modal.trigger>
