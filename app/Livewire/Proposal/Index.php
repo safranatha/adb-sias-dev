@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Proposal;
 
+use App\Models\DocumentApprovalWorkflow;
 use App\Models\Proposal;
 use App\Models\Tender;
 use Livewire\Component;
@@ -60,8 +61,8 @@ class Index extends Component
             return session()->flash('error', 'Proposal tidak ditemukan.');
         }
 
-        $file_path=public_path('storage/' . $proposal->file_path_proposal);
-        
+        $file_path = public_path('storage/' . $proposal->file_path_proposal);
+
         if (!file_exists($file_path)) {
             return session()->flash('error', 'File Proposal tidak ditemukan di storage.');
         }
@@ -145,18 +146,74 @@ class Index extends Component
         // return redirect()->route('proposal.index');
     }
 
+    public function checkStatus($id)
+    {
+        $status = DocumentApprovalWorkflow::where('proposal_id', $id)->whereNotNull('status')->exists();
+
+        return $status;
+    }
+
+    public function approve($id)
+    {
+
+        // check role of user
+        $nama_role = auth()->user()->roles->first()->name;
+
+        DocumentApprovalWorkflow::create([
+            'user_id' => auth()->user()->id,
+            'proposal_id' => $id,
+            'status' => true,
+            'level' => ($nama_role == "Manajer Teknik") ? "2" : ($nama_role == "Direktur" ? "3" : null),
+            'keterangan' => ($nama_role == "Manajer Teknik") ? "Proposal disetujui oleh Manajer Teknik" : ($nama_role == "Direktur" ? "Proposal disetujui oleh Direktur" : null),
+        ]);
+
+        session()->flash('success', 'Proposal berhasil di approve!');
+
+        $this->resetForm();
+
+    }
+
+    public function reject($id)
+    {
+        // check role of user
+        $nama_role = auth()->user()->roles->first()->name;
+
+        DocumentApprovalWorkflow::create([
+            'user_id' => auth()->user()->id,
+            'proposal_id' => $id,
+            'status' => false,
+            'level' => ($nama_role == "Manajer Teknik") ? "2" : ($nama_role == "Direktur" ? "3" : null),
+            'keterangan' => ($nama_role == "Manajer Teknik") ? "Proposal ditolak oleh Manajer Teknik" : ($nama_role == "Direktur" ? "Proposal ditolak oleh Direktur" : null),
+        ]);
+
+        session()->flash('success', 'Proposal berhasil di tolak!');
+
+        $this->resetForm();
+
+    }
+
 
     public function render()
     {
         // dd(Proposal::all());
         return view('livewire.proposal.index', [
-            'proposals' => Proposal::with(['tender', 'user'])
+            'proposals' => Proposal::with(['tender', 'user','document_approval_workflows'])
+                ->select('proposals.*')
+                ->selectRaw("
+                        EXISTS (
+                            SELECT 1 
+                            FROM document_approval_workflow daw 
+                            WHERE daw.proposal_id = proposals.id
+                            AND daw.level IS NOT NULL
+                        ) AS is_approved
+                    ")
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
 
             'tenders' => Tender::where('status', 'Dalam Proses')
                 ->doesntHave('proposal')
                 ->get(),
+
         ]);
     }
 }
