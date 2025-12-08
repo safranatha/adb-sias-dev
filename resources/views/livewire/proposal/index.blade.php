@@ -79,7 +79,7 @@
                     {{-- <th class="px-4 py-3 font-medium">Nama Proposal</th> --}}
                     <th class="px-4 py-3 font-medium">File Proposal</th>
                     <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
-                    <th class="px-4 py-3 font-medium">Keterangan</th>
+                    {{-- <th class="px-4 py-3 font-medium">Keterangan</th> --}}
                     @can('validate proposal')
                         <th class="px-4 py-3 font-medium">Validate</th>
                     @endcan
@@ -109,10 +109,11 @@
                             <td class="px-4 py-3">
                                 {{ $item->user->name }}
                             </td>
-                            <td class="px-4 py-3">
-                                {{ $item->document_approval_workflows()->latest()->first()->keterangan ?? '-' }}
-                            </td>
+                            {{-- <td class="px-4 py-3">
+                                {{ $item->keterangan ?? '-' }}
+                            </td> --}}
                             @can('validate proposal')
+                                {{-- cek apakah sudah di validasi --}}
                                 @if ($item->is_approved)
                                     <td class="px-4 py-3">
                                         <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-md">
@@ -121,22 +122,22 @@
                                     </td>
                                 @else
                                     <td class="px-4 py-3">
-                                        <flux:button icon="check" class="mr-2"
-                                            wire:click="approve({{ $item->id }})" variant="primary" color="green">
+                                        {{-- validate proposal --}}
+                                        <flux:button icon="check" class="mr-2" wire:click="approve({{ $item->id }})"
+                                            variant="primary" color="green">
                                         </flux:button>
 
                                         <flux:modal.trigger name="reject-proposal-{{ $item->id }}">
-                                            <flux:button icon="x-mark" variant="danger"
-                                                wire:click="reject({{ $item->id }})"></flux:button>
+                                            <flux:button icon="x-mark" variant="danger"></flux:button>
                                         </flux:modal.trigger>
 
                                         {{-- modal form reject --}}
                                         <flux:modal name="reject-proposal-{{ $item->id }}">
-                                            <form wire:submit.prevent="reject">
+                                            <form wire:submit.prevent="reject({{ $item->id }})">
                                                 <flux:field>
                                                     <flux:label class="mt-3">Alasan Penolakan</flux:label>
-                                                    <flux:input wire:model="alasan_penolakan" />
-                                                    @error('alasan_penolakan')
+                                                    <flux:textarea wire:model="pesan_revisi"></flux:textarea>
+                                                    @error('pesan_revisi')
                                                         <span class="text-red-500 text-sm">{{ $message }}</span>
                                                     @enderror
                                                 </flux:field>
@@ -151,18 +152,31 @@
 
                             @can('create proposal')
                                 <td>
-                                    @if ($item->status === 1)
-                                        <flux:button icon="envelope" class="mr-2" variant="primary">
+                                    @if ($item->status === 1 && $item->keterangan !== null)
+                                    {{-- kondisi acc validasi --}}
+                                        <flux:button icon="envelope" class="mr-2" variant="primary" color="green">
+                                            {{ $item->keterangan }}
                                         </flux:button>
-                                    @else       
+                                    @elseif($item->status === null && $item->keterangan === null)
+                                    {{-- kondisi belum di validasi --}}
+                                        <flux:button icon="envelope" class="mr-2" variant="primary">
+                                            {{ $item->keterangan ?? 'Proposal belum diperiksa' }}
+                                        </flux:button>
+                                    @else
+                                    {{-- kondisi jika ada revisi --}}
                                         <flux:modal.trigger name="edit-proposal-{{ $item->id }}">
                                             <flux:button icon="envelope" class="mr-2"
                                                 wire:click="edit({{ $item->id }})" variant="primary" color="yellow">
+                                                {{ $item->keterangan}}
                                             </flux:button>
                                         </flux:modal.trigger>
 
                                         {{-- modal form --}}
                                         <flux:modal name="edit-proposal-{{ $item->id }}">
+                                            <flux:field>
+                                                <flux:label class="mt-3">Pesan Revisi</flux:label>
+                                                <flux:text class=" text-left">{{ $item->pesan_revisi }}</flux:text>
+                                            </flux:field>
                                             <form wire:submit.prevent="update">
                                                 <flux:field>
                                                     <flux:label class="mt-3">Nama Proposal</flux:label>

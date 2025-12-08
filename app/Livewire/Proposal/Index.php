@@ -21,6 +21,8 @@ class Index extends Component
     public $proposal_id;
     public $isEditing = false;
 
+    public $pesan_revisi;
+
     protected $rules = [
         'tender_id' => ['required', 'exists:tenders,id'],
         'nama_proposal' => ['required', 'string', 'max:255'],
@@ -40,6 +42,7 @@ class Index extends Component
         $this->file_path_proposal = '';
         $this->isEditing = false;
         $this->proposal_id = null;
+        $this->pesan_revisi = '';
 
     }
 
@@ -178,12 +181,18 @@ class Index extends Component
         // check role of user
         $nama_role = auth()->user()->roles->first()->name;
 
+        $rules = ['pesan_revisi' => ['required', 'string', 'max:255']];
+
+        $this->validate($rules);
+
         DocumentApprovalWorkflow::create([
             'user_id' => auth()->user()->id,
             'proposal_id' => $id,
             'status' => false,
             'level' => ($nama_role == "Manajer Teknik") ? "2" : ($nama_role == "Direktur" ? "3" : null),
             'keterangan' => ($nama_role == "Manajer Teknik") ? "Proposal ditolak oleh Manajer Teknik" : ($nama_role == "Direktur" ? "Proposal ditolak oleh Direktur" : null),
+            'pesan_revisi' => $this->pesan_revisi
+
         ]);
 
         session()->flash('success', 'Proposal berhasil di tolak!');
@@ -197,7 +206,7 @@ class Index extends Component
     {
         // dd(Proposal::all());
         return view('livewire.proposal.index', [
-            'proposals' => Proposal::with(['tender', 'user','document_approval_workflows'])
+            'proposals' => Proposal::with(['tender', 'user', 'document_approval_workflows'])
                 ->select('proposals.*')
                 ->selectRaw("
                         EXISTS (
