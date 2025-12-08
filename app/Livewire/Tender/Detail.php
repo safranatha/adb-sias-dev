@@ -3,6 +3,7 @@
 namespace App\Livewire\Tender;
 
 use App\Models\Proposal;
+use App\Models\SuratPenawaranHarga;
 use App\Models\Tender;
 use Livewire\Component;
 
@@ -16,7 +17,7 @@ class Detail extends Component
         $this->tender_id = $id;
     }
 
-    public function getData($id)
+    public function get_data_proposal($id)
     {
         $proposal = Proposal::where('tender_id', $id)->first();
 
@@ -37,6 +38,30 @@ class Detail extends Component
         return response()->download($file);
 
     }
+
+
+    public function get_data_SPH($id)
+    {
+        $sph = SuratPenawaranHarga::where('tender_id', $id)->first();
+
+        if ($sph== null) {
+            return session()->flash('error', 'Surat Penawaran Harga tidak ditemukan.');
+        }
+
+        $file = public_path('storage/' . $sph->file_path_sph);
+
+        if (!file_exists($file)) {
+            $this->dispatch('alert', [
+                'type' => 'error',
+                'message' => 'File tidak ditemukan di storage.'
+            ]);
+            return;
+        }
+
+        return response()->download($file);
+
+    }
+
 
     public function render()
     {

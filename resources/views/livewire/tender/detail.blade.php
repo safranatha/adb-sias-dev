@@ -27,11 +27,12 @@
                 <tr>
                     <td class="px-4 py-3">{{ $tender->nama_tender }}</td>
                     <td class="px-4 py-3">
-                        <flux:button icon="arrow-down-tray" class="mr-2" wire:click="getData({{ $tender->id }})">
+                        <flux:button icon="arrow-down-tray" class="mr-2" wire:click="get_data_proposal({{ $tender->id }})">
                         </flux:button>
                     </td>
                     <td class="px-4 py-3">
-                        <flux:button icon="arrow-down-tray" class="mr-2"></flux:button>
+                        <flux:button icon="arrow-down-tray" class="mr-2" wire:click="get_data_SPH({{ $tender->id }})">
+                        </flux:button>
                     </td>
                     @if ($tender->status === 'Dalam Proses')
                         @can('validate proposal')
