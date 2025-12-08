@@ -72,4 +72,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Tender::class);
     }
+
+    public function document_approval_workflows()
+    {
+        return $this->hasMany(DocumentApprovalWorkflow::class);
+    }
 }
