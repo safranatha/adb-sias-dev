@@ -28,11 +28,7 @@ class Detail extends Component
         $file = public_path('storage/' . $proposal->file_path_proposal);
 
         if (!file_exists($file)) {
-            $this->dispatch('alert', [
-                'type' => 'error',
-                'message' => 'File tidak ditemukan di storage.'
-            ]);
-            return;
+            return session()->flash('error', 'File Proposal tidak ditemukan di storage.');
         }
 
         return response()->download($file);
@@ -50,12 +46,8 @@ class Detail extends Component
 
         $file = public_path('storage/' . $sph->file_path_sph);
 
-        if (!file_exists($file)) {
-            $this->dispatch('alert', [
-                'type' => 'error',
-                'message' => 'File tidak ditemukan di storage.'
-            ]);
-            return;
+       if (!file_exists($file)) {
+            return session()->flash('error', 'File Surat Penawaran Harga tidak ditemukan di storage.');
         }
 
         return response()->download($file);
