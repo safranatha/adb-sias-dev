@@ -76,15 +76,15 @@
             <thead class="bg-gray-100 text-black">
                 <tr>
                     <th class="px-4 py-3 font-medium">Nama Tender</th>
-                    <th class="px-4 py-3 font-medium">Nama Proposal</th>
+                    {{-- <th class="px-4 py-3 font-medium">Nama Proposal</th> --}}
                     <th class="px-4 py-3 font-medium">File Proposal</th>
-                    <th class="px-4 py-3 font-medium">Creator</th>
-                    <th class="px-4 py-3 font-medium">Validator</th>
+                    <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
+                    <th class="px-4 py-3 font-medium">Keterangan</th>
                     @can('validate proposal')
                         <th class="px-4 py-3 font-medium">Validate</th>
                     @endcan
                     @can('create proposal')
-                        <th class="px-4 py-3 font-medium">Edit</th>
+                        <th class="px-4 py-3 font-medium">Pesan</th>
                     @endcan
                 </tr>
             </thead>
@@ -100,7 +100,7 @@
                     @foreach ($proposals as $item)
                         <tr>
                             <td class="px-4 py-3">{{ $item->tender->nama_tender }}</td>
-                            <td class="px-4 py-3">{{ $item->nama_proposal }}</td>
+                            {{-- <td class="px-4 py-3">{{ $item->nama_proposal }}</td> --}}
                             {{-- file proposal diberi logo download dan jika diklik maka auto download --}}
                             <td class="px-4 py-3">
                                 <flux:button icon="arrow-down-tray" class="mr-2"
@@ -110,57 +110,93 @@
                                 {{ $item->user->name }}
                             </td>
                             <td class="px-4 py-3">
-                                validator
+                                {{ $item->document_approval_workflows()->latest()->first()->keterangan ?? '-' }}
                             </td>
                             @can('validate proposal')
-                                <td class="px-4 py-3">
-                                    <flux:button icon="check" class="mr-2" variant="primary" color="green">
-                                    </flux:button>
-                                    <flux:button icon="x-mark" variant="danger"></flux:button>
-                                </td>
+                                @if ($item->is_approved)
+                                    <td class="px-4 py-3">
+                                        <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-md">
+                                            Sudah diperiksa
+                                        </span>
+                                    </td>
+                                @else
+                                    <td class="px-4 py-3">
+                                        <flux:button icon="check" class="mr-2"
+                                            wire:click="approve({{ $item->id }})" variant="primary" color="green">
+                                        </flux:button>
+
+                                        <flux:modal.trigger name="reject-proposal-{{ $item->id }}">
+                                            <flux:button icon="x-mark" variant="danger"
+                                                wire:click="reject({{ $item->id }})"></flux:button>
+                                        </flux:modal.trigger>
+
+                                        {{-- modal form reject --}}
+                                        <flux:modal name="reject-proposal-{{ $item->id }}">
+                                            <form wire:submit.prevent="reject">
+                                                <flux:field>
+                                                    <flux:label class="mt-3">Alasan Penolakan</flux:label>
+                                                    <flux:input wire:model="alasan_penolakan" />
+                                                    @error('alasan_penolakan')
+                                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                    @enderror
+                                                </flux:field>
+                                                <flux:button type="submit" class="mt-6" variant="danger">
+                                                    Tolak
+                                                </flux:button>
+                                            </form>
+                                        </flux:modal>
+                                    </td>
+                                @endif
                             @endcan
 
                             @can('create proposal')
                                 <td>
-                                    <flux:modal.trigger name="edit-proposal-{{ $item->id }}">
-                                        <flux:button icon="pencil" class="mr-2" wire:click="edit({{ $item->id }})"
-                                            variant="primary" color="yellow"></flux:button>
-                                    </flux:modal.trigger>
-
-                                    {{-- modal form --}}
-                                    <flux:modal name="edit-proposal-{{ $item->id }}">
-                                        <form wire:submit.prevent="update">
-                                            <flux:field>
-                                                <flux:label class="mt-3">Nama Proposal</flux:label>
-                                                <flux:input wire:model="nama_proposal" />
-                                                @error('nama_proposal')
-                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
-                                                @enderror
-                                            </flux:field>
-
-                                            <flux:field>
-                                                <flux:label class="mt-3">File Proposal</flux:label>
-
-                                                @if ($file_path_proposal)
-                                                    <p class="text-sm mb-2">
-                                                        File saat ini: {{ basename($file_path_proposal) }}
-                                                    </p>
-                                                @endif
-                                                <flux:input type="file" wire:model="file_path_proposal" />
-                                                @error('file_path_proposal')
-                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
-                                                @enderror
-                                            </flux:field>
-
-                                            <flux:button type="submit" class="mt-6" variant="primary">
-                                                Update
+                                    @if ($item->status === 1)
+                                        <flux:button icon="envelope" class="mr-2" variant="primary">
+                                        </flux:button>
+                                    @else       
+                                        <flux:modal.trigger name="edit-proposal-{{ $item->id }}">
+                                            <flux:button icon="envelope" class="mr-2"
+                                                wire:click="edit({{ $item->id }})" variant="primary" color="yellow">
                                             </flux:button>
-                                        </form>
-                                    </flux:modal>
+                                        </flux:modal.trigger>
+
+                                        {{-- modal form --}}
+                                        <flux:modal name="edit-proposal-{{ $item->id }}">
+                                            <form wire:submit.prevent="update">
+                                                <flux:field>
+                                                    <flux:label class="mt-3">Nama Proposal</flux:label>
+                                                    <flux:input wire:model="nama_proposal" />
+                                                    @error('nama_proposal')
+                                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                    @enderror
+                                                </flux:field>
+
+                                                <flux:field>
+                                                    <flux:label class="mt-3">File Proposal</flux:label>
+
+                                                    @if ($file_path_proposal)
+                                                        <p class="text-sm mb-2">
+                                                            File saat ini: {{ basename($file_path_proposal) }}
+                                                        </p>
+                                                    @endif
+                                                    <flux:input type="file" wire:model="file_path_proposal" />
+                                                    @error('file_path_proposal')
+                                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                    @enderror
+                                                </flux:field>
+
+                                                <flux:button type="submit" class="mt-6" variant="primary">
+                                                    Update
+                                                </flux:button>
+                                            </form>
+                                        </flux:modal>
+                                    @endif
                                 </td>
                             @endcan
                         </tr>
                     @endforeach
+
 
                 @endif
             </tbody>
