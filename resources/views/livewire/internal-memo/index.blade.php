@@ -60,6 +60,7 @@
                     <tr>
                         <th class="px-4 py-3 font-medium">Judul Memo</th>
                         <th class="px-4 py-3 font-medium">Isi Memo</th>
+                        <th class="px-4 py-1 font-medium">Aksi</th>
                     </tr>
                 </thead>
 
@@ -75,9 +76,57 @@
                             <tr>
                                 <td class="px-4 py-3">{{ $memo->nama_internal_memo }}</td>
                                 <td class="px-4 py-3">{{ $memo->isi_internal_memo }}</td>
+                                <td class="px-1 py-1">
+                                    @can('create internal memo')
+                                    <flux:modal.trigger name="edit-internal-memo-{{ $memo->id }}">
+                                        <flux:button icon="pencil" class="mr-2" wire:click="edit({{ $memo->id }})"
+                                            variant="primary" color="yellow"></flux:button>
+                                    </flux:modal.trigger>
+
+                                    {{-- modal form --}}
+                                    <flux:modal name="edit-internal-memo-{{ $memo->id }}" class="max-w-2xl">
+                                        <form wire:submit.prevent="update" class="space-y-6 p-2">
+                                            <flux:heading size="lg">Edit Internal Memo</flux:heading>
+                                            {{-- Name Field --}}
+                                            <flux:field>
+                                                <flux:label>Judul Memo</flux:label>
+                                                <flux:input wire:model="nama_internal_memo"
+                                                    placeholder="Masukkan nama internal memo"></flux:input>
+                                            </flux:field>
+
+                                            <flux:field>
+                                                <flux:label>Isi Memo</flux:label>
+                                                <flux:textarea wire:model="isi_internal_memo"
+                                                    placeholder="Masukkan isi internal memo"></flux:textarea>
+                                            </flux:field>
+
+                                            <flux:field>
+                                                <flux:label class="mt-3">Tender</flux:label>
+                                                <flux:select wire:model="tender_id">
+                                                    <flux:select.option value="">-- Pilih Tender --</flux:select.option>
+                                                    @foreach ($tenders as $tender)
+                                                        <flux:select.option value="{{ $tender->id }}">
+                                                            {{ $tender->nama_tender }}
+                                                        </flux:select.option>
+                                                    @endforeach
+                                                </flux:select>
+
+                                                @error('tender_id')
+                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                @enderror
+                                            </flux:field>
+
+                                            <flux:spacer />
+                                            <flux:button type="submit" variant="primary">
+                                                Update
+                                            </flux:button>
+                                        </form>
+                                    </flux:modal>
+                                    @endcan
+                           
                             </tr>
                         @endforeach
-
+                    
                     @endif
                 </tbody>
             </table>

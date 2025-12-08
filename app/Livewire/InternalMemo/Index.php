@@ -17,11 +17,60 @@ class Index extends Component
     public $nama_internal_memo;
     public $isi_internal_memo;
 
+    public $internal_memo_id;
+    public $isEditing = false;
+
     protected $rules = [
         'tender_id' => 'required|exists:tenders,id',
         'nama_internal_memo' => 'required|string|max:255',
         'isi_internal_memo' => 'required|string',
     ];
+
+    public function mount()
+    {
+        // Reset properties
+        $this->resetForm();
+    }
+
+    public function resetForm()
+    {
+        $this->tender_id = null;
+        $this->nama_internal_memo = '';
+        $this->isi_internal_memo = '';
+        $this->isEditing = false;
+        $this->proposal_id = null;
+    }
+
+
+    public function edit($id)
+    {
+        $internalMemo = InternalMemo::findOrFail($id);
+        $this->tender_id = $internalMemo->tender_id;
+        $this->nama_internal_memo = $internalMemo->nama_internal_memo;
+        $this->isi_internal_memo = $internalMemo->isi_internal_memo;
+        $this->isEditing = true;
+        $this->internal_memo_id = $internalMemo->id;
+    }
+
+    public function update()
+    {
+        $this->validate();
+
+        $internalMemo = InternalMemo::findOrFail($this->internal_memo_id);
+        $internalMemo->update([
+            'tender_id' => $this->tender_id,
+            'nama_internal_memo' => $this->nama_internal_memo,
+            'isi_internal_memo' => $this->isi_internal_memo,
+        ]);
+
+        // Reset form fields
+        $this->resetForm();
+
+        session()->flash('success', 'Internal Memo berhasil diperbarui!');
+
+        return redirect()->route('internal-memo.index');
+    }
+
 
     public function store()
     {
