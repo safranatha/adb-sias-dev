@@ -20,6 +20,8 @@
                     wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
+
+        
         @if (auth()->user()->hasRole('Super Admin'))
             <flux:navlist variant="outline">
                 <flux:navlist.group class="grid">
@@ -29,7 +31,8 @@
                 </flux:navlist.group>
             </flux:navlist>
         @endif
-
+        
+        @can ('view tender')
         <flux:navlist variant="outline">
             <flux:navlist.group class="grid">
                 <flux:navlist.item icon="clipboard-document-list" :href="route('tender.index')"
@@ -37,6 +40,7 @@
                 </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
+        @endcan
 
         <flux:navlist variant="outline">
             <flux:navlist.group class="grid">
