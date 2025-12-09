@@ -131,7 +131,7 @@
                                 {{-- cek apakah sudah di validasi --}}
                                 @if ($item->is_approved)
                                     <td class="px-4 py-3">
-                                        <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-md">
+                                        <span class="bg-green-500 text-white text-s px-2 py-1 rounded-md">
                                             Sudah diperiksa
                                         </span>
                                     </td>
