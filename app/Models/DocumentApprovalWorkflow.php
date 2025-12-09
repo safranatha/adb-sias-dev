@@ -29,4 +29,9 @@ class DocumentApprovalWorkflow extends Model
     {
         return $this->belongsTo(Proposal::class);
     }
+
+    public function surat_penawaran_harga()
+    {
+        return $this->belongsTo(Proposal::class);
+    }
 }
