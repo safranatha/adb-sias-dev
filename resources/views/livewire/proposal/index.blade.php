@@ -115,13 +115,13 @@
                             @if (auth()->user()->hasRole('Manajer Admin'))
                                 <td class="px-4 py-3">
                                     @if ($item->status === 1 && $item->keterangan !== null)
-                                        <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-md">
+                                        <span class="bg-green-500 text-white text-s px-2 py-1 rounded-md">
                                             {{ $item->keterangan ?? 'Proposal belum diperiksa' }} </span>
                                     @elseif($item->status === 0 && $item->keterangan !== null)
-                                        <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-md">
+                                        <span class="bg-yellow-500 text-white text-s px-2 py-1 rounded-md">
                                             {{ $item->keterangan ?? 'Proposal belum diperiksa' }} </span>
                                     @else
-                                        <span class=" bg-gray-500 text-white text-xs px-2 py-1 rounded-md">
+                                        <span class=" bg-gray-500 text-white text-s px-2 py-1 rounded-md">
                                             {{ $item->keterangan ?? 'Proposal belum diperiksa' }} </span>
                                     @endif
                                 </td>
