@@ -195,17 +195,19 @@
                                             <form wire:submit.prevent="update">
                                                 <flux:field>
                                                     <flux:label class="mt-3">Nama Proposal</flux:label>
-                                                    <flux:input wire:model="nama_proposal" />
+                                                    <flux:text class=" text-left">{{ $item->nama_proposal }}</flux:text>
+
+                                                    {{-- <flux:input wire:model="nama_proposal" />
                                                     @error('nama_proposal')
                                                         <span class="text-red-500 text-sm">{{ $message }}</span>
-                                                    @enderror
+                                                    @enderror --}}
                                                 </flux:field>
 
                                                 <flux:field>
-                                                    <flux:label class="mt-3">File Proposal</flux:label>
+                                                    {{-- <flux:label class="mt-3">File Proposal</flux:label> --}}
 
                                                     @if ($file_path_proposal)
-                                                        <p class="text-sm mb-2">
+                                                        <p class="text-sm mt-3">
                                                             File saat ini: {{ basename($file_path_proposal) }}
                                                         </p>
                                                     @endif
