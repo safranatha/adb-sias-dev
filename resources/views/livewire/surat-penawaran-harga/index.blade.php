@@ -76,15 +76,14 @@
             <thead class="bg-gray-100 text-black">
                 <tr>
                     <th class="px-4 py-3 font-medium">Nama Tender</th>
-                    <th class="px-4 py-3 font-medium">Nama Surat Penawaran Harga</th>
+                    {{-- <th class="px-4 py-3 font-medium">Nama Surat Penawaran Harga</th> --}}
                     <th class="px-4 py-3 font-medium">File Surat Penawaran Harga</th>
-                    <th class="px-4 py-3 font-medium">Creator</th>
-                    <th class="px-4 py-3 font-medium">Validator</th>
+                    <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
                     @can('validate surat penawaran harga')
                         <th class="px-4 py-3 font-medium">Validate</th>
                     @endcan
                     @can('create surat penawaran harga')
-                        <th class="px-4 py-3 font-medium">Edit</th>
+                        <th class="px-4 py-3 font-medium">Pesan</th>
                     @endcan
                 </tr>
             </thead>
@@ -100,7 +99,7 @@
                     @foreach ($sphs as $item)
                         <tr>
                             <td class="px-4 py-3">{{ $item->tender->nama_tender }}</td>
-                            <td class="px-4 py-3">{{ $item->nama_sph }}</td>
+                            {{-- <td class="px-4 py-3">{{ $item->nama_sph }}</td> --}}
                             {{-- file sph diberi logo download dan jika diklik maka auto download --}}
                             <td class="px-4 py-3">
                                 <flux:button icon="arrow-down-tray" class="mr-2"
@@ -109,54 +108,101 @@
                             <td class="px-4 py-3">
                                 {{ $item->user->name }}
                             </td>
-                            <td class="px-4 py-3">
-                                validator
-                            </td>
                             @can('validate surat penawaran harga')
-                                <td class="px-4 py-3">
-                                    <flux:button icon="check" class="mr-2" variant="primary" color="green">
-                                    </flux:button>
-                                    <flux:button icon="x-mark" variant="danger"></flux:button>
-                                </td>
+                                @if ($item->is_approved)
+                                    <td class="px-4 py-3">
+                                        <span class="bg-green-500 text-white text-s px-2 py-1 rounded-md">
+                                            Sudah diperiksa
+                                        </span>
+                                    </td>
+                                @else
+                                    <td class="px-4 py-3">
+                                        {{-- validate suratPenawaranHarga --}}
+                                        <flux:button icon="check" class="mr-2" wire:click="approve({{ $item->id }})"
+                                            variant="primary" color="green">
+                                        </flux:button>
+
+                                        <flux:modal.trigger name="reject-suratPenawaranHarga-{{ $item->id }}">
+                                            <flux:button icon="x-mark" variant="danger"></flux:button>
+                                        </flux:modal.trigger>
+
+                                        {{-- modal form reject --}}
+                                        <flux:modal name="reject-suratPenawaranHarga-{{ $item->id }}">
+                                            <form wire:submit.prevent="reject({{ $item->id }})">
+                                                <flux:field>
+                                                    <flux:label class="mt-3">Alasan Penolakan</flux:label>
+                                                    <flux:textarea wire:model="pesan_revisi"></flux:textarea>
+                                                    @error('pesan_revisi')
+                                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                    @enderror
+                                                </flux:field>
+                                                <flux:button type="submit" class="mt-6" variant="danger">
+                                                    Tolak
+                                                </flux:button>
+                                            </form>
+                                        </flux:modal>
+                                    </td>
+                                @endif
                             @endcan
 
-                            @can('create surat penawaran harga')
-                                <td>
-                                    <flux:modal.trigger name="edit-sph-{{ $item->id }}">
-                                        <flux:button icon="pencil" class="mr-2" wire:click="edit({{ $item->id }})"
-                                            variant="primary" color="yellow"></flux:button>
-                                    </flux:modal.trigger>
+                            <td>
+                                @can('create surat penawaran harga')
+                                    @if ($item->status === 1 && $item->keterangan !== null)
+                                        {{-- kondisi acc validasi --}}
+                                        <flux:button icon="envelope" class="mr-2" variant="primary" color="green">
+                                            {{ $item->keterangan }}
+                                        </flux:button>
+                                    @elseif($item->status === null && $item->keterangan === null)
+                                        {{-- kondisi belum di validasi --}}
+                                        <flux:button icon="envelope" class="mr-2" variant="primary">
+                                            {{ $item->keterangan ?? 'Surat Penawaran Harga belum diperiksa' }}
+                                        </flux:button>
+                                    @else
+                                        {{-- kondisi jika ada revisi --}}
+                                        <flux:modal.trigger name="edit-sph-{{ $item->id }}">
+                                            <flux:button icon="envelope" class="mr-2"
+                                                wire:click="edit({{ $item->id }})" variant="primary" color="yellow">
+                                                {{ $item->keterangan }}
+                                            </flux:button>
+                                        </flux:modal.trigger>
 
-                                    {{-- modal form --}}
-                                    <flux:modal name="edit-sph-{{ $item->id }}">
-                                        <form wire:submit.prevent="update">
+                                        {{-- modal form --}}
+                                        <flux:modal name="edit-sph-{{ $item->id }}">
                                             <flux:field>
-                                                <flux:label class="mt-3">Nama Surat Penawaran Harga</flux:label>
-                                                <flux:input wire:model="nama_sph" />
+                                                <flux:label class="mt-3">Pesan Revisi</flux:label>
+                                                <flux:text class=" text-left">{{ $item->pesan_revisi }}</flux:text>
+                                            </flux:field>
+                                            <form wire:submit.prevent="update">
+                                                <flux:field>
+                                                    <flux:label class="mt-3">Nama Surat Penawaran Harga</flux:label>
+                                                    <flux:text class=" text-left">{{ $item->nama_sph }}</flux:text>
+
+                                                    {{-- <flux:input wire:model="nama_sph" />
                                                 @error('nama_sph')
                                                     <span class="text-red-500 text-sm">{{ $message }}</span>
-                                                @enderror
-                                            </flux:field>
+                                                @enderror --}}
+                                                </flux:field>
 
-                                            <flux:field>
-                                                <flux:label class="mt-3">File Surat Penawaran Harga</flux:label>
+                                                <flux:field>
+                                                    {{-- <flux:label class="mt-3">File Surat Penawaran Harga</flux:label> --}}
 
-                                                @if ($file_path_sph)
-                                                    <p class="text-sm mb-2">
-                                                        File saat ini: {{ basename($file_path_sph) }}
-                                                    </p>
-                                                @endif
-                                                <flux:input type="file" wire:model="file_path_sph" />
-                                                @error('file_path_sph')
-                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
-                                                @enderror
-                                            </flux:field>
+                                                    @if ($file_path_sph)
+                                                        <p class="text-sm mt-3">
+                                                            File saat ini: {{ basename($file_path_sph) }}
+                                                        </p>
+                                                    @endif
+                                                    <flux:input type="file" wire:model="file_path_sph" />
+                                                    @error('file_path_sph')
+                                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                    @enderror
+                                                </flux:field>
 
-                                            <flux:button type="submit" class="mt-6" variant="primary">
-                                                Update
-                                            </flux:button>
-                                        </form>
-                                    </flux:modal>
+                                                <flux:button type="submit" class="mt-6" variant="primary">
+                                                    Update
+                                                </flux:button>
+                                            </form>
+                                        </flux:modal>
+                                    @endif
                                 </td>
                             @endcan
                         </tr>

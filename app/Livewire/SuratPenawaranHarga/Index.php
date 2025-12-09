@@ -2,6 +2,7 @@
 
 namespace App\Livewire\SuratPenawaranHarga;
 
+use App\Models\DocumentApprovalWorkflow;
 use App\Models\SuratPenawaranHarga;
 use App\Models\Tender;
 use Livewire\Component;
@@ -19,6 +20,8 @@ class Index extends Component
     public $file_path_sph;
     public $sph_id;
     public $isEditing = false;
+
+    public $pesan_revisi;
 
     protected $rules = [
         'tender_id' => ['required', 'exists:tenders,id'],
@@ -146,10 +149,60 @@ class Index extends Component
 
     }
 
+    public function approve($id)
+    {
+
+        // check role of user
+        $nama_role = auth()->user()->roles->first()->name;
+
+        DocumentApprovalWorkflow::create([
+            'user_id' => auth()->user()->id,
+            'surat_penawaran_harga_id' => $id,
+            'status' => true,
+            'level' => ($nama_role == "Manajer Admin") ? "2" : ($nama_role == "Direktur" ? "3" : null),
+            'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga disetujui oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga disetujui oleh Direktur" : null),
+        ]);
+
+        session()->flash('success', 'Surat Penawaran Harga berhasil di approve!');
+
+    }
+
+    public function reject($id)
+    {
+        // check role of user
+        $nama_role = auth()->user()->roles->first()->name;
+
+        $rules = ['pesan_revisi' => ['required', 'string', 'max:255']];
+
+        $this->validate($rules);
+
+        DocumentApprovalWorkflow::create([
+            'user_id' => auth()->user()->id,
+            'surat_penawaran_harga_id' => $id,
+            'status' => false,
+            'level' => ($nama_role == "Manajer Admin") ? "2" : ($nama_role == "Direktur" ? "3" : null),
+            'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga ditolak oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga ditolak oleh Direktur" : null),
+            'pesan_revisi' => $this->pesan_revisi
+
+        ]);
+
+        session()->flash('success', 'Surat Penawaran Harga berhasil di tolak!');
+
+    }
+
     public function render()
     {
         return view('livewire.surat-penawaran-harga.index', [
-            'sphs' => SuratPenawaranHarga::with(['tender', 'user'])
+            'sphs' => SuratPenawaranHarga::with(['tender', 'user','document_approval_workflows'])
+                ->select('surat_penawaran_hargas.*')
+                ->selectRaw("
+                        EXISTS (
+                            SELECT 1 
+                            FROM document_approval_workflow daw 
+                            WHERE daw.surat_penawaran_harga_id = surat_penawaran_hargas.id
+                            AND daw.level IS NOT NULL
+                        ) AS is_approved
+                    ")
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
 
