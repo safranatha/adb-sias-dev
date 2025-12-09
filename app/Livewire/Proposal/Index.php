@@ -165,8 +165,6 @@ class Index extends Component
 
         session()->flash('success', 'Proposal berhasil di approve!');
 
-        $this->resetForm();
-
     }
 
     public function reject($id)
@@ -189,8 +187,6 @@ class Index extends Component
         ]);
 
         session()->flash('success', 'Proposal berhasil di tolak!');
-
-        $this->resetForm();
 
     }
 
