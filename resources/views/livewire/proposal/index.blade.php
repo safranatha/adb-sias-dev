@@ -79,7 +79,9 @@
                     {{-- <th class="px-4 py-3 font-medium">Nama Proposal</th> --}}
                     <th class="px-4 py-3 font-medium">File Proposal</th>
                     <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
-                    {{-- <th class="px-4 py-3 font-medium">Keterangan</th> --}}
+                    @if (auth()->user()->hasRole('Manajer Admin'))
+                        <th class="px-4 py-3 font-medium">Keterangan</th>
+                    @endif
                     @can('validate proposal')
                         <th class="px-4 py-3 font-medium">Validate</th>
                     @endcan
@@ -109,9 +111,22 @@
                             <td class="px-4 py-3">
                                 {{ $item->user->name }}
                             </td>
-                            {{-- <td class="px-4 py-3">
-                                {{ $item->keterangan ?? '-' }}
-                            </td> --}}
+
+                            @if (auth()->user()->hasRole('Manajer Admin'))
+                                <td class="px-4 py-3">
+                                    @if ($item->status === 1 && $item->keterangan !== null)
+                                        <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-md">
+                                            {{ $item->keterangan ?? 'Proposal belum diperiksa' }} </span>
+                                    @elseif($item->status === 0 && $item->keterangan !== null)
+                                        <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-md">
+                                            {{ $item->keterangan ?? 'Proposal belum diperiksa' }} </span>
+                                    @else
+                                        <span class=" bg-gray-500 text-white text-xs px-2 py-1 rounded-md">
+                                            {{ $item->keterangan ?? 'Proposal belum diperiksa' }} </span>
+                                    @endif
+                                </td>
+                            @endif
+
                             @can('validate proposal')
                                 {{-- cek apakah sudah di validasi --}}
                                 @if ($item->is_approved)
@@ -123,8 +138,8 @@
                                 @else
                                     <td class="px-4 py-3">
                                         {{-- validate proposal --}}
-                                        <flux:button icon="check" class="mr-2" wire:click="approve({{ $item->id }})"
-                                            variant="primary" color="green">
+                                        <flux:button icon="check" class="mr-2"
+                                            wire:click="approve({{ $item->id }})" variant="primary" color="green">
                                         </flux:button>
 
                                         <flux:modal.trigger name="reject-proposal-{{ $item->id }}">
@@ -153,21 +168,21 @@
                             @can('create proposal')
                                 <td>
                                     @if ($item->status === 1 && $item->keterangan !== null)
-                                    {{-- kondisi acc validasi --}}
+                                        {{-- kondisi acc validasi --}}
                                         <flux:button icon="envelope" class="mr-2" variant="primary" color="green">
                                             {{ $item->keterangan }}
                                         </flux:button>
                                     @elseif($item->status === null && $item->keterangan === null)
-                                    {{-- kondisi belum di validasi --}}
+                                        {{-- kondisi belum di validasi --}}
                                         <flux:button icon="envelope" class="mr-2" variant="primary">
                                             {{ $item->keterangan ?? 'Proposal belum diperiksa' }}
                                         </flux:button>
                                     @else
-                                    {{-- kondisi jika ada revisi --}}
+                                        {{-- kondisi jika ada revisi --}}
                                         <flux:modal.trigger name="edit-proposal-{{ $item->id }}">
                                             <flux:button icon="envelope" class="mr-2"
                                                 wire:click="edit({{ $item->id }})" variant="primary" color="yellow">
-                                                {{ $item->keterangan}}
+                                                {{ $item->keterangan }}
                                             </flux:button>
                                         </flux:modal.trigger>
 
