@@ -149,13 +149,6 @@ class Index extends Component
         // return redirect()->route('proposal.index');
     }
 
-    public function checkStatus($id)
-    {
-        $status = DocumentApprovalWorkflow::where('proposal_id', $id)->whereNotNull('status')->exists();
-
-        return $status;
-    }
-
     public function approve($id)
     {
 
