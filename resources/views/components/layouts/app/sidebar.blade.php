@@ -42,6 +42,7 @@
         </flux:navlist>
         @endcan
 
+        @can('view proposal')
         <flux:navlist variant="outline">
             <flux:navlist.group class="grid">
                 <flux:navlist.item icon="document-text" :href="route('proposal.index')"
@@ -49,7 +50,9 @@
                 </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
+        @endcan
 
+        @can('view surat penawaran harga')
         <flux:navlist variant="outline">
             <flux:navlist.group class="grid">
                 <flux:navlist.item icon="banknotes" :href="route('surat-penawaran-harga.index')"
@@ -57,6 +60,7 @@
                 </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
+        @endcan
 
         <flux:spacer />
 
