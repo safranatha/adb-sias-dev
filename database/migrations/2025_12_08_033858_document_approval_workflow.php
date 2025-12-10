@@ -17,7 +17,7 @@ return new class extends Migration
            $table->foreignId('proposal_id')->nullable()->constrained()->onDelete('cascade');
            $table->foreignId('surat_penawaran_harga_id')->nullable()->constrained()->onDelete('cascade');
            $table->char('level', 1);
-           $table->boolean('status');
+           $table->boolean('status')->nullable();
            $table->string('keterangan');
            $table->string('pesan_revisi')->nullable();
            $table->timestamps();
