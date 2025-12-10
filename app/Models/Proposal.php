@@ -43,13 +43,33 @@ class Proposal extends Model
     {
         return $this->document_approval_workflows()
             ->latest()
-            ->value('pesan_revisi'); // langsung ambil status, tidak butuh first()
+            ->value('pesan_revisi'); 
     }
 
     public function getKeteranganAttribute()
     {
         return $this->document_approval_workflows()
             ->latest()
-            ->value('keterangan'); // langsung ambil status, tidak butuh first()
+            ->value('keterangan'); 
     }
+
+
+    // buat asssor get count proposal (count_proposal)
+    public function getCountProposalAttribute()
+    {
+        return $this->document_approval_workflows()
+            ->where('proposal_id', $this->id)
+            ->count();
+    }
+
+    // manipulasi get count proposal (status_proposal)
+    public function getStatusProposalAttribute()
+    {
+        if ($this->count_proposal == 1 || $this->count_proposal == null) {  // Memanggil accessor pertama
+            return 'Proposal Baru';
+        }
+
+        return 'Proposal Revisi ke-' . ($this->count_proposal - 1);
+    }
+
 }
