@@ -199,15 +199,30 @@ class Index extends Component
 
         $this->validate($rules);
 
-        DocumentApprovalWorkflow::create([
+
+         // Cari document approval berdasarkan proposal_id
+        $documentApproval = DocumentApprovalWorkflow::where('proposal_id', $id)
+            ->latest() // Ambil yang terbaru
+            ->first();
+
+        $documentApproval->update([
             'user_id' => auth()->user()->id,
-            'proposal_id' => $id,
             'status' => false,
             'level' => ($nama_role == "Manajer Teknik") ? "2" : ($nama_role == "Direktur" ? "3" : null),
             'keterangan' => ($nama_role == "Manajer Teknik") ? "Proposal ditolak oleh Manajer Teknik" : ($nama_role == "Direktur" ? "Proposal ditolak oleh Direktur" : null),
             'pesan_revisi' => $this->pesan_revisi
-
         ]);
+
+
+        // DocumentApprovalWorkflow::create([
+        //     'user_id' => auth()->user()->id,
+        //     'proposal_id' => $id,
+        //     'status' => false,
+        //     'level' => ($nama_role == "Manajer Teknik") ? "2" : ($nama_role == "Direktur" ? "3" : null),
+        //     'keterangan' => ($nama_role == "Manajer Teknik") ? "Proposal ditolak oleh Manajer Teknik" : ($nama_role == "Direktur" ? "Proposal ditolak oleh Direktur" : null),
+        //     'pesan_revisi' => $this->pesan_revisi
+
+        // ]);
 
         session()->flash('success', 'Proposal berhasil di tolak!');
 

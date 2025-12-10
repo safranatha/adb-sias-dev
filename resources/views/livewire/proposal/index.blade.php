@@ -97,6 +97,7 @@
                         </tr>
                     @else
                         @foreach ($document_approvals as $item)
+                        {{-- @dd($item->status_proposal) --}}
                             <tr>
                                 {{-- nama tender --}}
                                 <td class="px-4 py-3">{{ $item->proposal->tender->nama_tender }}</td>
@@ -126,17 +127,19 @@
                                 @else
                                     <td class="px-4 py-3">
                                         {{-- validate proposal --}}
+                                        {{-- button approve --}}
                                         <flux:button icon="check" class="mr-2" wire:click="approve({{ $item->proposal->id }})"
                                             variant="primary" color="green">
                                         </flux:button>
 
-                                        <flux:modal.trigger name="reject-proposal-{{ $item->id }}">
+                                        {{-- button reject --}}
+                                        <flux:modal.trigger name="reject-proposal-{{ $item->proposal->id }}">
                                             <flux:button icon="x-mark" variant="danger"></flux:button>
                                         </flux:modal.trigger>
 
                                         {{-- modal form reject --}}
-                                        <flux:modal name="reject-proposal-{{ $item->id }}">
-                                            <form wire:submit.prevent="reject({{ $item->id }})">
+                                        <flux:modal name="reject-proposal-{{ $item->proposal->id }}">
+                                            <form wire:submit.prevent="reject({{ $item->proposal->id }})">
                                                 <flux:field>
                                                     <flux:label class="mt-3">Alasan Penolakan</flux:label>
                                                     <flux:textarea wire:model="pesan_revisi"></flux:textarea>

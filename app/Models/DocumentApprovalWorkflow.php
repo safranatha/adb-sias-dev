@@ -39,16 +39,18 @@ class DocumentApprovalWorkflow extends Model
     // asssor helper for get
     public function getCountProposalAttribute()
     {
-        return self::where('proposal_id', $this->id)
+        return self::where('proposal_id', $this->proposal_id)
             ->count();
     }
 
     public function getStatusProposalAttribute()
     {
-        if ($this->count_proposal == 1 || $this->count_proposal == null) {  // Memanggil accessor pertama
+        $count = $this->count_proposal;
+
+        if ($count == 1 || $count == null) {  // Memanggil accessor pertama
             return 'Proposal Baru';
         }
 
-        return 'Proposal Revisi ke-' . ($this->count_proposal - 1);
+        return 'Proposal Revisi ke-' . ($count - 1);
     }
 }
