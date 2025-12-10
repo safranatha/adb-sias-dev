@@ -107,10 +107,20 @@ class Index extends Component
             $format_timestamp = date('g i a,d-m-Y', $timestamp);
             $filename = "Revision" . "_" . $format_timestamp . "_" . $original;
 
+            // store ke storage
             $path = $this->file_path_proposal->storeAs('proposals', $filename, 'public');
 
+            // store ke db
             $proposal->update([
                 'file_path_proposal' => $path,
+            ]);
+
+            // create status on document approval workflow
+            DocumentApprovalWorkflow::create([
+                'user_id' => auth()->user()->id,
+                'proposal_id' => $this->proposal_id,
+                'keterangan' => "(belum diperiksa) Proposal diupdate oleh " . auth()->user()->name,
+                'level' => 0,
             ]);
         }
 
@@ -134,12 +144,21 @@ class Index extends Component
         $path = $this->file_path_proposal->storeAs('proposals', $filename, 'public');
 
         // save to database
-        Proposal::create([
+        $proposal = Proposal::create([
             'user_id' => auth()->user()->id,
             'tender_id' => $this->tender_id,
             'nama_proposal' => $this->nama_proposal,
             'file_path_proposal' => $path,
         ]);
+
+        // create status on document approval workflow
+        DocumentApprovalWorkflow::create([
+            'user_id' => auth()->user()->id,
+            'proposal_id' => $proposal->id,
+            'keterangan' => "(belum diperiksa) Proposal dibuat oleh " . auth()->user()->name,
+            'level' => 0,
+        ]);
+
 
         session()->flash('success', 'Proposal berhasil diupload!');
 
@@ -155,9 +174,13 @@ class Index extends Component
         // check role of user
         $nama_role = auth()->user()->roles->first()->name;
 
-        DocumentApprovalWorkflow::create([
+        // Cari document approval berdasarkan proposal_id
+        $documentApproval = DocumentApprovalWorkflow::where('proposal_id', $id)
+            ->latest() // Ambil yang terbaru
+            ->first();
+
+        $documentApproval->update([
             'user_id' => auth()->user()->id,
-            'proposal_id' => $id,
             'status' => true,
             'level' => ($nama_role == "Manajer Teknik") ? "2" : ($nama_role == "Direktur" ? "3" : null),
             'keterangan' => ($nama_role == "Manajer Teknik") ? "Proposal disetujui oleh Manajer Teknik" : ($nama_role == "Direktur" ? "Proposal disetujui oleh Direktur" : null),
@@ -208,7 +231,12 @@ class Index extends Component
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
 
-            'tenders' => Tender::where('status', 'Dalam Proses')
+            'document_approvals' => DocumentApprovalWorkflow::with(['proposal'])
+            ->select('document_approval_workflow.*')
+            ->orderBy('created_at', 'desc')
+            ->paginate(5),
+
+            'tender_status' => Tender::where('status', 'Dalam Proses')
                 ->doesntHave('proposal')
                 ->get(),
 
