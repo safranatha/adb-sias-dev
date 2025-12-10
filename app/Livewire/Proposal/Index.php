@@ -119,7 +119,7 @@ class Index extends Component
             DocumentApprovalWorkflow::create([
                 'user_id' => auth()->user()->id,
                 'proposal_id' => $this->proposal_id,
-                'keterangan' => "(belum diperiksa) Proposal diupdate oleh " . auth()->user()->name,
+                'keterangan' => "Proposal belum diperiksa oleh Manajer Teknik",
                 'level' => 0,
             ]);
         }
@@ -155,7 +155,7 @@ class Index extends Component
         DocumentApprovalWorkflow::create([
             'user_id' => auth()->user()->id,
             'proposal_id' => $proposal->id,
-            'keterangan' => "(belum diperiksa) Proposal dibuat oleh " . auth()->user()->name,
+            'keterangan' => "Proposal belum diperiksa oleh Manajer Teknik",
             'level' => 0,
         ]);
 

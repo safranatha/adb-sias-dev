@@ -301,7 +301,7 @@
                                             <flux:button icon="envelope" class="mr-2" variant="primary" color="green">
                                                 {{ $item->keterangan }}
                                             </flux:button>
-                                        @elseif($item->status === null && $item->keterangan === null)
+                                        @elseif($item->status === null)
                                             {{-- kondisi belum di validasi --}}
                                             <flux:button icon="envelope" class="mr-2" variant="primary">
                                                 {{ $item->keterangan ?? 'Proposal belum diperiksa' }}
