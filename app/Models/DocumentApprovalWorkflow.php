@@ -20,7 +20,7 @@ class DocumentApprovalWorkflow extends Model
         'pesan_revisi',
     ];
 
-     public function user()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
@@ -37,20 +37,23 @@ class DocumentApprovalWorkflow extends Model
 
 
     // asssor helper for get
-    public function getCountProposalAttribute()
-    {
-        return self::where('proposal_id', $this->proposal_id)
-            ->count();
-    }
+    // public function getCountProposalAttribute()
+    // {
+    //     return self::where('proposal_id', $this->proposal_id)
+    //         ->count();
+    // }
 
     public function getStatusProposalAttribute()
     {
-        $count = $this->count_proposal;
+        // Hitung ada berapa workflow yang lebih lama dari row ini untuk proposal yang sama
+        $olderWorkflowCount = self::where('proposal_id', $this->proposal_id)
+            ->where('created_at', '<', $this->created_at)
+            ->count();
 
-        if ($count == 1 || $count == null) {  // Memanggil accessor pertama
+        if ($olderWorkflowCount == 0) {
             return 'Proposal Baru';
         }
 
-        return 'Proposal Revisi ke-' . ($count - 1);
+        return 'Proposal Revisi ke-' . $olderWorkflowCount;
     }
 }
