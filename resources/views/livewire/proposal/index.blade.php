@@ -73,7 +73,7 @@
 
     {{-- ===== MANAJER TEKNIK SECTION ==== --}}
     {{-- pengecekan permission, jika memenuhi syarat maka bisa tampil, manajer permissionnya view proposal dan validate saja --}}
-    @can(['view proposal', 'validate proposal'])
+    @can('validate proposal')
         {{-- tabel manajer --}}
         <div class="overflow-x-auto rounded-xl border border-gray-200">
             <table class="w-full text-sm text-center">
