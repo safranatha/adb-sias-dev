@@ -16,11 +16,28 @@ class Tender extends Model
         'nama_klien',
     ];
 
-    public function proposal() :HasOne{
+    public function proposal(): HasOne
+    {
         return $this->hasOne(Proposal::class);
     }
 
-    public function surat_penawaran_harga() :HasOne{
+    public function surat_penawaran_harga(): HasOne
+    {
         return $this->hasOne(SuratPenawaranHarga::class);
+    }
+
+    public function getStatusAttribute()
+    {
+        $status= $this->proposal?->document_approval_workflows()
+            ->latest()
+            ->value('status') ?? null;
+        
+        $level= $this->proposal?->document_approval_workflows()
+            ->latest()
+            ->value('level') ?? null;
+        
+        if($status == true && $level == 3){
+            return true;
+        }
     }
 }
