@@ -259,10 +259,6 @@
                         {{-- <th class="px-4 py-3 font-medium">Nama Proposal</th> --}}
                         <th class="px-4 py-3 font-medium">File Proposal</th>
                         <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
-                        @if (auth()->user()->hasRole('Manajer Admin'))
-                            <th class="px-4 py-3 font-medium">Keterangan</th>
-                        @endif
-
                         <th class="px-4 py-3 font-medium">Pesan</th>
 
                     </tr>
