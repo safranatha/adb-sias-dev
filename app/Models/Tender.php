@@ -36,7 +36,7 @@ class Tender extends Model
             ->latest()
             ->value('level') ?? null;
         
-        if($status == true && $level == 3){
+        if($level == 3){
             return true;
         }
     }
