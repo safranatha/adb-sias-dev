@@ -134,11 +134,19 @@ class Index extends Component
         $path = $this->file_path_sph->storeAs('surat_penawaran_hargas', $filename, 'public');
 
         // save to database
-        SuratPenawaranHarga::create([
+        $sph=SuratPenawaranHarga::create([
             'user_id' => auth()->user()->id,
             'tender_id' => $this->tender_id,
             'nama_sph' => $this->nama_sph,
             'file_path_sph' => $path,
+        ]);
+
+        // create status on document approval workflow
+        DocumentApprovalWorkflow::create([
+            'user_id' => auth()->user()->id,
+            'surat_penawaran_harga_id' => $sph->id,
+            'keterangan' => "Surat Penawaran Harga belum diperiksa oleh Manajer Admin",
+            'level' => 0,
         ]);
 
         session()->flash('success', 'Surat Penawaran Harga berhasil diupload!');
@@ -155,9 +163,13 @@ class Index extends Component
         // check role of user
         $nama_role = auth()->user()->roles->first()->name;
 
-        DocumentApprovalWorkflow::create([
+        // Cari document approval berdasarkan surat_penawaran_harga_id
+        $documentApproval = DocumentApprovalWorkflow::where('surat_penawaran_harga_id', $id)
+            ->latest() // Ambil yang terbaru
+            ->first();
+
+        $documentApproval->update([
             'user_id' => auth()->user()->id,
-            'surat_penawaran_harga_id' => $id,
             'status' => true,
             'level' => ($nama_role == "Manajer Admin") ? "2" : ($nama_role == "Direktur" ? "3" : null),
             'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga disetujui oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga disetujui oleh Direktur" : null),
@@ -176,14 +188,16 @@ class Index extends Component
 
         $this->validate($rules);
 
-        DocumentApprovalWorkflow::create([
+        // Cari document approval berdasarkan surat_penawaran_harga_id
+        $documentApproval = DocumentApprovalWorkflow::where('surat_penawaran_harga_id', $id)
+            ->latest() // Ambil yang terbaru
+            ->first();
+
+        $documentApproval->update([
             'user_id' => auth()->user()->id,
-            'surat_penawaran_harga_id' => $id,
             'status' => false,
             'level' => ($nama_role == "Manajer Admin") ? "2" : ($nama_role == "Direktur" ? "3" : null),
             'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga ditolak oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga ditolak oleh Direktur" : null),
-            'pesan_revisi' => $this->pesan_revisi
-
         ]);
 
         session()->flash('success', 'Surat Penawaran Harga berhasil di tolak!');
@@ -193,7 +207,7 @@ class Index extends Component
     public function render()
     {
         return view('livewire.surat-penawaran-harga.index', [
-            'sphs' => SuratPenawaranHarga::with(['tender', 'user','document_approval_workflows'])
+            'sphs' => SuratPenawaranHarga::with(['tender', 'user', 'document_approval_workflows'])
                 ->select('surat_penawaran_hargas.*')
                 ->selectRaw("
                         EXISTS (
@@ -203,6 +217,12 @@ class Index extends Component
                             AND daw.level IS NOT NULL
                         ) AS is_approved
                     ")
+                ->orderBy('created_at', 'desc')
+                ->paginate(5),
+
+            'document_approvals' => DocumentApprovalWorkflow::with(['surat_penawaran_harga'])
+                ->whereNotNull('surat_penawaran_harga_id')
+                ->select('document_approval_workflow.*')
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
 

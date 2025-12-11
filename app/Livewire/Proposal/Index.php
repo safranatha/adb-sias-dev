@@ -214,16 +214,6 @@ class Index extends Component
         ]);
 
 
-        // DocumentApprovalWorkflow::create([
-        //     'user_id' => auth()->user()->id,
-        //     'proposal_id' => $id,
-        //     'status' => false,
-        //     'level' => ($nama_role == "Manajer Teknik") ? "2" : ($nama_role == "Direktur" ? "3" : null),
-        //     'keterangan' => ($nama_role == "Manajer Teknik") ? "Proposal ditolak oleh Manajer Teknik" : ($nama_role == "Direktur" ? "Proposal ditolak oleh Direktur" : null),
-        //     'pesan_revisi' => $this->pesan_revisi
-
-        // ]);
-
         session()->flash('success', 'Proposal berhasil di tolak!');
 
     }

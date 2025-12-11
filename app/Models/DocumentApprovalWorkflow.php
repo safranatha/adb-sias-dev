@@ -32,17 +32,13 @@ class DocumentApprovalWorkflow extends Model
 
     public function surat_penawaran_harga()
     {
-        return $this->belongsTo(Proposal::class);
+        return $this->belongsTo(SuratPenawaranHarga::class);
     }
 
 
-    // asssor helper for get
-    // public function getCountProposalAttribute()
-    // {
-    //     return self::where('proposal_id', $this->proposal_id)
-    //         ->count();
-    // }
+    // assesor untuk get status dokumen (penggolongan dokumen baru atau revisi. jika revisi sudah yang keberapa)
 
+    // proposal
     public function getStatusProposalAttribute()
     {
         // Hitung ada berapa workflow yang lebih lama dari row ini untuk proposal yang sama
@@ -56,4 +52,20 @@ class DocumentApprovalWorkflow extends Model
 
         return 'Proposal Revisi ke-' . $olderWorkflowCount;
     }
+
+    // surat penawaran harga
+    public function getStatusSphAttribute()
+    {
+        // Hitung ada berapa workflow yang lebih lama dari row ini untuk surat penawaran harga yang sama
+        $olderWorkflowCount = self::where('surat_penawaran_harga_id', $this->surat_penawaran_harga_id)
+            ->where('created_at', '<', $this->created_at)
+            ->count();
+
+        if ($olderWorkflowCount == 0) {
+            return 'Surat Penawaran Harga Baru';
+        }
+
+        return 'Surat Penawaran Harga Revisi ke-' . $olderWorkflowCount;
+    }
+
 }

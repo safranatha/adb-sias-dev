@@ -71,45 +71,48 @@
         </div>
     @endif
 
-    <div class="overflow-x-auto rounded-xl border border-gray-200">
-        <table class="w-full text-sm text-center">
-            <thead class="bg-gray-100 text-black">
-                <tr>
-                    <th class="px-4 py-3 font-medium">Nama Tender</th>
-                    {{-- <th class="px-4 py-3 font-medium">Nama Surat Penawaran Harga</th> --}}
-                    <th class="px-4 py-3 font-medium">File Surat Penawaran Harga</th>
-                    <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
-                    @can('validate surat penawaran harga')
-                        <th class="px-4 py-3 font-medium">Validate</th>
-                    @endcan
-                    @can('create surat penawaran harga')
-                        <th class="px-4 py-3 font-medium">Pesan</th>
-                    @endcan
-                </tr>
-            </thead>
-
-            <tbody class="divide-y divide-gray-200">
-                @if ($sphs->isEmpty())
+    @can('validate surat penawaran harga')
+        <div class="overflow-x-auto rounded-xl border border-gray-200">
+            <table class="w-full text-sm text-center">
+                <thead class="bg-gray-100 text-black">
                     <tr>
-                        <td colspan="3" class="px-4 py-6">
-                            Tidak ada Surat Penawaran Harga untuk ditampilkan.
-                        </td>
+                        <th class="px-4 py-3 font-medium">Nama Tender</th>
+                        {{-- <th class="px-4 py-3 font-medium">Nama Surat Penawaran Harga</th> --}}
+                        <th class="px-4 py-3 font-medium">File Surat Penawaran Harga</th>
+                        <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
+                        <th class="px-4 py-3 font-medium">Validate</th>
+                        <th class="px-4 py-3 font-medium">Status Surat Penawaran Harga</th>
                     </tr>
-                @else
-                    @foreach ($sphs as $item)
+                </thead>
+
+                <tbody class="divide-y divide-gray-200">
+                    @if ($document_approvals->isEmpty())
                         <tr>
-                            <td class="px-4 py-3">{{ $item->tender->nama_tender }}</td>
-                            {{-- <td class="px-4 py-3">{{ $item->nama_sph }}</td> --}}
-                            {{-- file sph diberi logo download dan jika diklik maka auto download --}}
-                            <td class="px-4 py-3">
-                                <flux:button icon="arrow-down-tray" class="mr-2"
-                                    wire:click="download({{ $item->id }})"></flux:button>
+                            <td colspan="3" class="px-4 py-6">
+                                Tidak ada Surat Penawaran Harga untuk ditampilkan.
                             </td>
-                            <td class="px-4 py-3">
-                                {{ $item->user->name }}
-                            </td>
-                            @can('validate surat penawaran harga')
-                                @if ($item->is_approved)
+                        </tr>
+                    @else
+                        @foreach ($document_approvals as $item)
+                            <tr>
+                                {{-- nama tender --}}
+                                <td class="px-4 py-3">{{ $item->surat_penawaran_harga->tender->nama_tender }}</td>
+                                {{-- <td class="px-4 py-3">{{ $item->nama_sph }}</td> --}}
+
+                                {{-- download file --}}
+                                {{-- file sph diberi logo download dan jika diklik maka auto download --}}
+                                <td class="px-4 py-3">
+                                    <flux:button icon="arrow-down-tray" class="mr-2"
+                                        wire:click="download({{ $item->surat_penawaran_harga->id }})"></flux:button>
+                                </td>
+
+                                {{-- dibuat oleh --}}
+                                <td class="px-4 py-3">
+                                    {{ $item->user->name }}
+                                </td>
+
+                                {{-- validasi --}}
+                                @if ($item->status !== null)
                                     <td class="px-4 py-3">
                                         <span class="bg-green-500 text-white text-s px-2 py-1 rounded-md">
                                             Sudah diperiksa
@@ -117,18 +120,21 @@
                                     </td>
                                 @else
                                     <td class="px-4 py-3">
-                                        {{-- validate suratPenawaranHarga --}}
-                                        <flux:button icon="check" class="mr-2" wire:click="approve({{ $item->id }})"
-                                            variant="primary" color="green">
+                                        {{-- validate sph --}}
+                                        {{-- button approve --}}
+                                        <flux:button icon="check" class="mr-2"
+                                            wire:click="approve({{ $item->surat_penawaran_harga->id }})" variant="primary"
+                                            color="green">
                                         </flux:button>
 
-                                        <flux:modal.trigger name="reject-suratPenawaranHarga-{{ $item->id }}">
+                                        {{-- button reject --}}
+                                        <flux:modal.trigger name="reject-sph-{{ $item->surat_penawaran_harga->id }}">
                                             <flux:button icon="x-mark" variant="danger"></flux:button>
                                         </flux:modal.trigger>
 
                                         {{-- modal form reject --}}
-                                        <flux:modal name="reject-suratPenawaranHarga-{{ $item->id }}">
-                                            <form wire:submit.prevent="reject({{ $item->id }})">
+                                        <flux:modal name="reject-sph-{{ $item->surat_penawaran_harga->id }}">
+                                            <form wire:submit.prevent="reject({{ $item->surat_penawaran_harga->id }})">
                                                 <flux:field>
                                                     <flux:label class="mt-3">Alasan Penolakan</flux:label>
                                                     <flux:textarea wire:model="pesan_revisi"></flux:textarea>
@@ -143,10 +149,58 @@
                                         </flux:modal>
                                     </td>
                                 @endif
-                            @endcan
 
-                            <td>
-                                @can('create surat penawaran harga')
+                                {{-- status Surat Penawaran Harga --}}
+                                <td class="px-4 py-3">
+                                    {{-- logic pengambilan data ada di model proposal --}}
+                                    {{ $item->status_sph }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+            <div class=" pl-1 m-2">
+                {{ $document_approvals->links() }}
+            </div>
+        </div>
+    @endcan
+
+    @can('create surat penawaran harga')
+        <div class="overflow-x-auto rounded-xl border border-gray-200">
+            <table class="w-full text-sm text-center">
+                <thead class="bg-gray-100 text-black">
+                    <tr>
+                        <th class="px-4 py-3 font-medium">Nama Tender</th>
+                        {{-- <th class="px-4 py-3 font-medium">Nama Surat Penawaran Harga</th> --}}
+                        <th class="px-4 py-3 font-medium">File Surat Penawaran Harga</th>
+                        <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
+                        <th class="px-4 py-3 font-medium">Pesan</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-gray-200">
+                    @if ($sphs->isEmpty())
+                        <tr>
+                            <td colspan="3" class="px-4 py-6">
+                                Tidak ada Surat Penawaran Harga untuk ditampilkan.
+                            </td>
+                        </tr>
+                    @else
+                        @foreach ($sphs as $item)
+                            <tr>
+                                <td class="px-4 py-3">{{ $item->tender->nama_tender }}</td>
+                                {{-- <td class="px-4 py-3">{{ $item->nama_sph }}</td> --}}
+                                {{-- file sph diberi logo download dan jika diklik maka auto download --}}
+                                <td class="px-4 py-3">
+                                    <flux:button icon="arrow-down-tray" class="mr-2"
+                                        wire:click="download({{ $item->id }})"></flux:button>
+                                </td>
+                                <td class="px-4 py-3">
+                                    {{ $item->user->name }}
+                                </td>
+
+                                <td>
                                     @if ($item->status === 1 && $item->keterangan !== null)
                                         {{-- kondisi acc validasi --}}
                                         <flux:button icon="envelope" class="mr-2" variant="primary" color="green">
@@ -204,15 +258,15 @@
                                         </flux:modal>
                                     @endif
                                 </td>
-                            @endcan
-                        </tr>
-                    @endforeach
 
-                @endif
-            </tbody>
-        </table>
-        <div class=" pl-1 m-2">
-            {{ $sphs->links() }}
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+            <div class=" pl-1 m-2">
+                {{ $sphs->links() }}
+            </div>
         </div>
-    </div>
+    @endcan
 </div>
