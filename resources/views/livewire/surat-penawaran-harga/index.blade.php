@@ -206,7 +206,7 @@
                                         <flux:button icon="envelope" class="mr-2" variant="primary" color="green">
                                             {{ $item->keterangan }}
                                         </flux:button>
-                                    @elseif($item->status === null && $item->keterangan === null)
+                                    @elseif($item->status === null )
                                         {{-- kondisi belum di validasi --}}
                                         <flux:button icon="envelope" class="mr-2" variant="primary">
                                             {{ $item->keterangan ?? 'Surat Penawaran Harga belum diperiksa' }}
@@ -215,7 +215,7 @@
                                         {{-- kondisi jika ada revisi --}}
                                         <flux:modal.trigger name="edit-sph-{{ $item->id }}">
                                             <flux:button icon="envelope" class="mr-2"
-                                                wire:click="edit({{ $item->id }})" variant="primary" color="yellow">
+                                                wire:click="edit({{ $item->id }})" variant="primary" color="red">
                                                 {{ $item->keterangan }}
                                             </flux:button>
                                         </flux:modal.trigger>

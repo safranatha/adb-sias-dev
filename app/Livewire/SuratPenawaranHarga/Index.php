@@ -113,6 +113,14 @@ class Index extends Component
             $sph->update([
                 'file_path_sph' => $path,
             ]);
+
+            // create status on document approval workflow
+            DocumentApprovalWorkflow::create([
+                'user_id' => auth()->user()->id,
+                'surat_penawaran_harga_id' => $this->sph_id,
+                'keterangan' => "Surat Penawaran Harga belum diperiksa oleh Manajer Admin",
+                'level' => 0,
+            ]);
         }
 
         session()->flash('success', 'Surat Penawaran Harga berhasil diupdate!.');
