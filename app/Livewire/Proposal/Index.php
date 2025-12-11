@@ -237,6 +237,7 @@ class Index extends Component
                 ->paginate(5),
 
             'document_approvals' => DocumentApprovalWorkflow::with(['proposal'])
+            ->whereNotNull('proposal_id')
             ->select('document_approval_workflow.*')
             ->orderBy('created_at', 'desc')
             ->paginate(5),
