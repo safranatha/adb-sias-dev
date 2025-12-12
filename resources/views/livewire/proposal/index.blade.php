@@ -84,6 +84,7 @@
                         <th class="px-4 py-3 font-medium">File Proposal</th>
                         <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
                         <th class="px-4 py-3 font-medium">Validate</th>
+                        <th class="px-4 py-3 font-medium">Validator</th>
                         <th class="px-4 py-3 font-medium">Status Proposal</th>
                     </tr>
                 </thead>
@@ -112,7 +113,7 @@
 
                                 {{-- dibuat oleh --}}
                                 <td class="px-4 py-3">
-                                    {{ $item->user->name }}
+                                    {{ $item->proposal->user->name }}
                                 </td>
 
 
@@ -156,6 +157,10 @@
                                     </td>
                                 @endif
 
+                                {{-- validator --}}
+                                <td class="px-4 py-3">
+                                    {{ $item->user->name }}
+                                </td>
 
                                 {{-- tipe dokumen --}}
                                 <td class="px-4 py-3">
@@ -188,7 +193,6 @@
                                 <th class="px-4 py-3 font-medium">Nama Tender</th>
                                 {{-- <th class="px-4 py-3 font-medium">Nama Proposal</th> --}}
                                 <th class="px-4 py-3 font-medium">File Proposal</th>
-                                <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
                                 <th class="px-4 py-3 font-medium">Keterangan</th>
                             </tr>
                         </thead>
@@ -212,11 +216,6 @@
                                         <td class="px-4 py-3">
                                             <flux:button icon="arrow-down-tray" class="mr-2"
                                                 wire:click="download({{ $item->id }})"></flux:button>
-                                        </td>
-
-                                        {{-- dibuat oleh --}}
-                                        <td class="px-4 py-3">
-                                            {{ $item->user->name }}
                                         </td>
 
                                         {{-- keterangan --}}
