@@ -26,12 +26,9 @@ class Tender extends Model
         return $this->hasOne(SuratPenawaranHarga::class);
     }
 
-    public function getStatusAttribute()
+    public function getLevelAttribute()
     {
-        $status= $this->proposal?->document_approval_workflows()
-            ->latest()
-            ->value('status') ?? null;
-        
+       
         $level= $this->proposal?->document_approval_workflows()
             ->latest()
             ->value('level') ?? null;
