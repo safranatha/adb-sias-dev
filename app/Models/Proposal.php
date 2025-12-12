@@ -20,4 +20,38 @@ class Proposal extends Model
     {
         return $this->belongsTo(Tender::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function document_approval_workflows()
+    {
+        return $this->hasMany(DocumentApprovalWorkflow::class);
+    }
+
+    // get status dan auto generate properties, nnti tinggal panggil proposal(model)->status. itu didapat dari getStatusAttribute (generate property status)
+    public function getStatusAttribute()
+    {
+        return $this->document_approval_workflows()
+            ->latest()
+            ->value('status'); // langsung ambil status, tidak butuh first()
+    }
+
+    public function getPesanRevisiAttribute()
+    {
+        return $this->document_approval_workflows()
+            ->latest()
+            ->value('pesan_revisi'); 
+    }
+
+    public function getKeteranganAttribute()
+    {
+        return $this->document_approval_workflows()
+            ->latest()
+            ->value('keterangan'); 
+    }
+
+
 }

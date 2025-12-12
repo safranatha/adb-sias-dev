@@ -3,16 +3,12 @@
         <flux:button class="mb-4">Register</flux:button>
     </a>
 
-    {{-- success message after post created --}}
     @if (session('success'))
-        <div class="bg-green-100 text-green-800 px-4 py-2 rounded mb-3 successMsg">
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 2000)"
+            x-transition:leave="transition ease-out duration-500" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0" class="bg-green-100 text-green-800 px-4 py-2 rounded mb-3">
             {{ session('success') }}
         </div>
-        <script>
-            setTimeout(() => {
-                document.getElementsByClassName('successMsg')?.remove();
-            }, 200);
-        </script>
     @endif
 
     <div class="overflow-x-auto rounded-xl border border-gray-200">
@@ -20,6 +16,7 @@
             <thead class="bg-gray-100 text-black">
                 <tr>
                     <th class="px-4 py-3 font-medium">Nama</th>
+                    <th class="px-4 py-3 font-medium">Email</th>
                     <th class="px-4 py-3 font-medium">Role</th>
                     <th class="px-4 py-3 font-medium">Action</th>
                 </tr>
@@ -36,7 +33,8 @@
                     @foreach ($users as $user)
                         <tr>
                             <td class="px-4 py-3">{{ $user->name }}</td>
-
+                            <td class="px-4 py-3">{{ $user->email }}</td>
+                            
                             <td class="px-4 py-3">
                                 {{-- kalau pakai Spatie Roles --}}
                                 @foreach ($user->roles as $role)
@@ -50,7 +48,7 @@
                                 {{-- modal trigger --}}
                                 <flux:modal.trigger name="edit-user-{{ $user->id }}">
                                     {{-- button edit --}}
-                                    <flux:button icon="pencil" class="mr-2" wire:click="edit({{ $user->id }})"></flux:button>
+                                    <flux:button icon="pencil" class="mr-2" wire:click="edit({{ $user->id }})" variant="primary" color="yellow"></flux:button>
 
                                 </flux:modal.trigger>
 

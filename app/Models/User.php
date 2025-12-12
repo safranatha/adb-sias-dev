@@ -62,4 +62,19 @@ class User extends Authenticatable
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
+
+    public function proposals()
+    {
+        return $this->hasMany(Proposal::class);
+    }
+
+    public function surat_penawaran_hargas()
+    {
+        return $this->hasMany(Tender::class);
+    }
+
+    public function document_approval_workflows()
+    {
+        return $this->hasMany(DocumentApprovalWorkflow::class);
+    }
 }
