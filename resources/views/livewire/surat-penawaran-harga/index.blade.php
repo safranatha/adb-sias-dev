@@ -71,6 +71,7 @@
         </div>
     @endif
 
+    {{-- manajer admin --}}
     @can('validate surat penawaran harga')
         <div class="overflow-x-auto rounded-xl border border-gray-200">
             <table class="w-full text-sm text-center">
@@ -81,6 +82,7 @@
                         <th class="px-4 py-3 font-medium">File Surat Penawaran Harga</th>
                         <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
                         <th class="px-4 py-3 font-medium">Validate</th>
+                        <th class="px-4 py-3 font-medium">Validator</th>
                         <th class="px-4 py-3 font-medium">Status Surat Penawaran Harga</th>
                     </tr>
                 </thead>
@@ -108,7 +110,7 @@
 
                                 {{-- dibuat oleh --}}
                                 <td class="px-4 py-3">
-                                    {{ $item->user->name }}
+                                    {{ $item->surat_penawaran_harga->user->name }}
                                 </td>
 
                                 {{-- validasi --}}
@@ -150,6 +152,11 @@
                                     </td>
                                 @endif
 
+                                {{-- validator --}}
+                                <td class="px-4 py-3">
+                                    {{ $item->user->name }}
+                                </td>
+
                                 {{-- status Surat Penawaran Harga --}}
                                 <td class="px-4 py-3">
                                     {{-- logic pengambilan data ada di model proposal --}}
@@ -166,6 +173,7 @@
         </div>
     @endcan
 
+    {{-- staff admin --}}
     @can('create surat penawaran harga')
         <div class="overflow-x-auto rounded-xl border border-gray-200">
             <table class="w-full text-sm text-center">
