@@ -58,7 +58,7 @@
             <table class="w-full text-sm text-center">
                 <thead class="bg-gray-100 text-black">
                     <tr>
-                        <th class="px-4 py-3 font-medium">Judul Memo</th>
+                        <th class="px-4 py-3 font-medium">Nama Tender</th>
                         <th class="px-4 py-3 font-medium">Isi Memo</th>
                         @can('create internal memo')
                         <th class="px-4 py-1 font-medium">Aksi</th>
@@ -76,7 +76,7 @@
                     @else
                         @foreach ($internalMemos as $memo)
                             <tr>
-                                <td class="px-4 py-3">{{ $memo->nama_internal_memo }}</td>
+                                <td class="px-4 py-3">{{ $memo->tender->nama_tender }}</td>
                                 <td class="px-4 py-3">{{ $memo->isi_internal_memo }}</td>
                                 @can('create internal memo')
                                 <td class="px-1 py-1">
