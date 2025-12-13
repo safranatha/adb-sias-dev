@@ -60,7 +60,9 @@
                     <tr>
                         <th class="px-4 py-3 font-medium">Judul Memo</th>
                         <th class="px-4 py-3 font-medium">Isi Memo</th>
+                        @can('create internal memo')
                         <th class="px-4 py-1 font-medium">Aksi</th>
+                        @endcan
                     </tr>
                 </thead>
 
@@ -76,11 +78,11 @@
                             <tr>
                                 <td class="px-4 py-3">{{ $memo->nama_internal_memo }}</td>
                                 <td class="px-4 py-3">{{ $memo->isi_internal_memo }}</td>
+                                @can('create internal memo')
                                 <td class="px-1 py-1">
-                                    @can('create internal memo')
                                     <flux:modal.trigger name="edit-internal-memo-{{ $memo->id }}">
                                         <flux:button icon="pencil" class="mr-2" wire:click="edit({{ $memo->id }})"
-                                            variant="primary" color="yellow"></flux:button>
+                                            variant="primary" color="yellow">Edit</flux:button>
                                     </flux:modal.trigger>
 
                                     {{-- modal form --}}
