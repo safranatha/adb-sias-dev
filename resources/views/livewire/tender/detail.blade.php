@@ -39,7 +39,7 @@
                         </flux:button>
                     </td>
                     <td class="px-4 py-3"> {{ $tender->proposal->keterangan ?? 'Sedang dalam pengerjaan' }}</td>
-                    <td class="px-4 py-3"> {{ $tender->sph->keterangan ?? 'Sedang dalam pengerjaan' }}</td>
+                    <td class="px-4 py-3"> {{ $tender->surat_penawaran_harga->keterangan ?? 'Sedang dalam pengerjaan' }}</td>
                     <td class="px-4 py-3"> {{ $tender->status }}</td>
 
                     @if ($tender->status === 'Dalam Proses')
