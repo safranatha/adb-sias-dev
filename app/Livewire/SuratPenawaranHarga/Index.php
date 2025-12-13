@@ -51,6 +51,7 @@ class Index extends Component
         $this->tender_id = $sph->tender_id;
         $this->nama_sph = $sph->nama_sph;
         $this->file_path_sph = $sph->file_path_sph;
+        $this->pesan_revisi = $sph->pesan_revisi;
         $this->isEditing = true;
         $this->sph_id = $id;
     }
@@ -205,6 +206,7 @@ class Index extends Component
             'user_id' => auth()->user()->id,
             'status' => false,
             'level' => ($nama_role == "Manajer Admin") ? "2" : ($nama_role == "Direktur" ? "3" : null),
+            'pesan_revisi' => $this->pesan_revisi,
             'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga ditolak oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga ditolak oleh Direktur" : null),
         ]);
 
