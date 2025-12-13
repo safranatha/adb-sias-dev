@@ -62,6 +62,16 @@
         </flux:navlist>
         @endcan
 
+        @can('view internal memo')
+            <flux:navlist variant="outline">
+                <flux:navlist.group class="grid">
+                    <flux:navlist.item icon="document-minus" :href="route('internal-memo.index')"
+                        :current="request()->routeIs('internal-memo.index')" wire:navigate>{{ __('Internal Memo') }}
+                    </flux:navlist.item>
+                </flux:navlist.group>
+            </flux:navlist>
+        @endcan
+
         <flux:spacer />
 
         <flux:navlist variant="outline">
