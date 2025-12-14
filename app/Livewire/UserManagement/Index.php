@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Livewire\Attributes\Title;
 
 class Index extends Component
 {
@@ -138,7 +139,7 @@ class Index extends Component
                 ->paginate(10),
             'roles' => Role::all()->where('id', '!=', 1),
             'allpermissions' => Permission::all(),
-        ]);
+        ])->title('User Management');
     }
 
 }

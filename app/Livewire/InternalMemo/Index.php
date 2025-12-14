@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\InternalMemo;
 use Livewire\WithPagination;
 use App\Models\Tender;
+use Livewire\Attributes\Title;
 
 class Index extends Component
 {
@@ -98,6 +99,6 @@ class Index extends Component
             'tenders' => Tender::where('status', 'Dalam Proses')
                 ->doesntHave('proposal')
                 ->get(),
-        ]);
+        ])->title('Internal Memo');
     }
 }

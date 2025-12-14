@@ -4,6 +4,7 @@ namespace App\Livewire\Tender;
 
 use App\Models\Tender;
 use Livewire\Component;
+use Livewire\Attributes\Title;
 
 class Index extends Component
 {
@@ -93,6 +94,6 @@ class Index extends Component
     {
         return view('livewire.tender.index', [
             'tenders' => Tender::orderBy('created_at', 'desc')->paginate(5),
-        ]);
+        ])->title('Tender');
     }
 }
