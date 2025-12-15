@@ -12,20 +12,24 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
     --color-zinc-50: #fafafa;
+    --color-green-50: #057A55;
     --color-zinc-100: #f5f5f5;
     --color-zinc-200: #e5e5e5;
     --color-zinc-300: #d4d4d4;
     --color-zinc-400: #a3a3a3;
+    /* --color-zinc-500: #FFFFFF; */
     --color-zinc-500: #737373;
     --color-zinc-600: #525252;
     --color-zinc-700: #404040;
+    /* --color-zinc-800: #FFFFFF; */
     --color-zinc-800: #262626;
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
 
     --color-accent: var(--color-neutral-800);
-    --color-accent-content: var(--color-neutral-800);
+    --color-accent-content: var(--color-zinc-50);
     --color-accent-foreground: var(--color-white);
+    
 }
 
 @layer theme {
@@ -53,6 +57,33 @@
 
 [data-flux-label] {
     @apply  !mb-0 !leading-tight;
+}
+
+[data-test="sidebar-menu-button"] [data-flux-icon] {
+    @apply text-white;
+}
+
+/* Hanya span teks nama, bukan initials */
+[data-test="sidebar-menu-button"] span.text-sm.font-medium.truncate {
+    @apply text-white group-hover:text-white;
+}
+
+[data-flux-navlist] [data-flux-navlist-item] {
+    @apply text-neutral-50 dark:text-neutral-50;
+}
+
+[data-flux-navlist] [data-current] {
+    @apply text-green-700 dark:text-green-500;
+}
+
+/* Heading navlist group expandable (tambahkan ini) */
+[data-flux-navlist-group][data-expandable] > button {
+    @apply text-neutral-50 dark:text-neutral-50;
+}
+
+/* Icon chevron expand/collapse juga putih */
+[data-flux-navlist-group][data-expandable] > button svg {
+    @apply text-neutral-50 dark:text-neutral-50;
 }
 
 input:focus[data-flux-control],

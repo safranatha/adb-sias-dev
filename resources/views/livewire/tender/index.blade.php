@@ -1,40 +1,5 @@
-<div class="max-w-8xl mx-auto mt-8" x-data="{
-    closeModal(id) {
-        if (id === 'store') {
-            $flux.modal('store-tender').close();
-        } else {
-            $flux.modal('edit-tender-' + id).close();
-        }
-    }
-}" @modal-closed.window="closeModal($event.detail.id)">
-
-    @can('create tender')
-        <flux:modal.trigger name="store-tender">
-            <flux:button class="mb-4">Add Tender</flux:button>
-        </flux:modal.trigger>
-
-        <flux:modal name="store-tender" class="max-w-2xl">
-            <form wire:submit.prevent="store">
-                <flux:heading size="lg">Add Tender</flux:heading>
-                {{-- Name Field --}}
-                <flux:field>
-                    <flux:label class="mt-3">Nama Tender</flux:label>
-                    <flux:input wire:model="nama_tender" placeholder="Enter nama tender" />
-                </flux:field>
-
-                <flux:field>
-                    <flux:label class="mt-3">Nama Klien</flux:label>
-                    <flux:input wire:model="nama_klien" placeholder="Enter nama klien" />
-                </flux:field>
-
-                <flux:spacer />
-                <flux:button type="submit" class="mt-6" variant="primary">
-                    Add
-                </flux:button>
-            </form>
-        </flux:modal>
-    @endcan
-
+<div>
+    {{-- success message after post created --}}
     @if (session('success'))
         <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 2000)"
             x-transition:leave="transition ease-out duration-500" x-transition:leave-start="opacity-100"
@@ -42,11 +7,15 @@
             {{ session('success') }}
         </div>
     @endif
+    <div>
+        <div class="mb-5">
+            <flux:heading size="xl">Daftar Tender</flux:heading>
+            <flux:text class="mt-2">Berikut merupakan daftar Tender yang ada pada PT Adi Banuwa</flux:text>
+        </div>
 
-
-    <div class="overflow-x-auto rounded-xl border border-gray-200">
+    <div class="overflow-x-auto rounded-md border border-gray-200">
         <table class="w-full text-sm text-center">
-            <thead class="bg-gray-100 text-black">
+            <thead class="bg-green-50 text-white">
                 <tr>
                     <th class="px-4 py-3 font-medium">Nama Tender</th>
                     <th class="px-4 py-3 font-medium">Nama Klien</th>

@@ -5,18 +5,18 @@
     @include('partials.head')
 </head>
 
-<body class="min-h-screen bg-white dark:bg-zinc-800">
-    <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+<body class="min-h-screen bg-zinc-50 dark:bg-zinc-800">
+    <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-green-50 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-        <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
-            {{-- <x-app-logo /> --}}
-            Dashboard Adibanuwa
+        <a href="{{ route('dashboard') }}" class="text-neutral-50 me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
+            <x-app-logo />
+            <!-- Dashboard Adibanuwa -->
         </a>
 
         <flux:navlist variant="outline" class="mt-5">
             <flux:navlist.group class="grid">
-                <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
+                <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" class="text-neutral-50"
                     wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
@@ -24,29 +24,57 @@
         
         @if (auth()->user()->hasRole('Super Admin'))
             <flux:navlist variant="outline">
-                <flux:navlist.group class="grid">
-                    <flux:navlist.item icon="user-group" :href="route('user-management.index')"
-                        :current="request()->routeIs('user-management.index')" wire:navigate>{{ __('User Management') }}
+                <flux:navlist.group expandable :expanded="false" class="text-white">
+                        <x-slot:heading>
+                            <span class="text-white! font-medium">User Management</span>
+                        </x-slot:heading>
+                    <flux:navlist.item icon="plus-circle" :href="route('register')"
+                        :current="request()->routeIs('register')" wire:navigate class="mt-2">{{ __('Buat Pengguna Baru') }}
                     </flux:navlist.item>
+                    <flux:navlist.item icon="user-group" :href="route('user-management.index')"
+                        :current="request()->routeIs('user-management.index')" wire:navigate class="mt-2">{{ __('Lihat Pengguna') }}
+                    </flux:navlist.item>
+                    
                 </flux:navlist.group>
             </flux:navlist>
         @endif
         
         @can ('view tender')
         <flux:navlist variant="outline">
-            <flux:navlist.group class="grid">
-                <flux:navlist.item icon="clipboard-document-list" :href="route('tender.index')"
-                    :current="request()->routeIs('tender.index')" wire:navigate>{{ __('Tender') }}
+            <flux:navlist.group expandable :expanded="false" class="text-white">
+                <x-slot:heading>
+                    <span class="text-white! font-medium">Tender</span>
+                </x-slot:heading>
+                <!-- Hanya direktur yang bisa membuat Tender -->
+                @can ('create tender')
+                <flux:navlist.item icon="plus-circle" :href="route('tender.create')" 
+                    :current="request()->routeIs('tender.create')" wire:navigate class="mt-2">{{ __('Buat Tender Baru') }}
                 </flux:navlist.item>
+                @endcan                
+                <flux:navlist.item icon="clipboard-document-list" :href="route('tender.index')"
+                    :current="request()->routeIs('tender.index')" wire:navigate class="mt-2">{{ __('Daftar Tender') }}
+                </flux:navlist.item>
+                
             </flux:navlist.group>
         </flux:navlist>
         @endcan
 
         @can('view proposal')
         <flux:navlist variant="outline">
-            <flux:navlist.group class="grid">
-                <flux:navlist.item icon="document-text" :href="route('proposal.index')"
-                    :current="request()->routeIs('proposal.index')" wire:navigate>{{ __('Proposal') }}
+            <flux:navlist.group expandable :expanded="false" class="text-white">
+                <x-slot:heading>
+                    <span class="text-white! font-medium">Proposal</span>
+                </x-slot:heading>
+                @can('create proposal')
+                <flux:navlist.item icon="plus-circle" :href="route('proposal.create')" 
+                    :current="request()->routeIs('proposal.create')" wire:navigate class="mt-2">{{ __('Buat Proposal Baru') }}
+                </flux:navlist.item>
+                @endcan
+                <flux:navlist.item icon="document-text" :href="route('proposal.active')"
+                    :current="request()->routeIs('proposal.active')" wire:navigate class="mt-2">{{ __('Daftar Proposal Aktif') }}
+                </flux:navlist.item>
+                <flux:navlist.item icon="clock" :href="route('proposal.index')"
+                    :current="request()->routeIs('proposal.index')" wire:navigate class="mt-2">{{ __('Riwayat Proposal') }}
                 </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
@@ -54,37 +82,47 @@
 
         @can('view surat penawaran harga')
         <flux:navlist variant="outline">
-            <flux:navlist.group class="grid">
-                <flux:navlist.item icon="banknotes" :href="route('surat-penawaran-harga.index')"
-                    :current="request()->routeIs('surat-penawaran-harga.index')" wire:navigate>{{ __('Surat Penawaran Harga') }}
+            <flux:navlist.group expandable :expanded="false" class="text-white">
+                <x-slot:heading>
+                    <span class="text-white! font-medium">Surat Penawaran Harga</span>
+                </x-slot:heading>
+                @can('create surat penawaran harga')
+                <flux:navlist.item icon="plus-circle" :href="route('surat-penawaran-harga.create')"
+                    :current="request()->routeIs('surat-penawaran-harga.create')" wire:navigate class="mt-2">{{ __('Buat SPH Baru') }}
                 </flux:navlist.item>
+                @endcan
+                <flux:navlist.item icon="banknotes" :href="route('surat-penawaran-harga.active')"
+                    :current="request()->routeIs('surat-penawaran-harga.active')" wire:navigate class="mt-2">{{ __('Daftar SPH Aktif') }}
+                </flux:navlist.item>
+                <flux:navlist.item icon="clock" :href="route('surat-penawaran-harga.index')"
+                    :current="request()->routeIs('surat-penawaran-harga.index')" wire:navigate class="mt-2">{{ __('Riwayat SPH') }}
+                </flux:navlist.item>
+                
             </flux:navlist.group>
         </flux:navlist>
         @endcan
 
         @can('view internal memo')
             <flux:navlist variant="outline">
-                <flux:navlist.group class="grid">
-                    <flux:navlist.item icon="document-minus" :href="route('internal-memo.index')"
-                        :current="request()->routeIs('internal-memo.index')" wire:navigate>{{ __('Internal Memo') }}
+                <flux:navlist.group expandable :expanded="false" class="text-white">
+                    <x-slot:heading>
+                        <span class="text-white! font-medium">Internal Memo</span>
+                    </x-slot:heading>
+                    @can('create internal memo')
+                    <flux:navlist.item icon="plus-circle" :href="route('internal-memo.create')"
+                        :current="request()->routeIs('internal-memo.create')" wire:navigate class="mt-2">{{ __('Buat Internal Memo') }}
                     </flux:navlist.item>
+                    @endcan
+                    <flux:navlist.item icon="document-minus" :href="route('internal-memo.index')"
+                        :current="request()->routeIs('internal-memo.index')" wire:navigate class="mt-2">{{ __('Internal Memo') }}
+                    </flux:navlist.item>
+                    
                 </flux:navlist.group>
             </flux:navlist>
         @endcan
 
         <flux:spacer />
 
-        <flux:navlist variant="outline">
-            <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit"
-                target="_blank">
-                {{ __('Repository') }}
-            </flux:navlist.item>
-
-            <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire"
-                target="_blank">
-                {{ __('Documentation') }}
-            </flux:navlist.item>
-        </flux:navlist>
 
         <!-- Desktop User Menu -->
         <flux:dropdown class="hidden lg:block" position="bottom" align="start">

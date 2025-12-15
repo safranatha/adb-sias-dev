@@ -8,6 +8,8 @@ use App\Models\Tender;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
+
 
 class Index extends Component
 {
@@ -254,6 +256,6 @@ class Index extends Component
             'tenders' => Tender::where('status', 'Dalam Proses')
                 ->doesntHave('surat_penawaran_harga')
                 ->get(),
-        ]);
+        ])->title('Surat Penawaran Harga');
     }
 }

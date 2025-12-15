@@ -7,6 +7,7 @@ use App\Models\Proposal;
 use App\Models\SuratPenawaranHarga;
 use App\Models\Tender;
 use Livewire\Component;
+use Livewire\Attributes\Title;
 
 class Detail extends Component
 {
@@ -135,6 +136,6 @@ class Detail extends Component
     public function render()
     {
         // $proposal_id = Proposal::where('tender_id', $selected_tender_id)->pluck('id');
-        return view('livewire.tender.detail', ['tender' => Tender::find($this->tender_id)]);
+        return view('livewire.tender.detail', ['tender' => Tender::find($this->tender_id)])->title('Detail Tender');
     }
 }

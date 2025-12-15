@@ -1,60 +1,5 @@
-<div class="max-w-8xl mx-auto mt-8" x-data="{
-    closeModal(id) {
-        if (id === 'store') {
-            $flux.modal('store-proposal').close();
-        } else {
-            $flux.modal('edit-proposal-' + id).close();
-        }
-    }
-}" @modal-closed.window="closeModal($event.detail.id)">
+<div>
 
-
-    @can('create proposal')
-        <flux:modal.trigger name="store-proposal">
-            <flux:button class="mb-4">Add Proposal</flux:button>
-        </flux:modal.trigger>
-
-        <flux:modal name="store-proposal" class="max-w-2xl">
-            <form wire:submit.prevent="store">
-                <flux:heading size="lg">Upload Proposal</flux:heading>
-                {{-- Name Field --}}
-                <flux:field>
-                    <flux:label class="mt-3">Nama Proposal</flux:label>
-                    <flux:input wire:model="nama_proposal" placeholder="Enter user name" />
-                </flux:field>
-
-
-                <flux:field>
-                    <flux:label class="mt-3">File Proposal</flux:label>
-                    <flux:input type="file" wire:model="file_path_proposal" />
-                    @error('file_path_proposal')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </flux:field>
-
-                <flux:field>
-                    <flux:label class="mt-3">Tender</flux:label>
-                    <flux:select wire:model="tender_id">
-                        <flux:select.option value="">-- Pilih Tender --</flux:select.option>
-                        @foreach ($tender_status as $tender)
-                            <flux:select.option value="{{ $tender->id }}">
-                                {{ $tender->nama_tender }}
-                            </flux:select.option>
-                        @endforeach
-                    </flux:select>
-
-                    @error('tender_id')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </flux:field>
-
-                <flux:spacer />
-                <flux:button type="submit" class="mt-6" variant="primary">
-                    Upload
-                </flux:button>
-            </form>
-        </flux:modal>
-    @endcan
 
     {{-- success message after post created --}}
     @if (session('success'))
@@ -75,9 +20,15 @@
     {{-- pengecekan permission, jika memenuhi syarat maka bisa tampil, manajer permissionnya view proposal dan validate saja --}}
     @can('validate proposal')
         {{-- tabel manajer --}}
-        <div class="overflow-x-auto rounded-xl border border-gray-200">
+        <div class="mb-5">
+            <flux:heading size="xl">Daftar Proposal Tender</flux:heading>
+            <flux:text class="mt-2">Berikut merupakan daftar Proposal Tender yang ada pada PT Adi Banuwa</flux:text>
+        </div>
+
+
+        <div class="overflow-x-auto rounded-md border border-gray-200">
             <table class="w-full text-sm text-center">
-                <thead class="bg-gray-100 text-black">
+                <thead class="bg-green-50 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama Tender</th>
                         {{-- <th class="px-4 py-3 font-medium">Nama Proposal</th> --}}
@@ -186,9 +137,14 @@
         @cannot(['validate proposal'])
             @cannot(['create proposal'])
                 {{-- tabel manajer admin --}}
-                <div class="overflow-x-auto rounded-xl border border-gray-200">
+                <div class="mb-5">
+                    <flux:heading size="xl">Daftar Proposal Tender</flux:heading>
+                    <flux:text class="mt-2">Berikut merupakan daftar Proposal Tender yang ada pada PT Adi Banuwa</flux:text>
+                </div>
+                
+                <div class="overflow-x-auto rounded-md border border-gray-200">
                     <table class="w-full text-sm text-center">
-                        <thead class="bg-gray-100 text-black">
+                        <thead class="bg-green-50 text-white">
                             <tr>
                                 <th class="px-4 py-3 font-medium">Nama Tender</th>
                                 {{-- <th class="px-4 py-3 font-medium">Nama Proposal</th> --}}
@@ -250,9 +206,14 @@
     {{-- pengecekan permssion, jika memenuhi syarat maka bisa tampil, staff memiliki permission yang tidak dimilki oleh manajer yakni create proposal. staff ada permission view,create dan validate --}}
     @can('create proposal')
         {{-- tabel staff --}}
-        <div class="overflow-x-auto rounded-xl border border-gray-200">
+        <div class="mb-5">
+            <flux:heading size="xl">Daftar Proposal Tender</flux:heading>
+            <flux:text class="mt-2">Berikut merupakan daftar Proposal Tender yang ada pada PT Adi Banuwa</flux:text>
+        </div>
+                
+        <div class="overflow-x-auto rounded-md border border-gray-200">
             <table class="w-full text-sm text-center">
-                <thead class="bg-gray-100 text-black">
+                <thead class="bg-green-50 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama Tender</th>
                         {{-- <th class="px-4 py-3 font-medium">Nama Proposal</th> --}}
