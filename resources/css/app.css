@@ -29,6 +29,7 @@
     --color-accent: var(--color-neutral-800);
     --color-accent-content: var(--color-zinc-50);
     --color-accent-foreground: var(--color-white);
+    
 }
 
 @layer theme {
@@ -67,13 +68,22 @@
     @apply text-white group-hover:text-white;
 }
 
-
 [data-flux-navlist] [data-flux-navlist-item] {
     @apply text-neutral-50 dark:text-neutral-50;
 }
 
 [data-flux-navlist] [data-current] {
     @apply text-green-700 dark:text-green-500;
+}
+
+/* Heading navlist group expandable (tambahkan ini) */
+[data-flux-navlist-group][data-expandable] > button {
+    @apply text-neutral-50 dark:text-neutral-50;
+}
+
+/* Icon chevron expand/collapse juga putih */
+[data-flux-navlist-group][data-expandable] > button svg {
+    @apply text-neutral-50 dark:text-neutral-50;
 }
 
 input:focus[data-flux-control],

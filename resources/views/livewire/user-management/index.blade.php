@@ -1,7 +1,7 @@
 <div class="max-w-6xl mx-auto mt-8">
-    <a href="/register">
+    <!-- <a href="/register">
         <flux:button class="mb-4">Register</flux:button>
-    </a>
+    </a> -->
 
     @if (session('success'))
         <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 2000)"
