@@ -59,6 +59,22 @@ class Index extends Component
         $this->proposal_id = $id;
     }
 
+
+    public function storeWaktuDibaca($id)
+    {
+        $workflow = DocumentApprovalWorkflow::where('proposal_id', $id)
+            ->whereNull('waktu_pesan_dibaca')
+            ->latest('created_at') // atau latest() saja, default ke created_at
+            ->first();
+
+        if ($workflow) {
+            $workflow->update([
+                'waktu_pesan_dibaca' => now(),
+            ]);
+        }
+    }
+    
+
     public function download($id)
     {
         $proposal = Proposal::findOrFail($id);
@@ -221,19 +237,6 @@ class Index extends Component
 
     }
 
-    public function storeWaktuDibaca($id)
-    {
-        $workflow = DocumentApprovalWorkflow::where('proposal_id', $id)
-            ->whereNull('waktu_pesan_dibaca')
-            ->latest('created_at') // atau latest() saja, default ke created_at
-            ->first();
-
-        if ($workflow) {
-            $workflow->update([
-                'waktu_pesan_dibaca' => now(),
-            ]);
-        }
-    }
 
 
     public function render()
