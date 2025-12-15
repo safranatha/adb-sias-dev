@@ -18,6 +18,7 @@ class DocumentApprovalWorkflow extends Model
         'status',
         'keterangan',
         'pesan_revisi',
+        'waktu_pesan_dibaca',
     ];
 
     public function user()
