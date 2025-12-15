@@ -1,10 +1,16 @@
 <?php
 use App\Livewire\UserManagement\Index;
 use App\Livewire\Proposal\Index as ProposalIndex;
+use App\Livewire\Proposal\Create as ProposalCreate;
+use App\Livewire\Proposal\Active as ProposalActive;
 use App\Livewire\Tender\Index as TenderIndex;
 use App\Livewire\InternalMemo\Index as InternalMemoIndex;
+use App\Livewire\InternalMemo\Create as InternalMemoCreate;
 use App\Livewire\Tender\Detail as TenderDetail;
 use App\Livewire\SuratPenawaranHarga\Index as SuratPenawaranHargaIndex;
+use App\Livewire\SuratPenawaranHarga\Create as SuratPenawaranHargaCreate;
+use App\Livewire\SuratPenawaranHarga\Active as SuratPenawaranHargaActive;
+use App\Livewire\Tender\Create as TenderCreate;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -59,23 +65,38 @@ Route::middleware(['auth'])->group(function () {
 // user management
 Route::get('/user-management', Index::class)->middleware(['auth', 'role:Super Admin'])->name('user-management.index');
 
-// proposal
-Route::get('/proposal', ProposalIndex::class)->middleware(['auth'])->name('proposal.index');
+// proposal active
+Route::get('/proposal-active', ProposalActive::class)->middleware(['auth'])->name('proposal.active');
+
+// proposal-history
+Route::get('/proposal-history', ProposalIndex::class)->middleware(['auth'])->name('proposal.index');
+
+// create proposal
+Route::get('/proposal-create', ProposalCreate::class)->middleware(['auth'])->name('proposal.create');
 
 // tender
 Route::get('/tender',TenderIndex::class)->middleware(['auth'])->name('tender.index');
 
-// internal memo
-Route::get('/internal-memo',InternalMemoIndex::class)->middleware(['auth'])->name('internal-memo.index');
 // detail tender
 Route::get('/tender/{id}',TenderDetail::class)->middleware(['auth'])->name('tender.detail');
 
-// surat penawaran harga
-Route::get('/surat-penawaran-harga',SuratPenawaranHargaIndex::class)->middleware(['auth'])->name('surat-penawaran-harga.index');
+// create tender
+Route::get('/tender-create',TenderCreate::class)->middleware(['auth'])->name('tender.create');
 
+// surat penawaran harga active
+Route::get('/surat-penawaran-harga-active',SuratPenawaranHargaActive::class)->middleware(['auth'])->name('surat-penawaran-harga.active');
 
+// history surat penawaran harga
+Route::get('/surat-penawaran-harga-history',SuratPenawaranHargaIndex::class)->middleware(['auth'])->name('surat-penawaran-harga.index');
 
+// create surat penawaran harga
+Route::get('/surat-penawaran-harga-create',SuratPenawaranHargaCreate::class)->middleware(['auth'])->name('surat-penawaran-harga.create');
 
+// internal memo
+Route::get('/internal-memo',InternalMemoIndex::class)->middleware(['auth'])->name('internal-memo.index');
+
+// create internal memo
+Route::get('/internal-memo-create',InternalMemoCreate::class)->middleware(['auth'])->name('internal-memo.create');
 
 
 

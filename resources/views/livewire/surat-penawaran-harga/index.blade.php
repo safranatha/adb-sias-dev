@@ -1,60 +1,4 @@
-<div class="max-w-8xl mx-auto mt-8" x-data="{
-    closeModal(id) {
-        if (id === 'store') {
-            $flux.modal('store-sph').close();
-        } else {
-            $flux.modal('edit-sph-' + id).close();
-        }
-    }
-}" @modal-closed.window="closeModal($event.detail.id)">
-
-
-    @can('create surat penawaran harga')
-        <flux:modal.trigger name="store-sph">
-            <flux:button class="mb-4">Add Surat Penawaran Harga</flux:button>
-        </flux:modal.trigger>
-
-        <flux:modal name="store-sph" class="max-w-2xl">
-            <form wire:submit.prevent="store">
-                <flux:heading size="lg">Upload Surat Penawaran Harga</flux:heading>
-                {{-- Name Field --}}
-                <flux:field>
-                    <flux:label class="mt-3">Nama Surat Penawaran Harga</flux:label>
-                    <flux:input wire:model="nama_sph" placeholder="Enter user name" />
-                </flux:field>
-
-
-                <flux:field>
-                    <flux:label class="mt-3">File Surate Penawaran Harga</flux:label>
-                    <flux:input type="file" wire:model="file_path_sph" />
-                    @error('file_path_sph')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </flux:field>
-
-                <flux:field>
-                    <flux:label class="mt-3">Tender</flux:label>
-                    <flux:select wire:model="tender_id">
-                        <flux:select.option value="">-- Pilih Tender --</flux:select.option>
-                        @foreach ($tenders as $tender)
-                            <flux:select.option value="{{ $tender->id }}">
-                                {{ $tender->nama_tender }}
-                            </flux:select.option>
-                        @endforeach
-                    </flux:select>
-
-                    @error('tender_id')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </flux:field>
-
-                <flux:spacer />
-                <flux:button type="submit" class="mt-6" variant="primary">
-                    Upload
-                </flux:button>
-            </form>
-        </flux:modal>
-    @endcan
+<div>
 
     {{-- success message after post created --}}
     @if (session('success'))
@@ -73,9 +17,14 @@
 
     {{-- manajer admin --}}
     @can('validate surat penawaran harga')
-        <div class="overflow-x-auto rounded-xl border border-gray-200">
+    <div class="mb-5">
+        <flux:heading size="xl">Riwayat Surat Penawaran Harga</flux:heading>
+        <flux:text class="mt-2">Berikut merupakan seluruh riwayat SPH Tender yang ada pada PT Adi Banuwa</flux:text>
+     </div>
+
+        <div class="overflow-x-auto rounded-md border border-gray-200">
             <table class="w-full text-sm text-center">
-                <thead class="bg-gray-100 text-black">
+                <thead class="bg-green-50 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama Tender</th>
                         {{-- <th class="px-4 py-3 font-medium">Nama Surat Penawaran Harga</th> --}}
@@ -175,9 +124,14 @@
 
     {{-- staff admin --}}
     @can('create surat penawaran harga')
-        <div class="overflow-x-auto rounded-xl border border-gray-200">
+        <div class="mb-5">
+            <flux:heading size="xl">Riwayat Surat Penawaran Harga</flux:heading>
+            <flux:text class="mt-2">Berikut merupakan seluruh riwayat SPH Tender yang telah dibuat</flux:text>
+         </div>
+
+        <div class="overflow-x-auto rounded-md border border-gray-200">
             <table class="w-full text-sm text-center">
-                <thead class="bg-gray-100 text-black">
+                <thead class="bg-green-50 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama Tender</th>
                         {{-- <th class="px-4 py-3 font-medium">Nama Surat Penawaran Harga</th> --}}
