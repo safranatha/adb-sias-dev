@@ -1,5 +1,5 @@
 <div>
-    <div class="max-w-6xl mx-auto mt-8">
+    <div class="max-w-6xl mx-auto">
 
         {{-- success message after internal memo created --}}
         @if (session('success'))
@@ -12,9 +12,15 @@
                 }, 200);
             </script>
         @endif
-        <div class="overflow-x-auto rounded-xl border border-gray-200">
+
+        <div class="mb-5">
+            <flux:heading size="xl">Daftar Internal Memo</flux:heading>
+            <flux:text class="mt-2">Berikut merupakan daftar Internal Memo yang ada pada PT Adi Banuwa</flux:text>
+        </div>
+
+        <div class="overflow-x-auto rounded-md border border-gray-200">
             <table class="w-full text-sm text-center">
-                <thead class="bg-gray-100 text-black">
+                <thead class="bg-green-50 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama Tender</th>
                         <th class="px-4 py-3 font-medium">Isi Memo</th>
