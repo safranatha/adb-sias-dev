@@ -48,12 +48,27 @@ class Index extends Component
     public function edit($id)
     {
         $sph = SuratPenawaranHarga::findOrFail($id);
+        $this->storeWaktuDibaca($id);
         $this->tender_id = $sph->tender_id;
         $this->nama_sph = $sph->nama_sph;
         $this->file_path_sph = $sph->file_path_sph;
         $this->pesan_revisi = $sph->pesan_revisi;
         $this->isEditing = true;
         $this->sph_id = $id;
+    }
+
+    public function storeWaktuDibaca($id)
+    {
+        $workflow = DocumentApprovalWorkflow::where('surat_penawaran_harga_id', $id)
+            ->whereNull('waktu_pesan_dibaca')
+            ->latest('created_at') // atau latest() saja, default ke created_at
+            ->first();
+
+        if ($workflow) {
+            $workflow->update([
+                'waktu_pesan_dibaca' => now(),
+            ]);
+        }
     }
 
     public function download($id)

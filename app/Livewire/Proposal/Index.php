@@ -46,15 +46,34 @@ class Index extends Component
 
     }
 
+
     public function edit($id)
     {
         $proposal = Proposal::findOrFail($id);
+        // update kolom waktu dibaca sehingga manajer tau apakah proposal sudah dibaca
+        $this->storeWaktuDibaca($id);
         $this->tender_id = $proposal->tender_id;
         $this->nama_proposal = $proposal->nama_proposal;
         $this->file_path_proposal = $proposal->file_path_proposal;
         $this->isEditing = true;
         $this->proposal_id = $id;
     }
+
+
+    public function storeWaktuDibaca($id)
+    {
+        $workflow = DocumentApprovalWorkflow::where('proposal_id', $id)
+            ->whereNull('waktu_pesan_dibaca')
+            ->latest('created_at') // atau latest() saja, default ke created_at
+            ->first();
+
+        if ($workflow) {
+            $workflow->update([
+                'waktu_pesan_dibaca' => now(),
+            ]);
+        }
+    }
+    
 
     public function download($id)
     {
@@ -200,7 +219,7 @@ class Index extends Component
         $this->validate($rules);
 
 
-         // Cari document approval berdasarkan proposal_id
+        // Cari document approval berdasarkan proposal_id
         $documentApproval = DocumentApprovalWorkflow::where('proposal_id', $id)
             ->latest() // Ambil yang terbaru
             ->first();
@@ -217,6 +236,7 @@ class Index extends Component
         session()->flash('success', 'Proposal berhasil di tolak!');
 
     }
+
 
 
     public function render()
@@ -237,10 +257,10 @@ class Index extends Component
                 ->paginate(5),
 
             'document_approvals' => DocumentApprovalWorkflow::with(['proposal'])
-            ->whereNotNull('proposal_id')
-            ->select('document_approval_workflow.*')
-            ->orderBy('created_at', 'desc')
-            ->paginate(5),
+                ->whereNotNull('proposal_id')
+                ->select('document_approval_workflow.*')
+                ->orderBy('created_at', 'desc')
+                ->paginate(5),
 
             'tender_status' => Tender::where('status', 'Dalam Proses')
                 ->doesntHave('proposal')
