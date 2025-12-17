@@ -117,12 +117,11 @@
     {{--  ===== STAFF SECTION ====  --}}
     {{-- tabel staff --}}
     @can('create proposal')
-        <div class="overflow-x-auto rounded-md border border-gray-200">
+        <div class="overflow-x-auto rounded-md border border-gray-200 ">
             <table class="w-full text-sm text-center">
-                <thead class="bg-green-50 text-white">
+                <thead class="bg-green-700 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama Tender</th>
-                        {{-- <th class="px-4 py-3 font-medium">Nama Proposal</th> --}}
                         <th class="px-4 py-3 font-medium">File Proposal</th>
                         <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
                         <th class="px-4 py-3 font-medium">Pesan</th>
@@ -130,7 +129,7 @@
                     </tr>
                 </thead>
 
-                <tbody class="divide-y divide-gray-200">
+                <tbody class="divide-y divide-gray-200 bg-white">
                     @if ($proposals->isEmpty())
                         <tr>
                             <td colspan="3" class="px-4 py-6">
@@ -218,6 +217,11 @@
                                 </tr>
                             @endif
                         @endforeach
+                        <tr>
+                            <td colspan="3" class="px-4 py-6">
+                                Tidak ada Proposal (aktif) untuk ditampilkan.
+                            </td>
+                        </tr>
                     @endif
                 </tbody>
             </table>
