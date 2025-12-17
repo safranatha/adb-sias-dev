@@ -145,10 +145,16 @@
                                             Approved
                                         </span>
                                     </td>
-                                @else
+                                @elseif ($item->status === 0)
                                     <td class="px-4 py-3">
                                         <span class="bg-red-500 text-white text-s px-2 py-1 rounded-md">
                                             Rejected
+                                        </span>
+                                    </td>
+                                @else
+                                    <td class="px-4 py-3">
+                                        <span class="bg-black text-white text-s px-2 py-1 rounded-md">
+                                            Belum Diperiksa
                                         </span>
                                     </td>
                                 @endif
