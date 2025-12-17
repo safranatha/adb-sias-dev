@@ -98,7 +98,7 @@
 
                                 <td class="px-4 py-3">
                                     <span class="bg-blue-500 text-white text-xs px-3 py-1 rounded-md">
-                                       {{ $item->status_proposal }}
+                                        {{ $item->status_proposal }}
                                     </span>
                                 </td>
                             </tr>
@@ -109,7 +109,7 @@
 
             {{-- Static Pagination Info --}}
             <div class="pl-1 m-2">
-                {{ $proposals->links() }}
+                {{ $document_approvals ->links() }}
             </div>
         </div>
     @endcan
@@ -130,103 +130,95 @@
                 </thead>
 
                 <tbody class="divide-y divide-gray-200 bg-white">
-                    @if ($proposals->isEmpty())
+                    @if ($proposals_active->isEmpty())
                         <tr>
                             <td colspan="3" class="px-4 py-6">
-                                Tidak ada proposal untuk ditampilkan.
-                            </td>
-                        </tr>
-                    @else
-                        @foreach ($proposals as $item)
-                            {{-- yang tampil adalah yang statusnya revisi/belum disetujui --}}
-                            @if ($item->status !== 1)
-                                <tr>
-                                    {{-- nama tender --}}
-                                    <td class="px-4 py-3">{{ $item->tender->nama_tender }}</td>
-                                    {{-- <td class="px-4 py-3">{{ $item->nama_proposal }}</td> --}}
-
-                                    {{-- file proposal --}}
-                                    {{-- file proposal diberi logo download dan jika diklik maka auto download --}}
-                                    <td class="px-4 py-3">
-                                        <flux:button icon="arrow-down-tray" class="mr-2"
-                                            wire:click="download({{ $item->id }})"></flux:button>
-                                    </td>
-
-                                    {{-- dibuat oleh --}}
-                                    <td class="px-4 py-3">
-                                        {{ $item->user->name }}
-                                    </td>
-
-
-                                    {{-- edit dan pesan --}}
-                                    <td>
-                                        @if ($item->status === 0 && $item->keterangan !== null)
-                                            {{-- kondisi jika ada revisi --}}
-                                            <flux:modal.trigger name="edit-proposal-{{ $item->id }}">
-                                                <flux:button icon="envelope" class="mr-2"
-                                                    wire:click="edit({{ $item->id }})" variant="primary"
-                                                    color="red">
-                                                    {{ $item->keterangan }}
-                                                </flux:button>
-                                            </flux:modal.trigger>
-
-                                            {{-- modal form --}}
-                                            <flux:modal name="edit-proposal-{{ $item->id }}">
-                                                <flux:field>
-                                                    <flux:label class="mt-3">Pesan Revisi</flux:label>
-                                                    <flux:text class=" text-left">{{ $item->pesan_revisi }}</flux:text>
-                                                </flux:field>
-                                                <form wire:submit.prevent="update">
-                                                    <flux:field>
-                                                        <flux:label class="mt-3">Nama Proposal</flux:label>
-                                                        <flux:text class=" text-left">{{ $item->nama_proposal }}
-                                                        </flux:text>
-
-                                                        {{-- <flux:input wire:model="nama_proposal" />
-                                                @error('nama_proposal')
-                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
-                                                @enderror --}}
-                                                    </flux:field>
-
-                                                    <flux:field>
-                                                        {{-- <flux:label class="mt-3">File Proposal</flux:label> --}}
-
-                                                        @if ($file_path_proposal)
-                                                            <p class="text-sm mt-3">
-                                                                File saat ini: {{ basename($file_path_proposal) }}
-                                                            </p>
-                                                        @endif
-                                                        <flux:input type="file" wire:model="file_path_proposal" />
-                                                        @error('file_path_proposal')
-                                                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                                                        @enderror
-                                                    </flux:field>
-
-                                                    <flux:button type="submit" class="mt-6" variant="primary">
-                                                        Update
-                                                    </flux:button>
-                                                </form>
-                                            </flux:modal>
-                                        @else
-                                            {{-- kondisi belum di validasi --}}
-                                            <flux:button icon="envelope" class="mr-2" variant="primary">
-                                                {{ $item->keterangan ?? 'Proposal belum diperiksa' }}
-                                            </flux:button>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endif
-                        @endforeach
-                        <tr>
-                            <td colspan="3" class="px-4 py-6">
-                                Tidak ada Proposal (aktif) untuk ditampilkan.
+                                Tidak ada proposal status aktif.
                             </td>
                         </tr>
                     @endif
+                    @foreach ($proposals_active as $item)
+                        {{-- yang tampil adalah yang statusnya revisi/belum disetujui --}}
+                        <tr>
+                            {{-- nama tender --}}
+                            <td class="px-4 py-3">{{ $item->tender->nama_tender }}</td>
+                            {{-- <td class="px-4 py-3">{{ $item->nama_proposal }}</td> --}}
+
+                            {{-- file proposal --}}
+                            {{-- file proposal diberi logo download dan jika diklik maka auto download --}}
+                            <td class="px-4 py-3">
+                                <flux:button icon="arrow-down-tray" class="mr-2"
+                                    wire:click="download({{ $item->id }})"></flux:button>
+                            </td>
+
+                            {{-- dibuat oleh --}}
+                            <td class="px-4 py-3">
+                                {{ $item->user->name }}
+                            </td>
+
+
+                            {{-- edit dan pesan --}}
+                            <td>
+                                @if ($item->status === 0 && $item->keterangan !== null)
+                                    {{-- kondisi jika ada revisi --}}
+                                    <flux:modal.trigger name="edit-proposal-{{ $item->id }}">
+                                        <flux:button icon="envelope" class="mr-2" wire:click="edit({{ $item->id }})"
+                                            variant="primary" color="red">
+                                            {{ $item->keterangan }}
+                                        </flux:button>
+                                    </flux:modal.trigger>
+
+                                    {{-- modal form --}}
+                                    <flux:modal name="edit-proposal-{{ $item->id }}">
+                                        <flux:field>
+                                            <flux:label class="mt-3">Pesan Revisi</flux:label>
+                                            <flux:text class=" text-left">{{ $item->pesan_revisi }}</flux:text>
+                                        </flux:field>
+                                        <form wire:submit.prevent="update">
+                                            <flux:field>
+                                                <flux:label class="mt-3">Nama Proposal</flux:label>
+                                                <flux:text class=" text-left">{{ $item->nama_proposal }}
+                                                </flux:text>
+
+                                                {{-- <flux:input wire:model="nama_proposal" />
+                                                @error('nama_proposal')
+                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                @enderror --}}
+                                            </flux:field>
+
+                                            <flux:field>
+                                                {{-- <flux:label class="mt-3">File Proposal</flux:label> --}}
+
+                                                @if ($file_path_proposal)
+                                                    <p class="text-sm mt-3">
+                                                        File saat ini: {{ basename($file_path_proposal) }}
+                                                    </p>
+                                                @endif
+                                                <flux:input type="file" wire:model="file_path_proposal" />
+                                                @error('file_path_proposal')
+                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                @enderror
+                                            </flux:field>
+
+                                            <flux:button type="submit" class="mt-6" variant="primary">
+                                                Update
+                                            </flux:button>
+                                        </form>
+                                    </flux:modal>
+                                @else
+                                    {{-- kondisi belum di validasi --}}
+                                    <flux:button icon="envelope" class="mr-2" variant="primary">
+                                        {{ $item->keterangan ?? 'Proposal belum diperiksa' }}
+                                    </flux:button>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                    {{-- @endif --}}
                 </tbody>
             </table>
             <div class=" pl-1 m-2">
-                {{ $proposals->links() }}
+                {{ $proposals_active->links() }}
             </div>
         </div>
     @endcan

@@ -239,21 +239,22 @@ class Active extends Component
     public function render()
     {
         return view('livewire.proposal.active', [
-            'proposals' => Proposal::with(['tender', 'user', 'document_approval_workflows'])
+            //mengambil data proposal yang aktif, dinilai dari status proposal, diambil yang bukan 1D 
+            'proposals_active' => Proposal::with(['tender', 'user', 'document_approval_workflows'])
+                ->whereDoesntHave('document_approval_workflows', function ($query) {
+                    $query->where('status', 1);
+                })
                 ->select('proposals.*')
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
-
+            
+            // ambil data documen approval yang berelasi dengan proposal (proposal id not null)
             'document_approvals' => DocumentApprovalWorkflow::with(['proposal'])
                 ->whereNotNull('proposal_id')
                 ->whereNull('status')
                 ->select('document_approval_workflow.*')
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
-
-            'tender_status' => Tender::where('status', 'Dalam Proses')
-                ->doesntHave('proposal')
-                ->get(),
 
         ])->title('Proposal Active');
     }
