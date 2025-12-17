@@ -65,17 +65,23 @@
                 <x-slot:heading>
                     <span class="text-white! font-medium">Proposal</span>
                 </x-slot:heading>
+
                 @can('create proposal')
                 <flux:navlist.item icon="plus-circle" :href="route('proposal.create')" 
                     :current="request()->routeIs('proposal.create')" wire:navigate class="mt-2">{{ __('Buat Proposal Baru') }}
                 </flux:navlist.item>
                 @endcan
+
+                @if(!auth()->user()->hasRole('Manajer Admin'))
                 <flux:navlist.item icon="document-text" :href="route('proposal.active')"
                     :current="request()->routeIs('proposal.active')" wire:navigate class="mt-2">{{ __('Daftar Proposal Aktif') }}
                 </flux:navlist.item>
+                @endif
+
                 <flux:navlist.item icon="clock" :href="route('proposal.index')"
                     :current="request()->routeIs('proposal.index')" wire:navigate class="mt-2">{{ __('Riwayat Proposal') }}
                 </flux:navlist.item>
+
             </flux:navlist.group>
         </flux:navlist>
         @endcan
