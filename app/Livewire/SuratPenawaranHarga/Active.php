@@ -232,6 +232,9 @@ class Active extends Component
     {
         return view('livewire.surat-penawaran-harga.active', [
             'sphs' => SuratPenawaranHarga::with(['tender', 'user', 'document_approval_workflows'])
+                ->whereDoesntHave('document_approval_workflows', function ($query) {
+                    $query->where('status', 1);
+                })
                 ->select('surat_penawaran_hargas.*')
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
@@ -243,9 +246,6 @@ class Active extends Component
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
 
-            'tenders' => Tender::where('status', 'Dalam Proses')
-                ->doesntHave('surat_penawaran_harga')
-                ->get(),
         ])->title('Surat Penawaran Harga');
     }
 }
