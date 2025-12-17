@@ -11,6 +11,7 @@ use App\Livewire\Tender\Detail as TenderDetail;
 use App\Livewire\SuratPenawaranHarga\Index as SuratPenawaranHargaIndex;
 use App\Livewire\SuratPenawaranHarga\Create as SuratPenawaranHargaCreate;
 use App\Livewire\SuratPenawaranHarga\Active as SuratPenawaranHargaActive;
+use App\Livewire\SuratPenawaranHarga\Detail as SuratPenawaranHargaDetail;
 use App\Livewire\Tender\Create as TenderCreate;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -92,6 +93,9 @@ Route::get('/surat-penawaran-harga-active',SuratPenawaranHargaActive::class)->mi
 
 // history surat penawaran harga
 Route::get('/surat-penawaran-harga-history',SuratPenawaranHargaIndex::class)->middleware(['auth'])->name('surat-penawaran-harga.index');
+
+// detail surat penawaran harga
+Route::get('/surat-penawaran-harga/{id}',SuratPenawaranHargaDetail::class)->middleware(['auth'])->name('surat-penawaran-harga.detail');
 
 // create surat penawaran harga
 Route::get('/surat-penawaran-harga-create',SuratPenawaranHargaCreate::class)->middleware(['auth'])->name('surat-penawaran-harga.create');
