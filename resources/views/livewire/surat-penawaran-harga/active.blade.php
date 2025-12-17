@@ -16,12 +16,16 @@
 
     {{-- Header Section --}}
     <div class="mb-5">
-        <flux:heading size="xl">SPH Aktif</flux:heading>
-        <flux:text class="mt-2">Berikut merupakan daftar SPH Tender yang belum disetujui oleh Manajer Admin</flux:text>
+        <flux:heading size="xl">Surat Penawaran Harga Aktif</flux:heading>
+        <flux:text class="mt-2">Berikut merupakan daftar Surat Penawaran Harga Tender yang belum disetujui oleh
+            Manajer Admin
+        </flux:text>
     </div>
 
-    {{-- Table Section --}}
-    <div class="overflow-x-auto rounded-md border border-gray-200">
+
+    {{-- ===== MANAJER ADMIN SECTION ==== --}}
+    {{-- pengecekan permission, jika memenuhi syarat maka bisa tampil, manajer permissionnya view proposal dan validate saja --}}
+    @can('validate surat penawaran harga')
         <table class="w-full text-sm text-center">
             <thead class="bg-green-700 text-white">
                 <tr>
@@ -35,116 +39,191 @@
             </thead>
 
             <tbody class="divide-y divide-gray-200 bg-white">
-                {{-- Dummy Data Row 1 --}}
-                <tr>
-                    <td class="px-4 py-3">Tender Pengadaan Alat Berat</td>
-                    <td class="px-4 py-3">
-                        <flux:button icon="arrow-down-tray" size="sm"></flux:button>
-                    </td>
-                    <td class="px-4 py-3">Ahmad Rizki</td>
-                    <td class="px-4 py-3">
-                        <div class="flex gap-2 justify-center">
-                            <flux:button icon="check" size="sm" variant="primary" color="green"></flux:button>
-                            <flux:button icon="x-mark" size="sm" variant="danger"></flux:button>
-                        </div>
-                    </td>
-                    <td class="px-4 py-3">-</td>
-                    <td class="px-4 py-3">
-                        <span class="bg-blue-500 text-white text-xs px-3 py-1 rounded-md">
-                            Proposal Baru
-                        </span>
-                    </td>
-                </tr>
+                @if ($document_approvals->isEmpty())
+                    <tr>
+                        <td colspan="6" class="px-4 py-6">
+                            Tidak ada Surat Penawaran Harga untuk ditampilkan.
+                        </td>
+                    </tr>
+                @else
+                    @foreach ($document_approvals as $item)
+                        <tr>
+                            {{-- nama tender --}}
+                            <td class="px-4 py-3">{{ $item->surat_penawaran_harga->tender->nama_tender }}</td>
+                            {{-- <td class="px-4 py-3">{{ $item->nama_sph }}</td> --}}
 
-                {{-- Dummy Data Row 2 --}}
-                <tr>
-                    <td class="px-4 py-3">Proyek Pembangunan Jembatan</td>
-                    <td class="px-4 py-3">
-                        <flux:button icon="arrow-down-tray" size="sm"></flux:button>
-                    </td>
-                    <td class="px-4 py-3">Siti Nurhaliza</td>
-                    <td class="px-4 py-3">
-                        <div class="flex gap-2 justify-center">
-                            <flux:button icon="check" size="sm" variant="primary" color="green"></flux:button>
-                            <flux:button icon="x-mark" size="sm" variant="danger"></flux:button>
-                        </div>
-                    </td>
-                    <td class="px-4 py-3">-</td>
-                    <td class="px-4 py-3">
-                        <span class="bg-blue-500 text-white text-xs px-3 py-1 rounded-md">
-                            Proposal Baru
-                        </span>
-                    </td>
-                </tr>
+                            {{-- download file --}}
+                            {{-- file sph diberi logo download dan jika diklik maka auto download --}}
+                            <td class="px-4 py-3">
+                                <flux:button icon="arrow-down-tray" class="mr-2"
+                                    wire:click="download({{ $item->surat_penawaran_harga->id }})"></flux:button>
+                            </td>
 
-                {{-- Dummy Data Row 3 --}}
-                <tr>
-                    <td class="px-4 py-3">Tender Pengadaan Peralatan Kantor</td>
-                    <td class="px-4 py-3">
-                        <flux:button icon="arrow-down-tray" size="sm"></flux:button>
-                    </td>
-                    <td class="px-4 py-3">Budi Santoso</td>
-                    <td class="px-4 py-3">
-                        <div class="flex gap-2 justify-center">
-                            <flux:button icon="check" size="sm" variant="primary" color="green"></flux:button>
-                            <flux:button icon="x-mark" size="sm" variant="danger"></flux:button>
-                        </div>
-                    </td>
-                    <td class="px-4 py-3">-</td>
-                    <td class="px-4 py-3">
-                        <span class="bg-blue-500 text-white text-xs px-3 py-1 rounded-md">
-                            Proposal Baru
-                        </span>
-                    </td>
-                </tr>
+                            {{-- dibuat oleh --}}
+                            <td class="px-4 py-3">
+                                {{ $item->surat_penawaran_harga->user->name }}
+                            </td>
 
-                {{-- Dummy Data Row 4 --}}
-                <tr>
-                    <td class="px-4 py-3">Renovasi Gedung Kantor Pusat</td>
-                    <td class="px-4 py-3">
-                        <flux:button icon="arrow-down-tray" size="sm"></flux:button>
-                    </td>
-                    <td class="px-4 py-3">Dewi Lestari</td>
-                    <td class="px-4 py-3">
-                        <div class="flex gap-2 justify-center">
-                            <flux:button icon="check" size="sm" variant="primary" color="green"></flux:button>
-                            <flux:button icon="x-mark" size="sm" variant="danger"></flux:button>
-                        </div>
-                    </td>
-                    <td class="px-4 py-3">-</td>
-                    <td class="px-4 py-3">
-                        <span class="bg-blue-500 text-white text-xs px-3 py-1 rounded-md">
-                            Proposal Baru
-                        </span>
-                    </td>
-                </tr>
+                            {{-- validasi propo --}}
+                            {{-- cek apakah sudah di validasi --}}
+                            <td class="px-4 py-3">
+                                {{-- validate sph --}} {{-- button approve --}}
+                                <flux:button icon="check" class="mr-2"
+                                    wire:click="approve({{ $item->surat_penawaran_harga->id }})" variant="primary"
+                                    color="green">
+                                </flux:button>
 
-                {{-- Dummy Data Row 5 --}}
-                <tr>
-                    <td class="px-4 py-3">Pengadaan Software Manajemen</td>
-                    <td class="px-4 py-3">
-                        <flux:button icon="arrow-down-tray" size="sm"></flux:button>
-                    </td>
-                    <td class="px-4 py-3">Rudi Hermawan</td>
-                    <td class="px-4 py-3">
-                        <div class="flex gap-2 justify-center">
-                            <flux:button icon="check" size="sm" variant="primary" color="green"></flux:button>
-                            <flux:button icon="x-mark" size="sm" variant="danger"></flux:button>
-                        </div>
-                    </td>
-                    <td class="px-4 py-3">-</td>
-                    <td class="px-4 py-3">
-                        <span class="bg-blue-500 text-white text-xs px-3 py-1 rounded-md">
-                            Proposal Baru
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
+                                {{-- button reject --}}
+                                <flux:modal.trigger name="reject-sph-{{ $item->surat_penawaran_harga->id }}">
+                                    <flux:button icon="x-mark" variant="danger"></flux:button>
+                                </flux:modal.trigger>
+
+                                {{-- modal form reject --}}
+                                <flux:modal name="reject-sph-{{ $item->surat_penawaran_harga->id }}">
+                                    <form wire:submit.prevent="reject({{ $item->surat_penawaran_harga->id }})">
+                                        <flux:field>
+                                            <flux:label class="mt-3">Alasan Penolakan</flux:label>
+                                            <flux:textarea wire:model="pesan_revisi"></flux:textarea>
+                                            @error('pesan_revisi')
+                                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                                            @enderror
+                                        </flux:field>
+                                        <flux:button type="submit" class="mt-6" variant="danger">
+                                            Tolak
+                                        </flux:button>
+                                    </form>
+                                </flux:modal>
+                            </td>
+                            {{-- status Surat Penawaran Harga --}}
+                            <td class="px-4 py-3">
+                                {{-- logic pengambilan data ada di model sph --}}
+                                <span class="bg-blue-500 text-white text-xs px-3 py-1 rounded-md">
+                                    {{ $item->status_sph }}
+                                </span>
+                            </td>
+
+
+                            {{-- validator --}}
+                            <td class="px-4 py-3">
+                                {{ $item->user->name }}
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
         </table>
-        
-        {{-- Static Pagination Info --}}
-        <div class="pl-1 m-2">
-            <p class="text-sm text-gray-600">Showing 5 of 5 results</p>
+    @endcan
+
+
+    {{-- ===== STAFF ADMIN SECTION ==== --}}
+    @can('create surat penawaran harga')
+        <div class="overflow-x-auto rounded-md border border-gray-200 ">
+            <table class="w-full text-sm text-center">
+                <thead class="bg-green-700 text-white">
+                    <tr>
+                        <th class="px-4 py-3 font-medium">Nama Tender</th>
+                        <th class="px-4 py-3 font-medium">File Surat Penawaran Harga</th>
+                        <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
+                        <th class="px-4 py-3 font-medium">Pesan</th>
+                    </tr>
+
+                </thead>
+
+                <tbody class="divide-y divide-gray-200 bg-white">
+                    @if ($sphs->isEmpty())
+                        <tr>
+                            <td colspan="3" class="px-4 py-6">
+                                Tidak ada Surat Penawaran Harga untuk ditampilkan.
+                            </td>
+                        </tr>
+                    @else
+                        @foreach ($sphs as $item)
+                            @if ($item->status !== 1)
+                                <tr>
+                                    <td class="px-4 py-3">{{ $item->tender->nama_tender }}</td>
+                                    <td class="px-4 py-3">
+                                        <flux:button icon="arrow-down-tray" class="mr-2"
+                                            wire:click="download({{ $item->id }})"></flux:button>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        {{ $item->user->name }}
+                                    </td>
+                                    <td>
+                                        @if ($item->status === 1 && $item->keterangan !== null)
+                                            {{-- kondisi acc validasi --}}
+                                            <flux:button icon="envelope" class="mr-2" variant="primary" color="green">
+                                                {{ $item->keterangan }}
+                                            </flux:button>
+                                        @elseif($item->status === null)
+                                            {{-- kondisi belum di validasi --}}
+                                            <flux:button icon="envelope" class="mr-2" variant="primary">
+                                                {{ $item->keterangan ?? 'Surat Penawaran Harga belum diperiksa' }}
+                                            </flux:button>
+                                        @else
+                                            {{-- kondisi jika ada revisi --}}
+                                            <flux:modal.trigger name="edit-sph-{{ $item->id }}">
+                                                <flux:button icon="envelope" class="mr-2"
+                                                    wire:click="edit({{ $item->id }})" variant="primary"
+                                                    color="red">
+                                                    {{ $item->keterangan }}
+                                                </flux:button>
+                                            </flux:modal.trigger>
+
+                                            {{-- modal form --}}
+                                            <flux:modal name="edit-sph-{{ $item->id }}">
+                                                <flux:field>
+                                                    <flux:label class="mt-3">Pesan Revisi</flux:label>
+                                                    <flux:text class=" text-left">{{ $item->pesan_revisi }}</flux:text>
+                                                </flux:field>
+                                                <form wire:submit.prevent="update">
+                                                    <flux:field>
+                                                        <flux:label class="mt-3">Nama Surat Penawaran Harga</flux:label>
+                                                        <flux:text class=" text-left">{{ $item->nama_sph }}</flux:text>
+
+                                                        {{-- <flux:input wire:model="nama_sph" />
+                                                @error('nama_sph')
+                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                @enderror --}}
+                                                    </flux:field>
+
+                                                    <flux:field>
+                                                        {{-- <flux:label class="mt-3">File Surat Penawaran Harga</flux:label> --}}
+
+                                                        @if ($file_path_sph)
+                                                            <p class="text-sm mt-3">
+                                                                File saat ini: {{ basename($file_path_sph) }}
+                                                            </p>
+                                                        @endif
+                                                        <flux:input type="file" wire:model="file_path_sph" />
+                                                        @error('file_path_sph')
+                                                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                        @enderror
+                                                    </flux:field>
+
+                                                    <flux:button type="submit" class="mt-6" variant="primary">
+                                                        Update
+                                                    </flux:button>
+                                                </form>
+                                            </flux:modal>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endif
+                        @endforeach
+                        <tr>
+                            <td colspan="3" class="px-4 py-6">
+                                Tidak ada Surat Penawaran Harga (aktif) untuk ditampilkan.
+                            </td>
+                        </tr>
+                    @endif
+                </tbody>
+
+            </table>
+
         </div>
+    @endcan
+
+    {{-- Static Pagination Info --}}
+    <div class="pl-1 m-2">
+        {{ $sphs->links() }}
     </div>
 </div>
