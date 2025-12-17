@@ -7,11 +7,12 @@ use App\Models\DocumentApprovalWorkflow;
 use App\Models\Tender;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 
 class Active extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, WithPagination;
 
     public $tender_id;
     public $nama_proposal;
