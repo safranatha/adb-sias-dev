@@ -32,7 +32,7 @@
                         <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
                         <th class="px-4 py-3 font-medium">Validate</th>
                         <th class="px-4 py-3 font-medium">Validator</th>
-                        <th class="px-4 py-3 font-medium">Status Surat Penawaran Harga</th>
+                        <th class="px-4 py-3 font-medium">Riwayat Status</th>
                     </tr>
                 </thead>
 
@@ -106,11 +106,20 @@
                                     {{ $item->user->name }}
                                 </td>
 
-                                {{-- status Surat Penawaran Harga --}}
+                                <!-- {{-- status Surat Penawaran Harga --}}
                                 <td class="px-4 py-3">
                                     {{-- logic pengambilan data ada di model proposal --}}
                                     {{ $item->status_sph }}
-                                </td>
+                                </td> -->
+                                
+                                {{-- riwayat status --}}
+                                <td class="px-4 py-3">
+                                    <flux:button icon="information-circle" class="mr-2"
+                                            :href="route('surat-penawaran-harga.detail', ['id' => $item->id])"
+                                            :current="request()->routeIs('surat-penawaran-harga.detail', ['id' => $item->id])" wire:navigate variant="primary"
+                                            color="yellow">
+                                        </flux:button>
+                                    </td>
                             </tr>
                         @endforeach
                     @endif
