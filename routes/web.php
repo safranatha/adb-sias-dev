@@ -3,6 +3,7 @@ use App\Livewire\UserManagement\Index;
 use App\Livewire\Proposal\Index as ProposalIndex;
 use App\Livewire\Proposal\Create as ProposalCreate;
 use App\Livewire\Proposal\Active as ProposalActive;
+use App\Livewire\Proposal\Detail as ProposalDetail;
 use App\Livewire\Tender\Index as TenderIndex;
 use App\Livewire\InternalMemo\Index as InternalMemoIndex;
 use App\Livewire\InternalMemo\Create as InternalMemoCreate;
@@ -10,6 +11,7 @@ use App\Livewire\Tender\Detail as TenderDetail;
 use App\Livewire\SuratPenawaranHarga\Index as SuratPenawaranHargaIndex;
 use App\Livewire\SuratPenawaranHarga\Create as SuratPenawaranHargaCreate;
 use App\Livewire\SuratPenawaranHarga\Active as SuratPenawaranHargaActive;
+use App\Livewire\SuratPenawaranHarga\Detail as SuratPenawaranHargaDetail;
 use App\Livewire\Tender\Create as TenderCreate;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -74,6 +76,9 @@ Route::get('/proposal-history', ProposalIndex::class)->middleware(['auth'])->nam
 // create proposal
 Route::get('/proposal-create', ProposalCreate::class)->middleware(['auth'])->name('proposal.create');
 
+// detail proposal
+Route::get('/proposal/{id}', ProposalDetail::class)->middleware(['auth'])->name('proposal.detail');
+
 // tender
 Route::get('/tender',TenderIndex::class)->middleware(['auth'])->name('tender.index');
 
@@ -88,6 +93,9 @@ Route::get('/surat-penawaran-harga-active',SuratPenawaranHargaActive::class)->mi
 
 // history surat penawaran harga
 Route::get('/surat-penawaran-harga-history',SuratPenawaranHargaIndex::class)->middleware(['auth'])->name('surat-penawaran-harga.index');
+
+// detail surat penawaran harga
+Route::get('/surat-penawaran-harga/{id}',SuratPenawaranHargaDetail::class)->middleware(['auth'])->name('surat-penawaran-harga.detail');
 
 // create surat penawaran harga
 Route::get('/surat-penawaran-harga-create',SuratPenawaranHargaCreate::class)->middleware(['auth'])->name('surat-penawaran-harga.create');

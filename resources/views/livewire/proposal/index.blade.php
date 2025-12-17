@@ -35,7 +35,7 @@
                         <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
                         <th class="px-4 py-3 font-medium">Status</th>
                         <th class="px-4 py-3 font-medium">Validator</th>
-                        <th class="px-4 py-3 font-medium">Status Proposal</th>
+                        <th class="px-4 py-3 font-medium">Riwayat Status</th>
                     </tr>
                 </thead>
 
@@ -89,17 +89,23 @@
                                 </td>
 
                                 {{-- tipe dokumen --}}
-                                <td class="px-4 py-3">
+                                <!-- <td class="px-4 py-3">
                                     {{-- logic pengambilan data ada di model proposal --}}
-                                    <span class="bg-blue-500 text-white text-xs px-3 py-1 rounded-md">
-                                        {{ $item->status_proposal }}
-                                    </span>
-                                </td>
-
-                            </tr>
-                        @endforeach
-                    @endif
-                </tbody>
+                                    {{ $item->status_proposal }}
+                                </td> -->
+                                
+                                {{-- riwayat status --}}
+                                <td class="px-4 py-3">
+                                    <flux:button icon="information-circle" class="mr-2"
+                                            :href="route('proposal.detail', ['id' => $item->proposal->id])"
+                                            :current="request()->routeIs('proposal.detail', ['id' => $item->proposal->id])" wire:navigate variant="primary"
+                                            color="yellow">
+                                        </flux:button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
+                    </tbody>
             </table>
             <div class=" pl-1 m-2">
                 {{ $proposals->links() }}
