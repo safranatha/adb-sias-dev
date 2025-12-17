@@ -16,16 +16,15 @@
         </div>
     @endif
 
+    <div class="mb-5">
+        <flux:heading size="xl">Riwayat Proposal Tender</flux:heading>
+        <flux:text class="mt-2">Berikut merupakan Riwayat Proposal Tender yang ada pada PT Adi Banuwa</flux:text>
+    </div>
+
     {{-- ===== MANAJER TEKNIK SECTION ==== --}}
     {{-- pengecekan permission, jika memenuhi syarat maka bisa tampil, manajer permissionnya view proposal dan validate saja --}}
     @can('validate proposal')
         {{-- tabel manajer --}}
-        <div class="mb-5">
-            <flux:heading size="xl">Daftar Proposal Tender</flux:heading>
-            <flux:text class="mt-2">Berikut merupakan daftar Proposal Tender yang ada pada PT Adi Banuwa</flux:text>
-        </div>
-
-
         <div class="overflow-x-auto rounded-md border border-gray-200">
             <table class="w-full text-sm text-center">
                 <thead class="bg-green-50 text-white">
@@ -183,12 +182,6 @@
     {{-- ===== STAFF SECTION ==== --}}
     {{-- pengecekan permssion, jika memenuhi syarat maka bisa tampil, staff memiliki permission yang tidak dimilki oleh manajer yakni create proposal. staff ada permission view,create dan validate --}}
     @can('create proposal')
-        {{-- tabel staff --}}
-        <div class="mb-5">
-            <flux:heading size="xl">Daftar Proposal Tender</flux:heading>
-            <flux:text class="mt-2">Berikut merupakan daftar Proposal Tender yang ada pada PT Adi Banuwa</flux:text>
-        </div>
-
         <div class="overflow-x-auto rounded-md border border-gray-200">
             <table class="w-full text-sm text-center">
                 <thead class="bg-green-50 text-white">
