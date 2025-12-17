@@ -3,6 +3,7 @@ use App\Livewire\UserManagement\Index;
 use App\Livewire\Proposal\Index as ProposalIndex;
 use App\Livewire\Proposal\Create as ProposalCreate;
 use App\Livewire\Proposal\Active as ProposalActive;
+use App\Livewire\Proposal\Detail as ProposalDetail;
 use App\Livewire\Tender\Index as TenderIndex;
 use App\Livewire\InternalMemo\Index as InternalMemoIndex;
 use App\Livewire\InternalMemo\Create as InternalMemoCreate;
@@ -73,6 +74,9 @@ Route::get('/proposal-history', ProposalIndex::class)->middleware(['auth'])->nam
 
 // create proposal
 Route::get('/proposal-create', ProposalCreate::class)->middleware(['auth'])->name('proposal.create');
+
+// detail proposal
+Route::get('/proposal/{id}', ProposalDetail::class)->middleware(['auth'])->name('proposal.detail');
 
 // tender
 Route::get('/tender',TenderIndex::class)->middleware(['auth'])->name('tender.index');
