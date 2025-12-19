@@ -119,11 +119,6 @@
     @can(['view proposal'])
         @cannot(['validate proposal'])
             @cannot(['create proposal'])
-                {{-- tabel manajer admin --}}
-                <div class="mb-5">
-                    <flux:heading size="xl">Daftar Proposal Tender</flux:heading>
-                    <flux:text class="mt-2">Berikut merupakan daftar Proposal Tender yang ada pada PT Adi Banuwa</flux:text>
-                </div>
 
                 <div class="overflow-x-auto rounded-md border border-gray-200">
                     <table class="w-full text-sm text-center">
