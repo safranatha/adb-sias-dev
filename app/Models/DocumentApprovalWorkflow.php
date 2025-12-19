@@ -69,4 +69,9 @@ class DocumentApprovalWorkflow extends Model
         return 'Surat Penawaran Harga Revisi ke-' . $olderWorkflowCount;
     }
 
+    public function getNameTenderAttribute()
+    {
+        return $this->proposal->tender()->where('id', $this->proposal->tender_id)->value('nama_tender');
+    }
+
 }
