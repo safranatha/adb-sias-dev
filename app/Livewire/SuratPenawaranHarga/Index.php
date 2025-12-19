@@ -50,15 +50,6 @@ class Index extends Component
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
 
-            'document_approvals' => DocumentApprovalWorkflow::with(['surat_penawaran_harga'])
-                ->whereNotNull('surat_penawaran_harga_id')
-                ->select('document_approval_workflow.*')
-                ->orderBy('created_at', 'desc')
-                ->paginate(5),
-
-            'tenders' => Tender::where('status', 'Dalam Proses')
-                ->doesntHave('surat_penawaran_harga')
-                ->get(),
         ])->title('Surat Penawaran Harga');
     }
 }
