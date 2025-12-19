@@ -43,14 +43,27 @@ class Proposal extends Model
     {
         return $this->document_approval_workflows()
             ->latest()
-            ->value('pesan_revisi'); 
+            ->value('pesan_revisi');
     }
 
     public function getKeteranganAttribute()
     {
         return $this->document_approval_workflows()
             ->latest()
-            ->value('keterangan'); 
+            ->value('keterangan');
+    }
+
+    public function getValidatorAttribute()
+    {
+        $user = $this->document_approval_workflows()
+            ->latest()
+            ->first();
+
+        if ($user) {
+            return $user->user->name;
+        }
+
+        return null;
     }
 
 
