@@ -40,30 +40,30 @@
                 </thead>
 
                 <tbody class="divide-y divide-gray-200">
-                    @if ($document_approvals->isEmpty())
+                    @if ($proposals->isEmpty())
                         <tr>
                             <td colspan="5" class="px-4 py-6">
                                 Tidak ada proposal untuk ditampilkan.
                             </td>
                         </tr>
                     @else
-                        @foreach ($document_approvals as $item)
+                        @foreach ($proposals as $item)
                             {{-- @dd($item->status_proposal) --}}
                             <tr>
                                 {{-- nama tender --}}
-                                <td class="px-4 py-3">{{ $item->proposal->tender->nama_tender }}</td>
+                                <td class="px-4 py-3">{{ $item->tender->nama_tender }}</td>
                                 {{-- <td class="px-4 py-3">{{ $item->nama_proposal }}</td> --}}
 
                                 {{-- download tender --}}
                                 {{-- file proposal diberi logo download dan jika diklik maka auto download --}}
                                 <td class="px-4 py-3">
                                     <flux:button icon="arrow-down-tray" class="mr-2"
-                                        wire:click="download({{ $item->proposal->id }})"></flux:button>
+                                        wire:click="download({{ $item->id }})"></flux:button>
                                 </td>
 
                                 {{-- dibuat oleh --}}
                                 <td class="px-4 py-3">
-                                    {{ $item->proposal->user->name }}
+                                    {{ $item->user->name }}
                                 </td>
 
 
@@ -85,20 +85,20 @@
 
                                 {{-- validator --}}
                                 <td class="px-4 py-3">
-                                    {{ $item->user->name }}
+                                    {{ $item->validator }}
                                 </td>
 
                                 {{-- tipe dokumen --}}
                                 <!-- <td class="px-4 py-3">
                                     {{-- logic pengambilan data ada di model proposal --}}
-                                    {{ $item->status_proposal }}
+                                    {{-- {{ $item->status_proposal }} --}}
                                 </td> -->
                                 
                                 {{-- riwayat status --}}
                                 <td class="px-4 py-3">
                                     <flux:button icon="information-circle" class="mr-2"
-                                            :href="route('proposal.detail', ['id' => $item->proposal->id])"
-                                            :current="request()->routeIs('proposal.detail', ['id' => $item->proposal->id])" wire:navigate variant="primary"
+                                            :href="route('proposal.detail', ['id' => $item->id])"
+                                            :current="request()->routeIs('proposal.detail', ['id' => $item->id])" wire:navigate variant="primary"
                                             color="yellow">
                                         </flux:button>
                                     </td>
@@ -119,11 +119,6 @@
     @can(['view proposal'])
         @cannot(['validate proposal'])
             @cannot(['create proposal'])
-                {{-- tabel manajer admin --}}
-                <div class="mb-5">
-                    <flux:heading size="xl">Daftar Proposal Tender</flux:heading>
-                    <flux:text class="mt-2">Berikut merupakan daftar Proposal Tender yang ada pada PT Adi Banuwa</flux:text>
-                </div>
 
                 <div class="overflow-x-auto rounded-md border border-gray-200">
                     <table class="w-full text-sm text-center">

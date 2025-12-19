@@ -39,29 +39,29 @@
                 </thead>
 
                 <tbody class="divide-y divide-gray-200">
-                    @if ($document_approvals->isEmpty())
+                    @if ($sphs->isEmpty())
                         <tr>
                             <td colspan="3" class="px-4 py-6">
                                 Tidak ada Surat Penawaran Harga untuk ditampilkan.
                             </td>
                         </tr>
                     @else
-                        @foreach ($document_approvals as $item)
+                        @foreach ($sphs as $item)
                             <tr>
                                 {{-- nama tender --}}
-                                <td class="px-4 py-3">{{ $item->surat_penawaran_harga->tender->nama_tender }}</td>
+                                <td class="px-4 py-3">{{ $item->tender->nama_tender }}</td>
                                 {{-- <td class="px-4 py-3">{{ $item->nama_sph }}</td> --}}
 
                                 {{-- download file --}}
                                 {{-- file sph diberi logo download dan jika diklik maka auto download --}}
                                 <td class="px-4 py-3">
                                     <flux:button icon="arrow-down-tray" class="mr-2"
-                                        wire:click="download({{ $item->surat_penawaran_harga->id }})"></flux:button>
+                                        wire:click="download({{ $item->id }})"></flux:button>
                                 </td>
 
                                 {{-- dibuat oleh --}}
                                 <td class="px-4 py-3">
-                                    {{ $item->surat_penawaran_harga->user->name }}
+                                    {{ $item->user->name }}
                                 </td>
 
                                 {{-- validasi propo --}}
@@ -106,7 +106,7 @@
                 </tbody>
             </table>
             <div class=" pl-1 m-2">
-                {{ $document_approvals->links() }}
+                {{ $sphs->links() }}
             </div>
         </div>
     @endcan

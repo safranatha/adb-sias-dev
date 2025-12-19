@@ -50,17 +50,6 @@ class Index extends Component
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
 
-            'document_approvals' => DocumentApprovalWorkflow::with(['proposal'])
-                ->whereNotNull('proposal_id')
-                ->whereNotNull('status')
-                ->select('document_approval_workflow.*')
-                ->orderBy('created_at', 'desc')
-                ->paginate(5),
-
-            'tender_status' => Tender::where('status', 'Dalam Proses')
-                ->doesntHave('proposal')
-                ->get(),
-
         ])->title('Proposal');
     }
 }
