@@ -1,4 +1,5 @@
-<div class="max-w-8xl mx-auto mt-8">
+<div>
+    
     @if (session('error'))
         <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 2000)"
             x-transition:leave="transition ease-out duration-500" x-transition:leave-start="opacity-100"
@@ -7,83 +8,146 @@
         </div>
     @endif
 
-    <div class="overflow-x-auto rounded-xl border border-gray-200">
-        <table class="w-full text-sm text-center">
-            <thead class="bg-gray-100 text-black">
-                <tr>
-                    <th class="px-4 py-3 font-medium">Nama Tender</th>
-                    <th class="px-4 py-3 font-medium">Proposal</th>
-                    <th class="px-4 py-3 font-medium">SPH</th>
-                    <th class="px-4 py-3 font-medium">Status Proposal</th>
-                    <th class="px-4 py-3 font-medium">Status SPH</th>
-                    <th class="px-4 py-3 font-medium">Status Tender</th>
-                    @if ($tender->status === 'Dalam Proses')
-                        @can('create tender')
-                            <th class="px-4 py-3 font-medium">Validate</th>
-                        @endcan
-                    @endif
-                </tr>
-            </thead>
+        <flux:heading size="xl">Detail Tender {{ $tender->nama_tender }}</flux:heading>
+        <flux:text class="mt-2">Berikut merupakan detail dari Tender {{ $tender->nama_tender }}.</flux:text>        
 
-            <tbody class="divide-y divide-gray-200">
-                <tr>
-                    <td class="px-4 py-3">{{ $tender->nama_tender }}</td>
-                    <td class="px-4 py-3">
-                        <flux:button icon="arrow-down-tray" class="mr-2"
-                            wire:click="get_data_proposal({{ $tender->id }})">
+        <!-- Baris 1 -->
+            <div class="flex gap-4 mt-6">
+            <div class="color-white bg-white p-5 rounded-lg shadow-md flex w-full">
+                <div>
+                    <flux:icon name="building-office" class="text-gray-400 size-12" />
+                </div>
+                <div>
+                    <flux:heading size="lg" class="ml-4">Nama Klien</flux:heading>
+                    <flux:text size="md" class="ml-4 mt-2">{{ $tender->nama_klien }}</flux:text>
+                </div>
+            </div>
+            <div class="color-white bg-white p-5 rounded-lg shadow-md flex w-full">
+                <div>
+                    <flux:icon name="clipboard-document-list" class="text-gray-400 size-12" />
+                </div>
+                <div>
+                    <flux:heading size="lg" class="ml-4">Status Tender</flux:heading>
+                    <flux:text size="md" class="ml-4 mt-2">{{ $tender->status }}</flux:text>
+                </div>
+            </div>   
+        </div>
+
+        <!-- Baris 2 -->
+        <div class="flex gap-4 mt-6">
+            <div class="color-white bg-white p-5 rounded-lg shadow-md flex w-full">
+                <div>
+                    <flux:icon name="document-text" class="text-gray-400 size-12" />
+                </div>
+                <div>
+                    <flux:heading size="lg" class="ml-4">Dokumen Proposal Tender</flux:heading>
+                    <flux:text size="md" class="ml-4 mt-2">{{ $tender->proposal->keterangan ?? 'Sedang dalam pengerjaan' }}</flux:text>
+                </div>
+                <div class="content-center ml-auto">
+                <!-- Logic masih perlu perbaikan -->
+                <flux:button variant="ghost" color="gray" disabled icon="arrow-down-tray"></flux:button>
+                <flux:button variant="primary" color="emerald" icon="arrow-down-tray"
+                    wire:click="get_data_proposal({{ $tender->id }})"></flux:button>
+            </div>
+            </div>
+            <!-- Logic masih perlu perbaikan -->
+            @if ($tender->status === 'Dalam Proses')
+            @if ($tender->level === true)
+                <div class="color-white bg-green-200 p-5 rounded-lg shadow-md flex w-full">
+                    <flux:icon name="check-circle" class="text-green-50 size-12" />
+                    <flux:text size="xl" class="ml-4 mt-2">Sudah diperiksa</flux:text>
+                </div>
+            @else
+            <div class="color-white bg-green-100 p-5 rounded-lg shadow-md flex">
+                <div class="content-center">
+                <flux:button icon="check" class="" wire:click="approve({{ $tender->id }})"
+                    variant="primary" color="green"></flux:button>
+                </div>
+            </div>
+            <div class="color-white bg-red-100 p-5 rounded-lg shadow-md flex">
+                <div class="content-center">
+                <flux:modal.trigger name="reject-proposal-{{ $tender->id }}">
+                <flux:button icon="x-mark" class="" wire:click=""
+                    variant="danger"></flux:button>
+                </flux:modal.trigger>
+
+                {{-- modal form reject --}}
+                <flux:modal name="reject-proposal-{{ $tender->id }}" class="max-w-3xl content-center">
+                    <form wire:submit.prevent="reject({{ $tender->id }})">
+                        <flux:field>
+                            <flux:label class="mt-3">Alasan Penolakan</flux:label>
+                            <flux:textarea wire:model="pesan_revisi"></flux:textarea>
+                                    @error('pesan_revisi')
+                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
+                        </flux:field>
+                        <flux:button type="submit" class="mt-6 w-full" variant="danger">
+                            Tolak
                         </flux:button>
-                    </td>
-                    <td class="px-4 py-3">
-                        <flux:button icon="arrow-down-tray" class="mr-2"
-                            wire:click="get_data_SPH({{ $tender->id }})">
+                    </form>
+                </flux:modal>
+                </div>
+            </div>   
+            @endif
+        @endif     
+        </div>
+
+        <!-- Baris 3 -->
+        <div class="flex gap-4 mt-6">
+            <div class="color-white bg-white p-5 rounded-lg shadow-md flex w-full">
+            <div>
+                <flux:icon name="envelope" class="text-gray-400 size-12" />
+            </div>
+            <div>
+                <flux:heading size="lg" class="ml-4">Dokumen Surat Penawaran Harga</flux:heading>
+                <flux:text size="md" class="ml-4 mt-2">{{ $tender->surat_penawaran_harga->keterangan ?? 'Sedang dalam pengerjaan' }}</flux:text>
+            </div>
+            <div class="content-center ml-auto">
+                <!-- Logic masih perlu perbaikan -->
+                <flux:button variant="ghost" color="gray" disabled icon="arrow-down-tray"></flux:button>
+                <flux:button variant="primary" color="emerald" icon="arrow-down-tray"
+                    wire:click="get_data_SPH({{ $tender->id }})"></flux:button>
+            </div>
+            </div>
+            <!-- Logic masih perlu perbaikan -->
+            @if ($tender->status === 'Dalam Proses')
+            @if ($tender->level === true)
+                <div class="color-white bg-green-200 p-5 rounded-lg shadow-md flex w-full">
+                    <flux:icon name="check-circle" class="text-green-50 size-12" />
+                    <flux:text size="xl" class="ml-4 mt-2">Sudah diperiksa</flux:text>
+                </div>
+            @else
+            <div class="color-white bg-green-100 p-5 rounded-lg shadow-md flex">
+                <div class="content-center">
+                <flux:button icon="check" class="" wire:click="approve({{ $tender->id }})"
+                    variant="primary" color="green"></flux:button>
+                </div>
+            </div>
+            <div class="color-white bg-red-100 p-5 rounded-lg shadow-md flex">
+                <div class="content-center">
+                <flux:modal.trigger name="reject-proposal-{{ $tender->id }}">
+                <flux:button icon="x-mark" class="" wire:click=""
+                    variant="danger"></flux:button>
+                </flux:modal.trigger>
+
+                {{-- modal form reject --}}
+                <flux:modal name="reject-proposal-{{ $tender->id }}" class="max-w-3xl content-center">
+                    <form wire:submit.prevent="reject({{ $tender->id }})">
+                        <flux:field>
+                            <flux:label class="mt-3">Alasan Penolakan</flux:label>
+                            <flux:textarea wire:model="pesan_revisi"></flux:textarea>
+                                    @error('pesan_revisi')
+                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
+                        </flux:field>
+                        <flux:button type="submit" class="mt-6 w-full" variant="danger">
+                            Tolak
                         </flux:button>
-                    </td>
-                    <td class="px-4 py-3"> {{ $tender->proposal->keterangan ?? 'Sedang dalam pengerjaan' }}</td>
-                    <td class="px-4 py-3"> {{ $tender->surat_penawaran_harga->keterangan ?? 'Sedang dalam pengerjaan' }}</td>
-                    <td class="px-4 py-3"> {{ $tender->status }}</td>
-
-                    @if ($tender->status === 'Dalam Proses')
-                            @if ($tender->level === true)
-                                <td class="px-4 py-3">
-                                    <span class="bg-green-500 text-white text-s px-2 py-1 rounded-md">
-                                        Sudah diperiksa
-                                    </span>
-                                </td>
-                            @else
-                                <td class="px-4 py-3">
-                                    {{-- validate proposal --}}
-                                    {{-- button approve --}}
-                                    <flux:button icon="check" class="mr-2" wire:click="approve({{ $tender->id }})"
-                                        variant="primary" color="green">
-                                    </flux:button>
-
-                                    {{-- button reject --}}
-                                    <flux:modal.trigger name="reject-proposal-{{ $tender->id }}">
-                                        <flux:button icon="x-mark" variant="danger"></flux:button>
-                                    </flux:modal.trigger>
-
-                                    {{-- modal form reject --}}
-                                    <flux:modal name="reject-proposal-{{ $tender->id }}">
-                                        <form wire:submit.prevent="reject({{ $tender->id }})">
-                                            <flux:field>
-                                                <flux:label class="mt-3">Alasan Penolakan</flux:label>
-                                                <flux:textarea wire:model="pesan_revisi"></flux:textarea>
-                                                @error('pesan_revisi')
-                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
-                                                @enderror
-                                            </flux:field>
-                                            <flux:button type="submit" class="mt-6" variant="danger">
-                                                Tolak
-                                            </flux:button>
-                                        </form>
-                                    </flux:modal>
-                                </td>
-                            @endif
-                    @endif
-
-
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                    </form>
+                </flux:modal>
+                </div>
+            </div>   
+            @endif
+        @endif     
+        </div>
 </div>
