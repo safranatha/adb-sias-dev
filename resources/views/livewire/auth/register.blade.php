@@ -33,7 +33,7 @@
             </flux:select>
 
             {{-- select permission --}}
-            <x-multi-select label="Permission" name="permissions" :options="$permission->pluck('name', 'name')" placeholder="Pilih permission" />
+            {{-- <x-multi-select label="Permission" name="permissions" :options="$permission->pluck('name', 'name')" placeholder="Pilih permission" /> --}}
 
 
 
