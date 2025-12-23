@@ -8,13 +8,23 @@
             {{-- Name Field --}}
             <flux:field>
                 <flux:label class="mt-3">Nama Tender</flux:label>
-                <flux:input wire:model="nama_tender" placeholder="Enter nama tender" />
+                <flux:input wire:model="nama_tender" placeholder="Masukkan nama tender" />
             </flux:field>
 
             <flux:field>
                 <flux:label class="mt-3">Nama Klien</flux:label>
-                <flux:input wire:model="nama_klien" placeholder="Enter nama klien" />
+                <flux:input wire:model="nama_klien" placeholder="Masukkan nama klien" />
             </flux:field>
+
+            <div class="bg-white rounded-2xl mt-3 p-5 shadow-md">
+            <flux:field>
+                <flux:label>File Dokumen Prakualifikasi Tender</flux:label>
+                    <flux:input type="file" wire:model="file_path_tender" />
+                    @error('file_path_sph')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+            </flux:field>
+            </div>
 
             <flux:spacer />
             
