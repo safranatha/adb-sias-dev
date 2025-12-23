@@ -77,4 +77,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(DocumentApprovalWorkflow::class);
     }
+
+    public function disposisis()
+    {
+        return $this->hasMany(Disposisi::class, 'penerima_id');
+    }
+
+    public function form_tugas()
+    {
+        return $this->hasMany(FormTugas::class);
+    }
 }
