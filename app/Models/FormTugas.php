@@ -16,6 +16,7 @@ class FormTugas extends Model
         'kegiatan',
         'keterangan',
         'file_path_form_tugas',
+        'lingkup_kerja',
     ];
 
     public function user()
@@ -26,5 +27,12 @@ class FormTugas extends Model
     public function disposisis()
     {
         return $this->hasMany(Disposisi::class);
+    }
+
+    public function getPenerimaAttribute()
+    {
+        $penerima_id=$this->disposisis()->latest()->value('penerima_id');
+        $user=User::find($penerima_id);
+        return $user->getRoleNames()->implode(', ');
     }
 }
