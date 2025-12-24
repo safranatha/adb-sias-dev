@@ -2,6 +2,7 @@
 
 namespace App\Livewire\FormTugas;
 
+use App\Models\Disposisi;
 use App\Models\FormTugas;
 use App\Models\User;
 use Livewire\Component;
@@ -48,6 +49,7 @@ class Create extends Component
     {
         $this->validate();
 
+        // store form tugas without file path
         $form_tugas = FormTugas::create([
             'user_id' => auth()->user()->id,
             'due_date' => $this->due_date,
@@ -57,7 +59,13 @@ class Create extends Component
             'keterangan' => $this->keterangan,
         ]);
 
+        // store to disposisi table
+        Disposisi::create([
+            'form_tugas_id' => $form_tugas->id,
+            'penerima_id' => $this->penerima,
+        ]);
 
+        // pengecekan jika ada file path maka akan update di kolom form tugas yang telah distore
         if ($this->file_path_form_tugas) {
             $path_awal = $this->file_path_form_tugas;
             // Save to Laravel storage
