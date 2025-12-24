@@ -16,9 +16,10 @@ return new class extends Migration
             // created by
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->boolean('status')->default(0);
-            $table->timestamp('due_date');
+            $table->date('due_date');
             $table->string('jenis_permintaan');
             $table->string('kegiatan');
+            $table->string('lingkup_kerja');
             $table->string('keterangan')->nullable();
             $table->string('file_path_form_tugas')->nullable();
             $table->timestamps();
