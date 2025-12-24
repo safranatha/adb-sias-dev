@@ -5,8 +5,8 @@ use App\Livewire\Proposal\Create as ProposalCreate;
 use App\Livewire\Proposal\Active as ProposalActive;
 use App\Livewire\Proposal\Detail as ProposalDetail;
 use App\Livewire\Tender\Index as TenderIndex;
-use App\Livewire\InternalMemo\Index as InternalMemoIndex;
-use App\Livewire\InternalMemo\Create as InternalMemoCreate;
+use App\Livewire\FormTugas\Index as FormTugasIndex;
+use App\Livewire\FormTugas\Create as FormTugasCreate;
 use App\Livewire\Tender\Detail as TenderDetail;
 use App\Livewire\SuratPenawaranHarga\Index as SuratPenawaranHargaIndex;
 use App\Livewire\SuratPenawaranHarga\Create as SuratPenawaranHargaCreate;
@@ -101,10 +101,10 @@ Route::get('/surat-penawaran-harga/{id}',SuratPenawaranHargaDetail::class)->midd
 Route::get('/surat-penawaran-harga-create',SuratPenawaranHargaCreate::class)->middleware(['auth'])->name('surat-penawaran-harga.create');
 
 // internal memo
-Route::get('/internal-memo',InternalMemoIndex::class)->middleware(['auth'])->name('internal-memo.index');
+Route::get('/form-tugas',FormTugasIndex::class)->middleware(['auth'])->name('form-tugas.index');
 
-// create internal memo
-Route::get('/internal-memo-create',InternalMemoCreate::class)->middleware(['auth'])->name('internal-memo.create');
+// create form tugas
+Route::get('/form-tugas-create',FormTugasCreate::class)->middleware(['auth'])->name('form-tugas.create');
 
 
 
