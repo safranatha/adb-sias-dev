@@ -29,15 +29,61 @@ class Tender extends Model
         return $this->hasOne(InternalMemo::class);
     }
 
-    public function getLevelAttribute()
+    public function getLevelPropoAttribute()
     {
-       
-        $level= $this->proposal?->document_approval_workflows()
+        $latestWorkflow = $this->proposal?->document_approval_workflows()
             ->latest()
-            ->value('level') ?? null;
-        
-        if($level == 3){
-            return true;
+            ->first();
+
+        if (!$latestWorkflow) {
+            return 'Proposal baru diupload';
         }
+
+        if ($latestWorkflow->level === "3" && $latestWorkflow->status === 1) {
+            return 'Dokumen proposal telah disetujui Direktur';
+        }
+
+        elseif ($latestWorkflow->level === "3" && $latestWorkflow->status === 0) {
+            return 'Dokumen proposal menunggu persetujuan Direktur';
+        }
+
+        elseif ($latestWorkflow->level === "2" && $latestWorkflow->status === 1) {
+            return 'Dokumen proposal telah disetujui Manajer Teknik';
+        }
+
+        elseif ($latestWorkflow->level === "2" && $latestWorkflow->status === 0) {
+            return 'Dokumen proposal menunggu persetujuan Manajer Teknik';
+        }
+
+        return 'Menunggu proses persetujuan';
+    }
+
+    public function getLevelSphAttribute()
+    {
+        $latestWorkflow = $this->surat_penawaran_harga?->document_approval_workflows()
+            ->latest()
+            ->first();
+
+        if (!$latestWorkflow) {
+            return 'SPH baru diupload';
+        }
+
+        if ($latestWorkflow->level === "3" && $latestWorkflow->status === 1) {
+            return 'SPH telah disetujui Direktur';
+        }
+
+        elseif ($latestWorkflow->level === "3" && $latestWorkflow->status === 0) {
+            return 'SPH menunggu persetujuan Direktur';
+        }
+
+        elseif ($latestWorkflow->level === "2" && $latestWorkflow->status === 1) {
+            return 'SPH telah disetujui Manajer Admin';
+        }
+
+        elseif ($latestWorkflow->level === "2" && $latestWorkflow->status === 0) {
+            return 'SPH menunggu persetujuan Manajer Admin';
+        }
+
+        return 'Menunggu proses persetujuan';
     }
 }
