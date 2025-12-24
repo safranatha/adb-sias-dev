@@ -108,19 +108,21 @@
         </flux:navlist>
         @endcan
 
-        @can('view internal memo')
+        @can('view form tugas')
             <flux:navlist variant="outline">
                 <flux:navlist.group expandable :expanded="false" class="text-white">
                     <x-slot:heading>
-                        <span class="text-white! font-medium">Internal Memo</span>
+                        <span class="text-white! font-medium">Form Tugas</span>
                     </x-slot:heading>
-                    @can('create internal memo')
-                    <flux:navlist.item icon="plus-circle" :href="route('internal-memo.create')"
-                        :current="request()->routeIs('internal-memo.create')" wire:navigate class="mt-2">{{ __('Buat Internal Memo') }}
+
+                    @can('create form tugas')
+                    <flux:navlist.item icon="plus-circle" :href="route('form-tugas.create')"
+                        :current="request()->routeIs('form-tugas.create')" wire:navigate class="mt-2">{{ __('Buat Form Tugas') }}
                     </flux:navlist.item>
                     @endcan
-                    <flux:navlist.item icon="document-minus" :href="route('internal-memo.index')"
-                        :current="request()->routeIs('internal-memo.index')" wire:navigate class="mt-2">{{ __('Internal Memo') }}
+
+                    <flux:navlist.item icon="document-minus" :href="route('form-tugas.index')"
+                        :current="request()->routeIs('form-tugas.index')" wire:navigate class="mt-2">{{ __('Daftar Form Tugas') }}
                     </flux:navlist.item>
                     
                 </flux:navlist.group>
