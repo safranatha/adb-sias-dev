@@ -40,19 +40,19 @@ class Tender extends Model
         }
 
         if ($latestWorkflow->level === "3" && $latestWorkflow->status === 1) {
-            return 'Dokumen proposal telah disetujui Direktur';
+            return 'Proposal telah disetujui Direktur';
         }
 
         elseif ($latestWorkflow->level === "3" && $latestWorkflow->status === 0) {
-            return 'Dokumen proposal menunggu persetujuan Direktur';
+            return 'Proposal menunggu persetujuan Direktur';
         }
 
         elseif ($latestWorkflow->level === "2" && $latestWorkflow->status === 1) {
-            return 'Dokumen proposal telah disetujui Manajer Teknik';
+            return 'Proposal telah disetujui Manajer Teknik';
         }
 
         elseif ($latestWorkflow->level === "2" && $latestWorkflow->status === 0) {
-            return 'Dokumen proposal menunggu persetujuan Manajer Teknik';
+            return 'Proposal menunggu persetujuan Manajer Teknik';
         }
 
         return 'Menunggu proses persetujuan';

@@ -54,13 +54,13 @@
                 @endif
             </div>
             </div>
-            @if ($tender->level_propo == 'Dokumen proposal telah disetujui Direktur')
+            @if ($tender->level_propo == 'Proposal telah disetujui Direktur')
                 <div class="color-white bg-green-200 p-5 rounded-lg shadow-md flex">
                     <flux:icon name="check-circle" class="text-green-50 size-12" />
                     <flux:text size="md" class="ml-4 mt-2">Sudah diperiksa</flux:text>
                 </div>
 
-            @elseif ($tender->level_propo == 'Dokumen proposal menunggu persetujuan Direktur' || $tender->level_propo == 'Dokumen proposal telah disetujui Manajer Teknik')
+            @elseif ($tender->level_propo == 'Proposal menunggu persetujuan Direktur' || $tender->level_propo == 'Proposal telah disetujui Manajer Teknik')
             <div class="color-white bg-green-100 p-5 rounded-lg shadow-md flex">
                 <div class="content-center">
                 <flux:button icon="check" class="" wire:click="approve({{ $tender->id }})"
