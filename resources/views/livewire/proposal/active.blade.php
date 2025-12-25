@@ -162,11 +162,27 @@
                                 @if ($item->status === 0 && $item->keterangan !== null)
                                     {{-- kondisi jika ada revisi --}}
                                     <flux:modal.trigger name="edit-proposal-{{ $item->id }}">
-                                        <flux:button icon="envelope" class="mr-2" wire:click="edit({{ $item->id }})"
-                                            variant="primary" color="red">
+                                    @if ($item->latestWorkflow?->waktu_pesan_dibaca === null)
+                                        {{-- BELUM DIBACA --}}
+                                        <flux:button
+                                            icon="envelope"
+                                            class="mr-2"
+                                            wire:click="edit({{ $item->id }})"
+                                            variant="primary"
+                                            color="red">
                                             {{ $item->keterangan }}
                                         </flux:button>
-                                    </flux:modal.trigger>
+                                    @else
+                                        {{-- SUDAH DIBACA --}}
+                                        <flux:button
+                                            icon="envelope-open"
+                                            class="mr-2"
+                                            wire:click="edit({{ $item->id }})"
+                                            variant="filled">
+                                            {{ $item->keterangan }}
+                                        </flux:button>
+                                    @endif
+                                </flux:modal.trigger>
 
                                     {{-- modal form --}}
                                     <flux:modal name="edit-proposal-{{ $item->id }}">

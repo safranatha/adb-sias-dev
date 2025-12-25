@@ -66,5 +66,11 @@ class Proposal extends Model
         return null;
     }
 
+    public function latestWorkflow()
+    {
+        return $this->hasOne(DocumentApprovalWorkflow::class)
+            ->latestOfMany('created_at');
+    }
+
 
 }

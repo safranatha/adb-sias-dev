@@ -33,7 +33,6 @@
                     <th class="px-4 py-3 font-medium">File SPH</th>
                     <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
                     <th class="px-4 py-3 font-medium">Validate</th>
-                    <th class="px-4 py-3 font-medium">Validator</th>
                     <th class="px-4 py-3 font-medium">Status SPH</th>
                 </tr>
             </thead>
@@ -101,12 +100,6 @@
                                     {{ $item->status_sph }}
                                 </span>
                             </td>
-
-
-                            {{-- validator --}}
-                            <td class="px-4 py-3">
-                                {{ $item->user->name }}
-                            </td>
                         </tr>
                     @endforeach
                 @endif
@@ -159,11 +152,27 @@
                                         </flux:button>
                                     @else
                                         {{-- kondisi jika ada revisi --}}
-                                        <flux:modal.trigger name="edit-sph-{{ $item->id }}">
-                                            <flux:button icon="envelope" class="mr-2"
-                                                wire:click="edit({{ $item->id }})" variant="primary" color="red">
-                                                {{ $item->keterangan }}
-                                            </flux:button>
+                                         <flux:modal.trigger name="edit-sph-{{ $item->id }}">
+                                            @if ($item->latestWorkflow?->waktu_pesan_dibaca === null)
+                                                {{-- BELUM DIBACA --}}
+                                                <flux:button
+                                                    icon="envelope"
+                                                    class="mr-2"
+                                                    wire:click="edit({{ $item->id }})"
+                                                    variant="primary"
+                                                    color="red">
+                                                    {{ $item->keterangan }}
+                                                </flux:button>
+                                            @else
+                                                {{-- SUDAH DIBACA --}}
+                                                <flux:button
+                                                    icon="envelope-open"
+                                                    class="mr-2"
+                                                    wire:click="edit({{ $item->id }})"
+                                                    variant="filled">
+                                                    {{ $item->keterangan }}
+                                                </flux:button>
+                                            @endif
                                         </flux:modal.trigger>
 
                                         {{-- modal form --}}

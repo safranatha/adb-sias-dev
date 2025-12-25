@@ -50,4 +50,9 @@ class SuratPenawaranHarga extends Model
             ->latest()
             ->value('keterangan'); // langsung ambil status, tidak butuh first()
     }
+    public function latestWorkflow()
+    {
+        return $this->hasOne(DocumentApprovalWorkflow::class)
+            ->latestOfMany('created_at');
+    }
 }
