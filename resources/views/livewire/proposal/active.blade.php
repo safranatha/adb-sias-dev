@@ -62,9 +62,30 @@
                                 {{-- validate --}}
                                 <td class="px-4 py-3">
                                     {{-- validate sph --}} {{-- button approve --}}
-                                    <flux:button icon="check" class="mr-2"
-                                        wire:click="approve({{ $item->proposal->id }})" variant="primary" color="green">
-                                    </flux:button>
+                                    <flux:modal.trigger name="approve-proposal">
+                                        <flux:button icon="check" class="mr-2"
+                                            variant="primary" color="green">
+                                        </flux:button>
+                                    </flux:modal.trigger>
+
+                                    <flux:modal name="approve-proposal" class="min-w-[22rem] text-left">
+                                        <div class="space-y-6">
+                                            <div>
+                                                <flux:heading size="lg">Setujui proposal?</flux:heading>
+                                                <flux:text class="mt-2">
+                                                    Anda akan menyetujui proposal tersebut.<br>
+                                                    Proposal yang sudah disetujui akan dilanjutkan ke Direktur.
+                                                </flux:text>
+                                            </div>
+                                            <div class="flex gap-2">
+                                                <flux:spacer />
+                                                <flux:modal.close>
+                                                    <flux:button variant="ghost">Batal</flux:button>
+                                                </flux:modal.close>
+                                                <flux:button wire:click="approve({{ $item->proposal->id }})" variant="primary" color="emerald">Yakin</flux:button>
+                                            </div>
+                                        </div>
+                                    </flux:modal>
 
                                     {{-- button reject --}}
                                     <flux:modal.trigger name="reject-sph-{{ $item->proposal->id }}">
@@ -81,9 +102,29 @@
                                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                                 @enderror
                                             </flux:field>
-                                            <flux:button type="submit" class="mt-6" variant="danger">
-                                                Tolak
-                                            </flux:button>
+                                            <flux:modal.trigger name="reject-proposal">
+                                                <flux:button class="mt-6" variant="danger">
+                                                    Tolak
+                                                </flux:button>
+                                            </flux:modal.trigger>
+                                            <flux:modal name="reject-proposal" class="min-w-[22rem] text-left">
+                                                <div class="space-y-6">
+                                                    <div>
+                                                        <flux:heading size="lg">Tolak proposal?</flux:heading>
+                                                        <flux:text class="mt-2">
+                                                            Anda akan menolak proposal tersebut.<br>
+                                                            Proposal yang ditolak akan dikembalikan lagi ke Staff.
+                                                        </flux:text>
+                                                    </div>
+                                                    <div class="flex gap-2">
+                                                        <flux:spacer />
+                                                        <flux:modal.close>
+                                                            <flux:button variant="ghost">Batal</flux:button>
+                                                        </flux:modal.close>
+                                                        <flux:button type="submit" variant="danger">Tolak</flux:button>
+                                                    </div>
+                                                </div>
+                                            </flux:modal>
                                         </form>
                                     </flux:modal>
                                 </td>
