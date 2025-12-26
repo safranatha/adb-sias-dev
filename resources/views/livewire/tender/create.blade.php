@@ -16,17 +16,31 @@
                 <flux:input wire:model="nama_klien" placeholder="Enter nama klien" />
             </flux:field>
 
+            {{-- File Upload Field --}}
+            <flux:field>
+                <flux:label class="mt-3">File Pra Kualifikasi</flux:label>
+                <flux:input type="file" wire:model="file_pra_kualifikasi" />
+                {{-- Loading indicator saat upload --}}
+                <div wire:loading wire:target="file_pra_kualifikasi" class="text-sm text-gray-500 mt-1">
+                    Uploading file...
+                </div>
+                @error('file_pra_kualifikasi')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </flux:field>
+
             <flux:spacer />
-            
+
             <div class="flex gap-3 mt-6">
                 <flux:button type="submit" variant="primary" color="emerald">
                     Buat Tender
                 </flux:button>
-                
+
                 <flux:button variant="ghost" href="{{ route('tender.index') }}">
                     Batal
                 </flux:button>
             </div>
+
         </form>
     </div>
 @else
