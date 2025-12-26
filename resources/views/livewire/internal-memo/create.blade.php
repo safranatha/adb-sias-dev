@@ -14,7 +14,7 @@
                         <flux:select.option value="">-- Pilih Tender --</flux:select.option>
                         @foreach ($tenders as $tender)
                             <flux:select.option value="{{ $tender->id }}">
-                                {{ $tender->nama_tender }} - {{ $tender->nama_klien }}
+                                {{ $tender->nama_klien }} - {{ $tender->nama_tender }}
                             </flux:select.option>
                         @endforeach
                     </flux:select>
