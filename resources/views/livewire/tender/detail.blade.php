@@ -46,7 +46,7 @@
                     <flux:text size="md" class="ml-4 mt-2">{{ $tender->proposal->keterangan ?? 'Sedang dalam pengerjaan' }}</flux:text>
                 </div>
                 <div class="content-center ml-auto">
-                @if($tender->proposal)
+                @if($tender->level_propo == 'Proposal menunggu persetujuan Direktur' || $tender->level_propo == 'Proposal telah disetujui Manajer Teknik')
                 <flux:button variant="primary" color="emerald" icon="arrow-down-tray"
                     wire:click="get_data_proposal({{ $tender->id }})"></flux:button>
                 @else
@@ -119,7 +119,7 @@
                 <flux:text size="md" class="ml-4 mt-2">{{ $tender->surat_penawaran_harga->keterangan ?? 'Sedang dalam pengerjaan' }}</flux:text>
             </div>
             <div class="content-center ml-auto">
-                @if($tender->surat_penawaran_harga)
+                @if($tender->level_sph == 'SPH menunggu persetujuan Direktur' || $tender->level_sph == 'SPH telah disetujui Manajer Admin')
                 <flux:button variant="primary" color="emerald" icon="arrow-down-tray"
                     wire:click="get_data_SPH({{ $tender->id }})"></flux:button>
                 @else
