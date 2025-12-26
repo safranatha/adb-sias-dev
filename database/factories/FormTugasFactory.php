@@ -18,13 +18,17 @@ class FormTugasFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::inRandomOrder()->first()?->id ?? User::factory(),
+            'user_id' => User::whereIn('id', [2, 4, 5])
+                ->inRandomOrder()
+                ->value('id'),
+
             'status' => fake()->boolean(),
-            'due_date'=> fake()->dateTimeBetween('now', '+60 days')->format('Y-m-d'),
+            'due_date' => fake()->dateTimeBetween('now', '+60 days')->format('Y-m-d'),
             'jenis_permintaan' => fake()->randomElement(['Permintaan', 'Pengajuan']),
             'kegiatan' => fake()->sentence(),
             'keterangan' => fake()->sentence(),
             'file_path_form_tugas' => fake()->imageUrl(),
+            'lingkup_kerja' => fake()->sentence(),
         ];
     }
 }
