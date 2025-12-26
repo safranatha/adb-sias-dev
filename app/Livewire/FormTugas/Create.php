@@ -92,7 +92,9 @@ class Create extends Component
     public function render()
     {
         return view('livewire.form-tugas.create', [
-            'list_penerima' => User::role(['Manajer Admin', 'Manajer Teknik'])->get()
+            'list_penerima_direktur' => User::role(['Manajer Admin', 'Manajer Teknik'])->get(),
+            'list_penerima_manajer_teknik' => User::role('Staff Teknik')->get(),
+            'list_penerima_manajer_admin' => User::role('Staff Admin')->get(),
 
         ])->title('Buat Form Tugas Baru');
 

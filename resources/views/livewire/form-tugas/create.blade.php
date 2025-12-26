@@ -12,11 +12,25 @@
                     <flux:label class="mt-3">Penerima</flux:label>
                     <flux:select wire:model="penerima" class="w-full">
                         <flux:select.option value="">-- Pilih penerima --</flux:select.option>
-                        @foreach ($list_penerima as $item)
-                            <flux:select.option value="{{ $item->id }}">
-                                {{ $item->name }}
-                            </flux:select.option>
-                        @endforeach
+                        @if (auth()->user()->hasRole(['Direktur', 'Asisten Direktur']))
+                            @foreach ($list_penerima_direktur as $item)
+                                <flux:select.option value="{{ $item->id }}">
+                                    {{ $item->name }}
+                                </flux:select.option>
+                            @endforeach
+                        @elseif (auth()->user()->hasRole('Manajer Teknik'))
+                            @foreach ($list_penerima_manajer_teknik as $item)
+                                <flux:select.option value="{{ $item->id }}">
+                                    {{ $item->name }}
+                                </flux:select.option>
+                            @endforeach
+                        @elseif(auth()->user()->hasRole('Manajer Admin'))
+                            @foreach ($list_penerima_manajer_admin as $item)
+                                <flux:select.option value="{{ $item->id }}">
+                                    {{ $item->name }}
+                                </flux:select.option>
+                            @endforeach
+                        @endif
                         @error('penerima')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
@@ -74,6 +88,10 @@
         <flux:field>
             <flux:label class="mt-3">Dokumen</flux:label>
             <flux:input type="file" wire:model="file_path_form_tugas" />
+            {{-- Loading indicator saat upload --}}
+            <div wire:loading wire:target="file_path_form_tugas" class="text-sm text-gray-500 mt-1">
+                Uploading file...
+            </div>
             @error('file_path_form_tugas')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
