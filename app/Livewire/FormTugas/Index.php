@@ -32,7 +32,10 @@ class Index extends Component
     public function render()
     {
         return view('livewire.form-tugas.index', [
-            'formtugas' => FormTugas::all(),
+            'formtugas' => FormTugas::whereHas('disposisis', function ($q) {
+                $q->whereIn('penerima_id', [4, 5]);
+            })->get(),
+
         ])->title('Daftar Form Tugas');
     }
 }
