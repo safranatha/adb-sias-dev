@@ -16,13 +16,15 @@
                 </flux:field>
 
                 {{-- File Upload Field --}}
-                <flux:field>
-                    <flux:label class="mt-3">File Surat Penawaran Harga</flux:label>
-                    <flux:input type="file" wire:model="file_path_sph" />
-                    @error('file_path_sph')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </flux:field>
+                <div class="bg-white rounded-2xl mt-3 p-5 shadow-md">
+                    <flux:field>
+                        <flux:label>File Surat Penawaran Harga</flux:label>
+                        <flux:input type="file" wire:model="file_path_sph" />
+                        @error('file_path_sph')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </flux:field>
+                </div>
 
                 {{-- Tender Selection --}}
                 <flux:field>
@@ -43,9 +45,28 @@
                 <flux:spacer />
                 
                 <div class="flex gap-3 mt-6">
-                    <flux:button type="submit" variant="primary" color="emerald">
-                        Buat Surat Penawaran Harga
-                    </flux:button>
+                    <flux:modal.trigger name="submit-sph">
+                        <flux:button variant="primary" color="emerald">Buat Surat Penawaran Harga</flux:button>
+                    </flux:modal.trigger>
+
+                    <flux:modal name="submit-sph" class="min-w-[22rem]">
+                        <div class="space-y-6">
+                            <div>
+                                <flux:heading size="lg">Buat Surat Penawaran Harga?</flux:heading>
+                                <flux:text class="mt-2">
+                                    Anda akan membuat SPH.<br>
+                                    SPH yang sudah dibuat tidak dapat dihapus.
+                                </flux:text>
+                            </div>
+                            <div class="flex gap-2">
+                                <flux:spacer />
+                                <flux:modal.close>
+                                    <flux:button variant="ghost">Batal</flux:button>
+                                </flux:modal.close>
+                                <flux:button type="submit" variant="primary" color="emerald">Yakin</flux:button>
+                            </div>
+                        </div>
+                    </flux:modal>                    
                     
                     <flux:button variant="ghost" href="{{ route('surat-penawaran-harga.index') }}">
                         Batal
