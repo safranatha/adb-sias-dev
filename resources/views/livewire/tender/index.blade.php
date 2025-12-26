@@ -14,7 +14,7 @@
         </div>
 
     <div class="overflow-x-auto rounded-md border border-gray-200">
-        <table class="w-full text-sm text-center">
+        <table class="w-full text-sm">
             <thead class="bg-green-50 text-white">
                 <tr>
                     <th class="px-4 py-3 font-medium">Nama Tender</th>
@@ -27,27 +27,29 @@
 
             <tbody class="divide-y divide-gray-200">
                 @if ($tenders->isEmpty())
-                    <tr>
+                    <tr class="text-center">
                         <td colspan="3" class="px-4 py-6">
                             Tidak ada tender untuk ditampilkan.
                         </td>
                     </tr>
                 @else
                     @foreach ($tenders as $item)
-                        <tr>
-                            <td class="px-4 py-3">{{ $item->nama_tender }}</td>
-                            <td class="px-4 py-3">{{ $item->nama_klien }}</td>
-                            <td class="px-4 py-3"> {{ $item->status }}</td>
-                            <td class="px-4 py-3">
+                        <tr> 
+                            <td class="px-4 py-3 text-center">{{ $item->nama_tender }}</td>
+                            <td class="px-4 py-3 text-center">{{ $item->nama_klien }}</td>
+                            <td class="px-4 py-3 text-center"> {{ $item->status }}</td>
+                            <td class="px-4 py-3 text-center">
                                 <flux:modal.trigger name="edit-tender-{{ $item->id }}">
-                                    <flux:button icon="pencil" class="mr-2" wire:click="edit({{ $item->id }})"
-                                        variant="primary" color="yellow"></flux:button>
+                                    <flux:button icon="pencil" class="mr-2"
+                                        wire:click="edit({{ $item->id }})"
+                                        variant="primary" color="yellow" />
                                 </flux:modal.trigger>
 
                                 <flux:modal name="edit-tender-{{ $item->id }}" class="max-w-2xl">
-                                    <form wire:submit.prevent="update">
+                                    <div class="space-y-4">
+
                                         <flux:field>
-                                            <flux:label class="mt-3">Nama Tender</flux:label>
+                                            <flux:label>Nama Tender</flux:label>
                                             <flux:input wire:model="nama_tender" />
                                             @error('nama_tender')
                                                 <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -55,20 +57,52 @@
                                         </flux:field>
 
                                         <flux:field>
-                                            <flux:label class="mt-3">Nama Klien</flux:label>
+                                            <flux:label>Nama Klien</flux:label>
                                             <flux:input wire:model="nama_klien" />
                                             @error('nama_klien')
                                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                                             @enderror
                                         </flux:field>
 
+                                        {{-- Trigger KONFIRMASI --}}
+                                        <flux:modal.trigger name="confirm-update-{{ $item->id }}">
+                                            <flux:button class="mt-3 w-full" variant="primary" color="emerald">
+                                                Update
+                                            </flux:button>
+                                        </flux:modal.trigger>
+                                    </div>
+                                </flux:modal>
 
+                                <flux:modal name="confirm-update-{{ $item->id }}" class="min-w-[22rem]">
+                                    <form wire:submit.prevent="update">
+                                        <div class="space-y-6 text-left">
 
-                                        <flux:button type="submit" class="mt-6" variant="primary">
-                                            Update
-                                        </flux:button>
+                                            <div>
+                                                <flux:heading size="lg">Update tender?</flux:heading>
+                                                <flux:text class="mt-2">
+                                                    Anda akan memperbarui tender tersebut.<br>
+                                                    Apakah Anda yakin?
+                                                </flux:text>
+                                            </div>
+
+                                            <div class="flex gap-2">
+                                                <flux:spacer />
+
+                                                <flux:modal.close>
+                                                    <flux:button type="button" variant="ghost">
+                                                        Batal
+                                                    </flux:button>
+                                                </flux:modal.close>
+                                                
+                                                <flux:button type="submit" variant="primary" color="emerald">
+                                                    Yakin
+                                                </flux:button>
+                                            </div>
+
+                                        </div>
                                     </form>
                                 </flux:modal>
+
                             </td>
                             <td class="px-4 py-3">
                                 <flux:button icon="information-circle" class="mr-2"
@@ -76,7 +110,6 @@
                             </td>
                         </tr>
                     @endforeach
-
                 @endif
             </tbody>
         </table>

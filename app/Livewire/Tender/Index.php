@@ -74,6 +74,8 @@ class Index extends Component
         $this->dispatch('modal-closed', id: $this->tender_id);
 
         $this->resetForm();
+
+        return redirect()->route('tender.index');
     }
 
     public function store(){
