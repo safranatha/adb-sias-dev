@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->foreignId('form_tugas_id')->constrained()->onDelete('cascade');
             $table->foreignId('penerima_id')->constrained('users')->onDelete('cascade');
             $table->timestamp('waktu_disposisi_dibaca')->nullable();
+            $table->char('status',1)->default('0');
             $table->timestamps();
         });
     }

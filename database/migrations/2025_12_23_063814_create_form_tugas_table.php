@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             // created by
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->boolean('status')->default(0);
             $table->date('due_date');
             $table->string('jenis_permintaan');
             $table->string('kegiatan');
