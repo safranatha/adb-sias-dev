@@ -224,6 +224,9 @@
 
     {{ $slot }}
 
+    {{-- Stack untuk Livewire / Chart --}}
+    @stack('scripts')
+
     @fluxScripts
 </body>
 
