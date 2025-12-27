@@ -59,7 +59,7 @@ class Detail extends Component
         $penerima_id_on_disposisi = Disposisi::where('form_tugas_id', '=', $id)->first()->penerima_id;
         if ($user_id === $penerima_id_on_disposisi) {
             // update status on disposisi table
-            Disposisi::where('form_tugas_id', '=', $id)->update(['status' => '1']);
+            Disposisi::where('form_tugas_id', '=', $id)->update(['status' => '2']);
         }
     }
 
