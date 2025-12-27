@@ -20,6 +20,10 @@
                     <flux:field>
                         <flux:label>File Surat Penawaran Harga</flux:label>
                         <flux:input type="file" wire:model="file_path_sph" />
+                        {{-- Loading indicator saat upload --}}
+                        <div wire:loading wire:target="file_path_sph" class="text-sm text-gray-500 mt-1">
+                            Uploading file...
+                        </div>
                         @error('file_path_sph')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
@@ -46,7 +50,8 @@
                 
                 <div class="flex gap-3 mt-6">
                     <flux:modal.trigger name="submit-sph">
-                        <flux:button variant="primary" color="emerald">Buat Surat Penawaran Harga</flux:button>
+                        <flux:button variant="primary" color="emerald" wire:loading.attr="disabled"
+                        wire:target="file_path_sph">Buat Surat Penawaran Harga</flux:button>
                     </flux:modal.trigger>
 
                     <flux:modal name="submit-sph" class="min-w-[22rem]">
