@@ -35,4 +35,14 @@ class FormTugas extends Model
         $user=User::find($penerima_id);
         return $user->getRoleNames()->implode(', ');
     }
+
+    public function getStatusAttribute()
+    {
+        return $this->disposisis()->latest()->value('status');
+    }
+
+    public function getWaktuDibacaAttribute()
+    {
+        return $this->disposisis()->latest()->value('waktu_disposisi_dibaca');
+    }
 }
