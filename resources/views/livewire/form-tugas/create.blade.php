@@ -109,7 +109,8 @@
         <flux:spacer />
 
         <div class="flex gap-3 mt-6">
-            <flux:button type="submit" variant="primary" color="emerald">
+            <flux:button type="submit" variant="primary" color="emerald" wire:loading.attr="disabled"
+                wire:target="file_path_form_tugas">
                 Buat Form Tugas
             </flux:button>
 
