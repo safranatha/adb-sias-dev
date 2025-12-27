@@ -19,18 +19,21 @@ class Index extends Component
         'nama_klien' => ['required', 'string', 'max:255'],
     ];
 
-    public function mount(){
+    public function mount()
+    {
         $this->reset();
     }
 
-    public function resetForm(){
+    public function resetForm()
+    {
         $this->nama_tender = '';
         $this->nama_klien = '';
         $this->isEditing = false;
         $this->tender_id = null;
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $tender = Tender::findOrFail($id);
         $this->nama_tender = $tender->nama_tender;
         $this->nama_klien = $tender->nama_klien;
@@ -39,9 +42,27 @@ class Index extends Component
 
     }
 
-    public function update(){
+    public function download($id)
+    {
+        $file = Tender::findOrFail($id);
 
-        $rules =[];
+        if (!$file) {
+            return session()->flash('error', 'File Pra kualifikasi tidak ditemukan.');
+        }
+
+        $file_path = public_path('storage/' . $file->file_pra_kualifikasi);
+
+        if (!file_exists($file_path)) {
+            return session()->flash('error', 'File Pra kualifikasi tidak ditemukan di storage.');
+        }
+
+        return response()->download($file_path);
+    }
+
+    public function update()
+    {
+
+        $rules = [];
 
         // Validasi hanya field yang diisi
         if ($this->nama_tender) {
@@ -75,20 +96,6 @@ class Index extends Component
 
         $this->resetForm();
     }
-
-    public function store(){
-        $this->validate();
-        Tender::create([
-            'nama_tender' => $this->nama_tender,
-            'nama_klien' => $this->nama_klien,
-        ]);
-        $this->reset();
-
-        session()->flash('success', 'Tender berhasil diupload!');
-
-        $this->dispatch('modal-closed', id: 'store');
-    }
-    
 
     public function render()
     {
