@@ -1,3 +1,4 @@
+{{-- FORM TUGAS AKTIF --}}
 <div>
     <div class="max-w-8xl mx-auto">
         {{-- success message after internal memo created --}}
@@ -31,7 +32,7 @@
                         {{-- <th class="px-4 py-3 font-medium">File</th> --}}
                         <th class="px-4 py-3 font-medium">Penerima</th>
                         <th class="px-4 py-3 font-medium">Status</th>
-                        <th class="px-4 py-3 font-medium">Waktu Dibaca</th>
+                        {{-- <th class="px-4 py-3 font-medium">Waktu Dibaca</th> --}}
                         <th class="px-4 py-3 font-medium">Detail</th>
                     </tr>
                 </thead>
@@ -69,14 +70,13 @@
                                         Tugas telah selesai dikerjakan
                                     @endif
                                 </td>
-                                <td class="px-4 py-3">
+                                {{-- <td class="px-4 py-3">
                                     @if ($item->waktu_dibaca === null)
                                         Belum dibaca penerima
                                     @else
-                                        {{-- {{ $item->waktu_dibaca }} --}}
                                         {{ \Carbon\Carbon::parse($item->waktu_dibaca)->diffForHumans() }}
                                     @endif
-                                </td>
+                                </td> --}}
                                 <td class="px-4 py-3">
                                     <flux:button icon="information-circle" class="mr-2"
                                         :href="route('form-tugas.detail', ['id' => $item->id])"
