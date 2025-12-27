@@ -28,7 +28,6 @@ class RolePermissionSeeder extends Seeder
 
         // Create permissions
         // form tugas
-        Permission::create(['name' => 'view form tugas']);
         Permission::create(['name' => 'create form tugas']);
         Permission::create(['name' => 'edit form tugas']);
 
@@ -81,7 +80,6 @@ class RolePermissionSeeder extends Seeder
         // ===== ASSIGN PERMISSION ROLE =====
         $rolePermissions = [          
             'Direktur' => [
-                'view form tugas',
                 'create form tugas',
                 'view tender',
                 'create tender',
@@ -91,12 +89,10 @@ class RolePermissionSeeder extends Seeder
             ],
 
             'Assisten Direktur' => [
-                'view form tugas',
                 'create form tugas',
             ],
 
             'Manajer Admin' => [
-                'view form tugas',
                 'create form tugas',
                 'view proposal',
                 'view surat penawaran harga',
@@ -104,7 +100,6 @@ class RolePermissionSeeder extends Seeder
             ],
 
             'Manajer Teknik' => [
-                'view form tugas',
                 'create form tugas',
                 'view proposal',
                 'validate proposal',
