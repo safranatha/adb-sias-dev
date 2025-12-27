@@ -7,6 +7,8 @@ use App\Livewire\Proposal\Detail as ProposalDetail;
 use App\Livewire\Tender\Index as TenderIndex;
 use App\Livewire\FormTugas\Index as FormTugasIndex;
 use App\Livewire\FormTugas\Create as FormTugasCreate;
+use App\Livewire\FormTugas\Penerima as FormTugasPenerima;
+use App\Livewire\FormTugas\Detail as FormTugasDetail;
 use App\Livewire\Tender\Detail as TenderDetail;
 use App\Livewire\SuratPenawaranHarga\Index as SuratPenawaranHargaIndex;
 use App\Livewire\SuratPenawaranHarga\Create as SuratPenawaranHargaCreate;
@@ -100,12 +102,17 @@ Route::get('/surat-penawaran-harga/{id}',SuratPenawaranHargaDetail::class)->midd
 // create surat penawaran harga
 Route::get('/surat-penawaran-harga-create',SuratPenawaranHargaCreate::class)->middleware(['auth'])->name('surat-penawaran-harga.create');
 
-// internal memo
+// history form tugas
 Route::get('/form-tugas',FormTugasIndex::class)->middleware(['auth'])->name('form-tugas.index');
 
 // create form tugas
 Route::get('/form-tugas-create',FormTugasCreate::class)->middleware(['auth'])->name('form-tugas.create');
 
+// form tugas aktif
+Route::get('/form-tugas-active',FormTugasPenerima::class)->middleware(['auth'])->name('form-tugas.active');
+
+// form tugas detail
+Route::get('/form-tugas/{id}',FormTugasDetail::class)->middleware(['auth'])->name('form-tugas.detail');
 
 
 // ⚠️⚠️🔴🔴FORTIFY AUTH DO NOT CHANGE ⚠️⚠️🔴🔴
