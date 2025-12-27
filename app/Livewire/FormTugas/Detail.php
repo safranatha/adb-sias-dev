@@ -33,14 +33,33 @@ class Detail extends Component
         return response()->download($file_path);
     }
 
-    public function timestamp_baca($id){
-        $user_id=auth()->user()->id;
+    public function timestamp_baca($id)
+    {
+        // check apakah sudah baca apa belum
+        $disposisi = Disposisi::where('form_tugas_id', '=', $id)->first();
 
-        $penerima_id_on_disposisi=Disposisi::where('form_tugas_id','=',$id)->first()->penerima_id;
+        if (!$disposisi->waktu_disposisi_dibaca) {
+            $user_id = auth()->user()->id;
 
-        if($user_id===$penerima_id_on_disposisi){
-            // update waktu_dibaca_disposisi on disposisi table
-            Disposisi::where('form_tugas_id','=',$id)->update(['waktu_disposisi_dibaca'=>now(),'status'=>'1']);
+            $penerima_id_on_disposisi = Disposisi::where('form_tugas_id', '=', $id)->first()->penerima_id;
+
+            if ($user_id === $penerima_id_on_disposisi) {
+                // update waktu_dibaca_disposisi on disposisi table
+                Disposisi::where('form_tugas_id', '=', $id)->update(['waktu_disposisi_dibaca' => now(), 'status' => '1']);
+            }
+        }
+
+
+    }
+
+    public function updateStatus($id)
+    {
+        // check ulang terkait user idnya
+        $user_id = auth()->user()->id;
+        $penerima_id_on_disposisi = Disposisi::where('form_tugas_id', '=', $id)->first()->penerima_id;
+        if ($user_id === $penerima_id_on_disposisi) {
+            // update status on disposisi table
+            Disposisi::where('form_tugas_id', '=', $id)->update(['status' => '1']);
         }
     }
 
