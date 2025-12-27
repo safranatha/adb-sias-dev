@@ -45,4 +45,16 @@ class FormTugas extends Model
     {
         return $this->disposisis()->latest()->value('waktu_disposisi_dibaca');
     }
+
+    public function getCheckPenerimaIdAttribute()
+    {
+        $penerima_id = $this->disposisis()->latest()->value('penerima_id');
+
+        $user_id_login=auth()->user()->id;
+
+        if($penerima_id===$user_id_login){
+            return true;
+        }
+        return false;
+    }
 }
