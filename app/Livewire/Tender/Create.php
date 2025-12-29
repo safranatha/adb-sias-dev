@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Tender;
 
+use App\Helpers\DokumenTenderHelper;
 use App\Models\Tender;
 use Livewire\Component;
 use Livewire\Attributes\Title;
@@ -29,15 +30,7 @@ class Create extends Component
     {
         $this->validate();
 
-        // Save to Laravel storage
-        $original = $this->file_pra_kualifikasi->getClientOriginalName();
-        $timestamp = time();
-        $format_timestamp = date('g i a,d-m-Y', $timestamp);
-        $filename = "New" . "_" . $format_timestamp . "_" . $original;
-
-        // Store to Laravel storage
-        $path = $this->file_pra_kualifikasi->storeAs('file_pra_kualifikasi', $filename, 'public');
-        
+        $path = DokumenTenderHelper::storeFileOnStroage($this->file_pra_kualifikasi, 'tenders/file_pra_kualifikasi');
 
         Tender::create([
             'nama_tender' => $this->nama_tender,

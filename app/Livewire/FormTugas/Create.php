@@ -2,6 +2,7 @@
 
 namespace App\Livewire\FormTugas;
 
+use App\Helpers\DokumenTenderHelper;
 use App\Models\Disposisi;
 use App\Models\FormTugas;
 use App\Models\User;
@@ -67,15 +68,7 @@ class Create extends Component
 
         // pengecekan jika ada file path maka akan update di kolom form tugas yang telah distore
         if ($this->file_path_form_tugas) {
-            $path_awal = $this->file_path_form_tugas;
-            // Save to Laravel storage
-            $original = $path_awal->getClientOriginalName();
-            $timestamp = time();
-            $format_timestamp = date('g i a,d-m-Y', $timestamp);
-            $filename = "New" . "_" . $format_timestamp . "_" . $original;
-
-            // Store to Laravel storage
-            $path = $path_awal->storeAs('proposals', $filename, 'public');
+            $path=DokumenTenderHelper::storeFileOnStroage($this->file_path_form_tugas, 'form_tugas');
 
             // Save to database
             FormTugas::where('id', $form_tugas->id)->update([

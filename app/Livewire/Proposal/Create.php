@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Proposal;
 
+use App\Helpers\DokumenTenderHelper;
 use App\Models\DocumentApprovalWorkflow;
 use App\Models\Proposal;
 use App\Models\Tender;
@@ -39,14 +40,7 @@ class Create extends Component
     {
         $this->validate();
 
-        // Save to Laravel storage
-        $original = $this->file_path_proposal->getClientOriginalName();
-        $timestamp = time();
-        $format_timestamp = date('g i a,d-m-Y', $timestamp);
-        $filename = "New" . "_" . $format_timestamp . "_" . $original;
-        
-        // Store to Laravel storage
-        $path = $this->file_path_proposal->storeAs('proposals', $filename, 'public');
+        $path=DokumenTenderHelper::storeFileOnStroage($this->file_path_proposal, 'proposals');
 
         // Save to database
         $proposal = Proposal::create([
