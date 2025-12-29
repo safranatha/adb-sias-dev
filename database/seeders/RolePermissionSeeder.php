@@ -25,15 +25,6 @@ class RolePermissionSeeder extends Seeder
         Role::create(['name' => 'Staff Teknik']);
         Role::create(['name' => 'Staff Admin']);
         Role::create(['name' => 'Staff Penggadaan']);
-        Role::create(['name' => 'Super Admin']);
-        Role::create(['name' => 'Direktur']);
-        Role::create(['name' => 'Assisten Direktur']);
-        Role::create(['name' => 'Manajer Admin']);
-        Role::create(['name' => 'Manajer Teknik']);
-        Role::create(['name' => 'PIC']);
-        Role::create(['name' => 'Staff Teknik']);
-        Role::create(['name' => 'Staff Admin']);
-        Role::create(['name' => 'Staff Penggadaan']);
 
         // Create permissions
         // form tugas
@@ -47,27 +38,19 @@ class RolePermissionSeeder extends Seeder
         Permission::create(['name' => 'view proposal']);
         Permission::create(['name' => 'create proposal']);
         Permission::create(['name' => 'validate proposal']);
-        Permission::create(['name' => 'view proposal']);
-        Permission::create(['name' => 'create proposal']);
-        Permission::create(['name' => 'validate proposal']);
+
 
         // surat penawaran harga
         Permission::create(['name' => 'view surat penawaran harga']);
         Permission::create(['name' => 'create surat penawaran harga']);
         Permission::create(['name' => 'validate surat penawaran harga']);
-        Permission::create(['name' => 'view surat penawaran harga']);
-        Permission::create(['name' => 'create surat penawaran harga']);
-        Permission::create(['name' => 'validate surat penawaran harga']);
+
 
         // PIC
         Permission::create(['name' => 'assign pic']);
-        Permission::create(['name' => 'assign pic']);
+
 
         // peta dan dokumen penyusun (dokumen pelaksanaan proyek div teknik)
-        Permission::create(['name' => 'view dokumen pelaksanaan']);
-        Permission::create(['name' => 'create dokumen pelaksanaan']);
-        Permission::create(['name' => 'validate dokumen pelaksanaan']);
-        Permission::create(['name' => 'assign signature number dokumen pelaksanaan']);
         Permission::create(['name' => 'view dokumen pelaksanaan']);
         Permission::create(['name' => 'create dokumen pelaksanaan']);
         Permission::create(['name' => 'validate dokumen pelaksanaan']);
@@ -78,33 +61,27 @@ class RolePermissionSeeder extends Seeder
         Permission::create(['name' => 'create surat tagihan']);
         Permission::create(['name' => 'validate surat tagihan']);
         Permission::create(['name' => 'assign signature number surat tagihan']);
-        Permission::create(['name' => 'view surat tagihan']);
-        Permission::create(['name' => 'create surat tagihan']);
-        Permission::create(['name' => 'validate surat tagihan']);
-        Permission::create(['name' => 'assign signature number surat tagihan']);
 
         // progress k/l
         Permission::create(['name' => 'view progress k/l']);
         Permission::create(['name' => 'create progress k/l']);
-        Permission::create(['name' => 'view progress k/l']);
-        Permission::create(['name' => 'create progress k/l']);
+
 
         // penggandaan
         Permission::create(['name' => 'view penggandaan']);
         Permission::create(['name' => 'create penggandaan']);
-        Permission::create(['name' => 'view penggandaan']);
-        Permission::create(['name' => 'create penggandaan']);
+
 
         // view projek
         Permission::create(['name' => 'view projek']);
-        Permission::create(['name' => 'view projek']);
+        
         // create projek
         Permission::create(['name' => 'create projek']);
-        Permission::create(['name' => 'create projek']);
+        
 
         // view tender
         Permission::create(['name' => 'view tender']);
-        Permission::create(['name' => 'view tender']);
+
         // create tender
         Permission::create(['name' => 'create tender']);
 
