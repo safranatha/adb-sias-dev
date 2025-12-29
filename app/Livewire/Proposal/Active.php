@@ -109,13 +109,15 @@ class Active extends Component
                 unlink(public_path('storage/' . $proposal->file_path_proposal));
             }
 
-            $original = $this->file_path_proposal->getClientOriginalName();
-            $timestamp = time();
-            $format_timestamp = date('g i a,d-m-Y', $timestamp);
-            $filename = "Revision" . "_" . $format_timestamp . "_" . $original;
+            $path=DokumenTenderHelper::storeRevisionFileOnStroage($this->file_path_proposal, 'proposals');
 
-            // store ke storage
-            $path = $this->file_path_proposal->storeAs('proposals', $filename, 'public');
+            // $original = $this->file_path_proposal->getClientOriginalName();
+            // $timestamp = time();
+            // $format_timestamp = date('g i a,d-m-Y', $timestamp);
+            // $filename = "Revision" . "_" . $format_timestamp . "_" . $original;
+
+            // // store ke storage
+            // $path = $this->file_path_proposal->storeAs('proposals', $filename, 'public');
 
             // store ke db
             $proposal->update([
@@ -136,44 +138,6 @@ class Active extends Component
         $this->resetForm();
     }
 
-
-    public function store()
-    {
-        // dd($this->tender_id, $this->nama_proposal, $this->file_path_proposal);
-        $this->validate();
-
-        // save to laravel storage
-        $original = $this->file_path_proposal->getClientOriginalName();
-        $timestamp = time();
-        $format_timestamp = date('g i a,d-m-Y', $timestamp);
-        $filename = "New" . "_" . $format_timestamp . "_" . $original;
-        // store to laravel storage
-        $path = $this->file_path_proposal->storeAs('proposals', $filename, 'public');
-
-        // save to database
-        $proposal = Proposal::create([
-            'user_id' => auth()->user()->id,
-            'tender_id' => $this->tender_id,
-            'nama_proposal' => $this->nama_proposal,
-            'file_path_proposal' => $path,
-        ]);
-
-        // create status on document approval workflow
-        DocumentApprovalWorkflow::create([
-            'user_id' => auth()->user()->id,
-            'proposal_id' => $proposal->id,
-            'keterangan' => "Proposal belum diperiksa oleh Manajer Teknik",
-            'level' => 0,
-        ]);
-
-
-        session()->flash('success', 'Proposal berhasil diupload!');
-
-        $this->dispatch('modal-closed', id: 'store');
-
-        $this->resetForm();
-        // return redirect()->route('proposal.index');
-    }
 
     public function approve($id)
     {

@@ -106,14 +106,8 @@ class Active extends Component
                 unlink(public_path('storage/' . $sph->file_path_sph));
             }
 
-            $original = $this->file_path_sph->getClientOriginalName();
+            $path = DokumenTenderHelper::storeRevisionFileOnStroage($this->file_path_sph, 'surat_penawaran_hargas');
 
-            $timestamp = time();
-            $format_timestamp = date('g i a,d-m-Y', $timestamp);
-            $filename = "Revision" . "_" . $format_timestamp . "_" . $original;
-
-            // store to laravel storage
-            $path = $this->file_path_sph->storeAs('surat_penawaran_hargas', $filename, 'public');
 
             $sph->update([
                 'file_path_sph' => $path,
@@ -134,41 +128,6 @@ class Active extends Component
         $this->resetForm();
     }
 
-    public function store()
-    {
-        $this->validate();
-
-        // save to laravel storage
-        $original = $this->file_path_sph->getClientOriginalName();
-        $timestamp = time();
-        $format_timestamp = date('g i a,d-m-Y', $timestamp);
-        $filename = "New" . "_" . $format_timestamp . "_" . $original;
-        // store to laravel storage
-        $path = $this->file_path_sph->storeAs('surat_penawaran_hargas', $filename, 'public');
-
-        // save to database
-        $sph = SuratPenawaranHarga::create([
-            'user_id' => auth()->user()->id,
-            'tender_id' => $this->tender_id,
-            'nama_sph' => $this->nama_sph,
-            'file_path_sph' => $path,
-        ]);
-
-        // create status on document approval workflow
-        DocumentApprovalWorkflow::create([
-            'user_id' => auth()->user()->id,
-            'surat_penawaran_harga_id' => $sph->id,
-            'keterangan' => "Surat Penawaran Harga belum diperiksa oleh Manajer Admin",
-            'level' => 0,
-        ]);
-
-        session()->flash('success', 'Surat Penawaran Harga berhasil diupload!');
-
-        $this->dispatch('modal-closed', id: 'store');
-
-        $this->resetForm();
-
-    }
 
     public function approve($id)
     {
