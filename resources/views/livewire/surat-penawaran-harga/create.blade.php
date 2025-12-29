@@ -80,8 +80,9 @@
             </form>
         </div>
 @else
-        <div class="max-w-2xl mx-auto py-6">
+        <!-- <div class="max-w-2xl mx-auto py-6">
             <flux:heading size="lg">Access Denied</flux:heading>
             <p class="mt-4">You don't have permission to create surat penawaran harga.</p>
-        </div>
+        </div> -->
+        @php abort(403); @endphp
 @endcan
