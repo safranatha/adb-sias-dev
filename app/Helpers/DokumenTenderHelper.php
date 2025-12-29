@@ -50,4 +50,19 @@ class DokumenTenderHelper
         return $path;
     }
 
+    public static function storeFileOnStroage(
+        $file_path,
+        $nama_folder
+    ) {
+        // Save to Laravel storage
+        $original = $file_path->getClientOriginalName();
+        $timestamp = time();
+        $format_timestamp = date('g i a,d-m-Y', $timestamp);
+        $filename = "New" . "_" . $format_timestamp . "_" . $original;
+
+        // Store to Laravel storage
+        $path = $file_path->storeAs($nama_folder, $filename, 'public');
+
+        return $path;
+    }
 }
