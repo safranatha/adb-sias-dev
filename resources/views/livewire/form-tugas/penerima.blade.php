@@ -31,7 +31,7 @@
                         <th class="px-4 py-3 font-medium">Due Date</th>
                         {{-- <th class="px-4 py-3 font-medium">File</th> --}}
                         <th class="px-4 py-3 font-medium">Penerima</th>
-                        <th class="px-4 py-3 font-medium">Status</th>
+                        {{-- <th class="px-4 py-3 font-medium">Status</th> --}}
                         {{-- <th class="px-4 py-3 font-medium">Waktu Dibaca</th> --}}
                         <th class="px-4 py-3 font-medium">Detail</th>
                     </tr>
@@ -61,7 +61,7 @@
 
                                     </td> --}}
                                 <td class="px-4 py-3"> {{ $item->penerima }}</td>
-                                <td class="px-4 py-3">
+                                {{-- <td class="px-4 py-3">
                                     @if ($item->status === '0')
                                         Belum dibaca penerima
                                     @elseif ($item->status === '1')
@@ -69,7 +69,7 @@
                                     @elseif($item->status === '2')
                                         Tugas telah selesai dikerjakan
                                     @endif
-                                </td>
+                                </td> --}}
                                 {{-- <td class="px-4 py-3">
                                     @if ($item->waktu_dibaca === null)
                                         Belum dibaca penerima
