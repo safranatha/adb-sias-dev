@@ -12,8 +12,12 @@
             <flux:text size="md" class="mt-2">{{ $item->updated_at->format('d-m-y') }}</flux:text>
 
             <flux:heading size="lg" class="mt-6">Tanggal Dibaca</flux:heading>
-            <flux:text size="md" class="mt-2">
-                {{ \Carbon\Carbon::parse($item->waktu_pesan_dibaca)->diffForHumans() }}</flux:text>
+            @if ($item->waktu_pesan_dibaca === null)
+                <flux:text size="md" class="mt-2">Belum dibaca penerima</flux:text>
+            @else
+                <flux:text size="md" class="mt-2">
+                    {{ \Carbon\Carbon::parse($item->waktu_pesan_dibaca)->diffForHumans() }}</flux:text>
+            @endif
 
 
 
