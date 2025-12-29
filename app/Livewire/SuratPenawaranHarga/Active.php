@@ -2,6 +2,8 @@
 
 namespace App\Livewire\SuratPenawaranHarga;
 
+use App\Helpers\DokumenTenderHelper;
+use App\Helpers\DownloadHelper;
 use App\Models\DocumentApprovalWorkflow;
 use App\Models\SuratPenawaranHarga;
 use App\Models\Tender;
@@ -72,19 +74,7 @@ class Active extends Component
 
     public function download($id)
     {
-        $sph = SuratPenawaranHarga::findOrFail($id);
-
-        if (!$sph) {
-            return session()->flash('error', 'Surat Penawaran Harga tidak ditemukan.');
-        }
-
-        $file_path = public_path('storage/' . $sph->file_path_sph);
-
-        if (!file_exists($file_path)) {
-            return session()->flash('error', 'File Surat Penawaran Harga tidak ditemukan di storage.');
-        }
-
-        return response()->download($file_path);
+        return DokumenTenderHelper::downloadHelper(SuratPenawaranHarga::class, $id, 'file_path_sph', 'Surat Penawaran Harga');
     }
 
     public function update()

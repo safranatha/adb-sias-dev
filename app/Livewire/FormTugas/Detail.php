@@ -2,6 +2,7 @@
 
 namespace App\Livewire\FormTugas;
 
+use App\Helpers\DokumenTenderHelper;
 use App\Models\Disposisi;
 use App\Models\FormTugas;
 use Livewire\Component;
@@ -18,19 +19,7 @@ class Detail extends Component
 
     public function download($id)
     {
-        $form_tugas = FormTugas::findOrFail($id);
-
-        if (!$form_tugas) {
-            return session()->flash('error', 'Form Tugas tidak ditemukan.');
-        }
-
-        $file_path = public_path('storage/' . $form_tugas->file_path_form_tugas);
-
-        if (!file_exists($file_path)) {
-            return session()->flash('error', 'File Form Tugas tidak ditemukan di storage.');
-        }
-
-        return response()->download($file_path);
+        return DokumenTenderHelper::downloadHelper(FormTugas::class, $id, 'file_path_form_tugas', 'File Form Tugas');
     }
 
     public function timestamp_baca($id)

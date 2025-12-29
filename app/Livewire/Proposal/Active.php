@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Proposal;
 
+use App\Helpers\DokumenTenderHelper;
 use App\Models\Proposal;
 use App\Models\DocumentApprovalWorkflow;
 use App\Models\Tender;
@@ -76,19 +77,7 @@ class Active extends Component
 
     public function download($id)
     {
-        $proposal = Proposal::findOrFail($id);
-
-        if (!$proposal) {
-            return session()->flash('error', 'Proposal tidak ditemukan.');
-        }
-
-        $file_path = public_path('storage/' . $proposal->file_path_proposal);
-
-        if (!file_exists($file_path)) {
-            return session()->flash('error', 'File Proposal tidak ditemukan di storage.');
-        }
-
-        return response()->download($file_path);
+        return DokumenTenderHelper::downloadHelper(Proposal::class, $id, 'file_path_proposal', 'File Proposal');
     }
 
     public function update()

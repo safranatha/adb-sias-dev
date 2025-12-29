@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Tender;
 
+use App\Helpers\DokumenTenderHelper;
 use App\Models\Tender;
 use Livewire\Component;
 use Livewire\Attributes\Title;
@@ -44,19 +45,7 @@ class Index extends Component
 
     public function download($id)
     {
-        $file = Tender::findOrFail($id);
-
-        if (!$file) {
-            return session()->flash('error', 'File Pra kualifikasi tidak ditemukan.');
-        }
-
-        $file_path = public_path('storage/' . $file->file_pra_kualifikasi);
-
-        if (!file_exists($file_path)) {
-            return session()->flash('error', 'File Pra kualifikasi tidak ditemukan di storage.');
-        }
-
-        return response()->download($file_path);
+        return DokumenTenderHelper::downloadHelper(Tender::class, $id, 'file_pra_kualifikasi', 'File Pra Kualifikasi');
     }
 
     public function update()

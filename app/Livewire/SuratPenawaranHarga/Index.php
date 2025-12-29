@@ -2,9 +2,8 @@
 
 namespace App\Livewire\SuratPenawaranHarga;
 
-use App\Models\DocumentApprovalWorkflow;
+use App\Helpers\DokumenTenderHelper;
 use App\Models\SuratPenawaranHarga;
-use App\Models\Tender;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -18,35 +17,16 @@ class Index extends Component
 
     public function download($id)
     {
-        $sph = SuratPenawaranHarga::findOrFail($id);
-
-        if (!$sph) {
-            return session()->flash('error', 'Surat Penawaran Harga tidak ditemukan.');
-        }
-
-        $file_path = public_path('storage/' . $sph->file_path_sph);
-
-        if (!file_exists($file_path)) {
-            return session()->flash('error', 'File Surat Penawaran Harga tidak ditemukan di storage.');
-        }
-
-        return response()->download($file_path);
+        return DokumenTenderHelper::downloadHelper(SuratPenawaranHarga::class, $id, 'file_path_sph', 'Surat Penawaran Harga');
     }
 
 
     public function render()
     {
         return view('livewire.surat-penawaran-harga.index', [
-            'sphs' => SuratPenawaranHarga::with(['tender', 'user', 'document_approval_workflows'])
-                ->select('surat_penawaran_hargas.*')
-                ->selectRaw("
-                        EXISTS (
-                            SELECT 1 
-                            FROM document_approval_workflow daw 
-                            WHERE daw.surat_penawaran_harga_id = surat_penawaran_hargas.id
-                            AND daw.level IS NOT NULL
-                        ) AS is_approved
-                    ")
+            'sphs' => SuratPenawaranHarga::whereHas('document_approval_workflows', function ($query) {
+                $query->where('status', '!=', null);
+            })
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
 
