@@ -35,6 +35,37 @@ class DokumenTenderHelper
         return response()->download($filePath);
     }
 
+    public static function downloadRevisionHelper(
+        string $modelClass,
+        int $id,
+        string $fileField,
+        string $namaFile,
+        string $document_id
+    ) {
+        /** @var Model|null $data */
+        $data = $modelClass::where($document_id, $id)->latest()->first();
+        $errorMessage = "File {$namaFile} tidak ditemukan.";
+        $basePath = 'storage';
+
+        if (!$data || empty($data->$fileField)) {
+            session()->flash('error', $errorMessage);
+            return null;
+        }
+
+        $filePath = public_path($basePath . '/' . $data->$fileField);
+
+        if (!file_exists($filePath)) {
+            session()->flash(
+                'error',
+                $errorMessage
+            );
+            return null;
+        }
+
+        return response()->download($filePath);
+    }
+
+
     public static function storeRevisionFileOnStroage(
         $file_path,
         $nama_folder
