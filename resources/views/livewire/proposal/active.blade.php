@@ -76,6 +76,15 @@
                                         <form wire:submit.prevent="reject({{ $item->proposal->id }})">
                                             <flux:field>
                                                 <flux:label class="mt-3">Alasan Penolakan</flux:label>
+                                                <flux:input type="file" wire:model="file_path_revisi" />
+                                                {{-- Loading indicator saat upload --}}
+                                                <div wire:loading wire:target="file_path_revisi"
+                                                    class="text-sm text-gray-500 mt-1">
+                                                    Uploading file...
+                                                </div>
+                                                @error('file_path_revisi')
+                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                @enderror
                                                 <flux:textarea wire:model="pesan_revisi"></flux:textarea>
                                                 @error('pesan_revisi')
                                                     <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -109,7 +118,7 @@
 
             {{-- Static Pagination Info --}}
             <div class="pl-1 m-2">
-                {{ $document_approvals ->links() }}
+                {{ $document_approvals->links() }}
             </div>
         </div>
     @endcan
@@ -184,6 +193,13 @@
                                                 @error('nama_proposal')
                                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                                 @enderror --}}
+                                            </flux:field>
+
+                                            <flux:field>
+                                                <flux:label class="mt-3">Doc Rev</flux:label>
+                                                <flux:button icon="arrow-down-tray" class="mr-2"
+                                                    wire:click="downloadFileRevisi({{ $item->id }})">
+                                                </flux:button>
                                             </flux:field>
 
                                             <flux:field>
