@@ -34,4 +34,20 @@ class DokumenTenderHelper
 
         return response()->download($filePath);
     }
+
+    public static function storeRevisionFileOnStroage(
+        $file_path,
+        $nama_folder
+    ) {
+        $original = $file_path->getClientOriginalName();
+        $timestamp = time();
+        $format_timestamp = date('g i a,d-m-Y', $timestamp);
+        $filename = "Revision" . "_" . $format_timestamp . "_" . $original;
+
+        // store ke storage
+        $path = $file_path->storeAs($nama_folder, $filename, 'public');
+
+        return $path;
+    }
+
 }
