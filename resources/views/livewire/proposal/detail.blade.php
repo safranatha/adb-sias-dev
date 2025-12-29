@@ -1,6 +1,7 @@
 <div>
     <flux:heading size="xl">Detail Proposal Tender</flux:heading>
-    <flux:text class="mt-2">Berikut merupakan detail Proposal Tender {{ $document_approvals->first()->name_tender_proposal }}.
+    <flux:text class="mt-2">Berikut merupakan detail Proposal Tender
+        {{ $document_approvals->first()->name_tender_proposal }}.
     </flux:text>
 
     @foreach ($document_approvals as $item)
@@ -19,6 +20,12 @@
                     {{ \Carbon\Carbon::parse($item->waktu_pesan_dibaca)->diffForHumans() }}</flux:text>
             @endif
 
+            @if ($item->file_path_revisi)
+                <flux:heading size="lg" class="mt-6">Dokumen Revisi</flux:heading>
+                <flux:button icon="arrow-down-tray" class="mr-2" wire:click="download({{ $item->id }})">
+                </flux:button>
+            @endif
+
 
             <flux:heading size="lg" class="mt-6">Status Dokumen</flux:heading>
             @if ($item->status === 0)
@@ -34,9 +41,6 @@
             @endif
 
 
-            {{-- <flux:heading size="lg" class="mt-6">Dokumen Revisi</flux:heading>
-            <flux:button href="#" variant="primary" color="emerald" class="mt-2" icon="arrow-down-tray">Unduh
-                Dokumen Revisi</flux:button> --}}
         </div>
     @endforeach
 
