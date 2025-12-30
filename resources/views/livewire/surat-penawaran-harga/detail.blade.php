@@ -19,6 +19,11 @@
                     {{ \Carbon\Carbon::parse($item->waktu_pesan_dibaca)->diffForHumans() }}</flux:text>
             @endif
 
+            @if ($item->file_path_revisi)
+                <flux:heading size="lg" class="mt-6">Dokumen Revisi</flux:heading>
+                <flux:button icon="arrow-down-tray" class="mr-2" wire:click="download({{ $item->id }})">
+                </flux:button>
+            @endif
 
 
             <flux:heading size="lg" class="mt-6">Status Dokumen</flux:heading>
