@@ -96,4 +96,24 @@ class DokumenTenderHelper
 
         return $path;
     }
+
+    public static function storeWaktuDibaca(
+        $id,
+        $modelClass, 
+        $document_id
+        )
+    {
+        /** @var Model|null $data */
+        $workflow = $modelClass::where($document_id, $id)
+            ->whereNull('waktu_pesan_dibaca')
+            ->latest('created_at') // atau latest() saja, default ke created_at
+            ->first();
+
+        if ($workflow) {
+            $workflow->update([
+                'waktu_pesan_dibaca' => now(),
+            ]);
+        }
+        return $workflow;
+    }
 }
