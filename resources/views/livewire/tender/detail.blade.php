@@ -48,7 +48,7 @@
             </div>
             <div class="content-center ml-auto">
                 @if (
-                    $tender->level_propo == 'Proposal menunggu persetujuan Direktur' ||
+                        $tender->level_propo == 'Proposal ditolak oleh Direktur' ||
                         $tender->level_propo == 'Proposal telah disetujui Manajer Teknik')
                     <flux:button variant="primary" color="emerald" icon="arrow-down-tray"
                         wire:click="get_data_proposal({{ $tender->id }})"></flux:button>
@@ -62,8 +62,13 @@
                 <flux:icon name="check-circle" class="text-green-50 size-12" />
                 <flux:text size="md" class="ml-4 mt-2">Sudah diperiksa</flux:text>
             </div>
+        @elseif(
+            $tender->level_propo == 'Proposal ditolak oleh Direktur')
+            <div class="color-white bg-red-500 p-5 rounded-lg shadow-md flex">
+                <flux:icon name="x-circle" class="text-red-50 size-12" />
+                <flux:text size="md" class="ml-4 mt-2 text-accent-content">Ditolak Direktur</flux:text>
+            </div>
         @elseif (
-            $tender->level_propo == 'Proposal menunggu persetujuan Direktur' ||
                 $tender->level_propo == 'Proposal telah disetujui Manajer Teknik')
             <div class="color-white bg-green-100 p-5 rounded-lg shadow-md flex">
                 <div class="content-center">

@@ -45,7 +45,7 @@ class Tender extends Model
         }
 
         elseif ($latestWorkflow->level === "3" && $latestWorkflow->status === 0) {
-            return 'Proposal menunggu persetujuan Direktur';
+            return 'Proposal ditolak oleh Direktur';
         }
 
         elseif ($latestWorkflow->level === "2" && $latestWorkflow->status === 1) {
