@@ -5,6 +5,10 @@ use App\Livewire\Proposal\Create as ProposalCreate;
 use App\Livewire\Proposal\Active as ProposalActive;
 use App\Livewire\Proposal\Detail as ProposalDetail;
 use App\Livewire\Tender\Index as TenderIndex;
+use App\Livewire\Tender\Detail as TenderDetail;
+use App\Livewire\Tender\Create as TenderCreate;
+use App\Livewire\InternalMemo\Index as InternalMemoIndex;
+use App\Livewire\InternalMemo\Create as InternalMemoCreate;
 use App\Livewire\FormTugas\Index as FormTugasIndex;
 use App\Livewire\FormTugas\Create as FormTugasCreate;
 use App\Livewire\FormTugas\Penerima as FormTugasPenerima;
@@ -14,7 +18,7 @@ use App\Livewire\SuratPenawaranHarga\Index as SuratPenawaranHargaIndex;
 use App\Livewire\SuratPenawaranHarga\Create as SuratPenawaranHargaCreate;
 use App\Livewire\SuratPenawaranHarga\Active as SuratPenawaranHargaActive;
 use App\Livewire\SuratPenawaranHarga\Detail as SuratPenawaranHargaDetail;
-use App\Livewire\Tender\Create as TenderCreate;
+use App\Livewire\TrackingDocument\Index as TrackingDocumentIndex;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -113,7 +117,8 @@ Route::get('/form-tugas-active',FormTugasPenerima::class)->middleware(['auth'])-
 
 // form tugas detail
 Route::get('/form-tugas/{id}',FormTugasDetail::class)->middleware(['auth'])->name('form-tugas.detail');
-
+// tracking document
+Route::get('/tracking-document',TrackingDocumentIndex::class)->middleware(['auth'])->name('tracking-document.index');
 
 // ⚠️⚠️🔴🔴FORTIFY AUTH DO NOT CHANGE ⚠️⚠️🔴🔴
 Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
