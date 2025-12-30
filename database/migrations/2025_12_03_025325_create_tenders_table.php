@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama_tender');
             $table->string('nama_klien');
             $table->enum('status', ['Gagal', 'Berhasil', 'Dalam Proses'])->default('Dalam Proses');
+            $table->string('file_pra_kualifikasi');
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\SuratPenawaranHarga;
 
+use App\Helpers\DokumenTenderHelper;
 use App\Models\DocumentApprovalWorkflow;
 use Livewire\Component;
 
@@ -13,6 +14,11 @@ class Detail extends Component
     public function mount($id)
     {
         $this->surat_penawaran_harga_id = $id;
+    }
+
+    public function download($id)
+    {
+        return DokumenTenderHelper::downloadHelper(DocumentApprovalWorkflow::class, $id, 'file_path_revisi', 'File revisi');
     }
 
     public function render()

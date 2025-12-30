@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class FormTugas extends Model
+{
+    use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'status',
+        'due_date',
+        'jenis_permintaan',
+        'kegiatan',
+        'keterangan',
+        'file_path_form_tugas',
+        'lingkup_kerja',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function disposisis()
+    {
+        return $this->hasMany(Disposisi::class);
+    }
+
+    public function getPenerimaAttribute()
+    {
+        $penerima_id=$this->disposisis()->latest()->value('penerima_id');
+        $user=User::find($penerima_id);
+        return $user->getRoleNames()->implode(', ');
+    }
+
+    public function getStatusAttribute()
+    {
+        return $this->disposisis()->latest()->value('status');
+    }
+
+    public function getWaktuDibacaAttribute()
+    {
+        return $this->disposisis()->latest()->value('waktu_disposisi_dibaca');
+    }
+
+    public function getCheckPenerimaIdAttribute()
+    {
+        $penerima_id = $this->disposisis()->latest()->value('penerima_id');
+
+        $user_id_login=auth()->user()->id;
+
+        if($penerima_id===$user_id_login){
+            return true;
+        }
+        return false;
+    }
+}

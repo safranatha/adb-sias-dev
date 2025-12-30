@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Disposisi;
 use App\Models\DocumentApprovalWorkflow;
+use App\Models\FormTugas;
 use App\Models\Proposal;
 use App\Models\SuratPenawaranHarga;
 use App\Models\Tender;
@@ -19,6 +21,8 @@ class DocumentSeeder extends Seeder
         // Tender::factory(10)->create();
         // SuratPenawaranHarga::factory(10)->create();
         // Proposal::factory(10)->create();
-        DocumentApprovalWorkflow::factory(5)->create();
+        // DocumentApprovalWorkflow::factory(5)->create();
+        // FormTugas::factory(10)->create();
+        Disposisi::factory(10)->create();
     }
 }

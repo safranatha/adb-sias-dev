@@ -14,6 +14,7 @@ class Tender extends Model
     protected $fillable = [
         'nama_tender',
         'nama_klien',
+        'file_pra_kualifikasi',
     ];
 
     public function proposal(): HasOne

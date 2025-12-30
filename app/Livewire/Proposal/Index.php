@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Proposal;
 
+use App\Helpers\DokumenTenderHelper;
 use App\Models\DocumentApprovalWorkflow;
 use App\Models\Proposal;
 use App\Models\Tender;
@@ -18,35 +19,16 @@ class Index extends Component
 
     public function download($id)
     {
-        $proposal = Proposal::findOrFail($id);
-
-        if (!$proposal) {
-            return session()->flash('error', 'Proposal tidak ditemukan.');
-        }
-
-        $file_path = public_path('storage/' . $proposal->file_path_proposal);
-
-        if (!file_exists($file_path)) {
-            return session()->flash('error', 'File Proposal tidak ditemukan di storage.');
-        }
-
-        return response()->download($file_path);
+        return DokumenTenderHelper::downloadHelper(Proposal::class, $id, 'file_path_proposal', 'File Proposal');
     }
 
     public function render()
     {
         // dd(Proposal::all());
         return view('livewire.proposal.index', [
-            'proposals' => Proposal::with(['tender', 'user', 'document_approval_workflows'])
-                ->select('proposals.*')
-                ->selectRaw("
-                        EXISTS (
-                            SELECT 1 
-                            FROM document_approval_workflow daw 
-                            WHERE daw.proposal_id = proposals.id
-                            AND daw.level IS NOT NULL
-                        ) AS is_approved
-                    ")
+            'proposals' => Proposal::whereHas('document_approval_workflows', function ($query) {
+                $query->where('status','!=', null);
+            })
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
 

@@ -31,8 +31,8 @@ class CreateNewUser implements CreatesNewUsers
             ],
             'password' => $this->passwordRules(),
             'role' => ['required', 'string', Rule::exists('roles', 'name')],
-            'permissions' => ['array'],
-            'permissions.*' => ['string', Rule::exists('permissions', 'name')],
+            // 'permissions' => ['array'],
+            // 'permissions.*' => ['string', Rule::exists('permissions', 'name')],
 
         ])->validate();
 
@@ -44,7 +44,7 @@ class CreateNewUser implements CreatesNewUsers
 
         $user->assignRole($input['role']);
 
-        $user->givePermissionTo($input['permissions']);
+        // $user->givePermissionTo($input['permissions']);
 
 
         return $user;

@@ -16,79 +16,137 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
         // Create roles
-        $super_admin_role = Role::create(['name' => 'Super Admin']);
-        $direktur_role = Role::create(['name' => 'Direktur']);
-        $manajer_admin_role = Role::create(['name' => 'Manajer Admin']);
-        $manajer_teknik_role = Role::create(['name' => 'Manajer Teknik']);
-        $pic_role = Role::create(['name' => 'PIC']);
-        $staff_teknik_role = Role::create(['name' => 'Staff Teknik']);
-        $staff_admin_role = Role::create(['name' => 'Staff Admin']);
-        $staff_penggadaan_role = Role::create(['name' => 'Staff Penggadaan']);
+        Role::create(['name' => 'Super Admin']);
+        Role::create(['name' => 'Direktur']);
+        Role::create(['name' => 'Assisten Direktur']);
+        Role::create(['name' => 'Manajer Admin']);
+        Role::create(['name' => 'Manajer Teknik']);
+        Role::create(['name' => 'PIC']);
+        Role::create(['name' => 'Staff Teknik']);
+        Role::create(['name' => 'Staff Admin']);
+        Role::create(['name' => 'Staff Penggadaan']);
 
         // Create permissions
-        // internal memo
-        $view_permission_internal_memo = Permission::create(['name' => 'view internal memo']);
-        $create_permission_internal_memo = Permission::create(['name' => 'create internal memo']);
-        $edit_permission_internal_memo = Permission::create(['name' => 'edit internal memo']);
-        $disposisi_permission_internal_memo = Permission::create(['name' => 'disposisi internal memo']);
+        // form tugas
+        Permission::create(['name' => 'create form tugas']);
+        Permission::create(['name' => 'edit form tugas']);
+
+        // permission to assign dokumen tender
+        Permission::create(['name' => 'assign dokumen tender']);
 
         // proposal
-        $view_permission_proposal = Permission::create(['name' => 'view proposal']);
-        $create_permission_proposal = Permission::create(['name' => 'create proposal']);
-        $validate_permission_proposal = Permission::create(['name' => 'validate proposal']);
-        $assign_signature_number_permission_proposal = Permission::create(['name' => 'assign signature number proposal']);
-        $disposisi_permsision_proposal = Permission::create(['name' => 'disposisi proposal']);
+        Permission::create(['name' => 'view proposal']);
+        Permission::create(['name' => 'create proposal']);
+        Permission::create(['name' => 'validate proposal']);
+
 
         // surat penawaran harga
-        $view_permission_sph = Permission::create(['name' => 'view surat penawaran harga']);
-        $create_permission_sph = Permission::create(['name' => 'create surat penawaran harga']);
-        $validate_permission_sph = Permission::create(['name' => 'validate surat penawaran harga']);
-        $assign_signature_number_permission_sph = Permission::create(['name' => 'assign signature number surat penawaran harga']);
-        $disposisi_permsision_sph = Permission::create(['name' => 'disposisi surat penawaran harga']);
+        Permission::create(['name' => 'view surat penawaran harga']);
+        Permission::create(['name' => 'create surat penawaran harga']);
+        Permission::create(['name' => 'validate surat penawaran harga']);
+
 
         // PIC
-        $assign_pic_permission = Permission::create(['name' => 'assign pic']);
+        Permission::create(['name' => 'assign pic']);
+
 
         // peta dan dokumen penyusun (dokumen pelaksanaan proyek div teknik)
-        $view_permission_dokumen_pelaksanaan = Permission::create(['name' => 'view dokumen pelaksanaan']);
-        $create_permission_dokumen_pelaksanaan = Permission::create(['name' => 'create dokumen pelaksanaan']);
-        $validate_permission_dokumen_pelaksanaan = Permission::create(['name' => 'validate dokumen pelaksanaan']);
-        $assign_signature_number_permission_dokumen_pelaksanaan = Permission::create(['name' => 'assign signature number dokumen pelaksanaan']);
-        $disposisi_permsision_dokumen_pelaksanaan = Permission::create(['name' => 'disposisi dokumen pelaksanaan']);
+        Permission::create(['name' => 'view dokumen pelaksanaan']);
+        Permission::create(['name' => 'create dokumen pelaksanaan']);
+        Permission::create(['name' => 'validate dokumen pelaksanaan']);
+        Permission::create(['name' => 'assign signature number dokumen pelaksanaan']);
 
         // surat tagihan
-        $view_permission_surat_tagihan = Permission::create(['name' => 'view surat tagihan']);
-        $create_permission_surat_tagihan = Permission::create(['name' => 'create surat tagihan']);
-        $validate_permission_surat_tagihan = Permission::create(['name' => 'validate surat tagihan']);
-        $assign_signature_number_permission_surat_tagihan = Permission::create(['name' => 'assign signature number surat tagihan']);
-        $disposisi_permsision_surat_tagihan = Permission::create(['name' => 'disposisi surat tagihan']);
+        Permission::create(['name' => 'view surat tagihan']);
+        Permission::create(['name' => 'create surat tagihan']);
+        Permission::create(['name' => 'validate surat tagihan']);
+        Permission::create(['name' => 'assign signature number surat tagihan']);
 
         // progress k/l
-        $view_permission_progress_kl = Permission::create(['name' => 'view progress k/l']);
-        $create_permission_progress_kl = Permission::create(['name' => 'create progress k/l']);
+        Permission::create(['name' => 'view progress k/l']);
+        Permission::create(['name' => 'create progress k/l']);
+
 
         // penggandaan
-        $view_permission_penggandaan = Permission::create(['name' => 'view penggandaan']);
-        $create_permission_penggandaan = Permission::create(['name' => 'create penggandaan']);
-        $disposisi_permission_penggandaan = Permission::create(['name' => 'disposisi penggandaan']);
+        Permission::create(['name' => 'view penggandaan']);
+        Permission::create(['name' => 'create penggandaan']);
+
 
         // view projek
-        $view_permission_projek = Permission::create(['name' => 'view projek']);
+        Permission::create(['name' => 'view projek']);
+        
         // create projek
-        $create_permission_projek = Permission::create(['name' => 'create projek']);
+        Permission::create(['name' => 'create projek']);
+        
 
         // view tender
-        $view_permission_tender = Permission::create(['name' => 'view tender']);
+        Permission::create(['name' => 'view tender']);
+
         // create tender
-        $create_permission_tender = Permission::create(['name' => 'create tender']);
+        Permission::create(['name' => 'create tender']);
 
-        // Assign permissions to roles
-        // $adminRole->givePermissionTo($editPermission, $viewPermission);
-        // $userRole->givePermissionTo($viewPermission);
+        // ===== ASSIGN PERMISSION ROLE =====
+        $rolePermissions = [          
+            'Direktur' => [
+                'create form tugas',
+                'view tender',
+                'create tender',
+                'validate proposal',
+                'validate surat penawaran harga',
+                'assign dokumen tender',
+            ],
 
+            'Assisten Direktur' => [
+                'create form tugas',
+            ],
 
-        // Assign role to user
-        $user = User::find(1); // Example user with ID 1
-        $user->assignRole('Super Admin');
+            'Manajer Admin' => [
+                'create form tugas',
+                'view proposal',
+                'view surat penawaran harga',
+                'validate surat penawaran harga',
+            ],
+
+            'Manajer Teknik' => [
+                'create form tugas',
+                'view proposal',
+                'validate proposal',
+            ],
+
+            'Staff Teknik' => [
+                'view proposal',
+                'create proposal',
+            ],
+
+            'Staff Admin' => [
+                'view surat penawaran harga',
+                'create surat penawaran harga',
+            ],
+        ];
+
+        foreach ($rolePermissions as $roleName => $permissions) {
+            $role = Role::where('name', $roleName)->first();
+            if ($role) {
+                $role->syncPermissions($permissions);
+            }
+        }
+
+        // ===== ASSIGN ROLES KE USERS (SETELAH PERMISSION SUDAH DI-ASSIGN KE ROLE) =====
+        $userRoles = [
+            1 => 'Super Admin',
+            2 => 'Direktur',
+            3 => 'Assisten Direktur',
+            4 => 'Manajer Teknik',
+            5 => 'Manajer Admin',
+            6 => 'Staff Teknik',
+            7 => 'Staff Admin',
+        ];
+
+        foreach ($userRoles as $userId => $roleName) {
+            $user = User::find($userId);
+            if ($user) {
+                $user->assignRole($roleName);
+            }
+        }
     }
 }

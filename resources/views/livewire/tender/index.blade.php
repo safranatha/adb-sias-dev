@@ -13,17 +13,18 @@
             <flux:text class="mt-2">Berikut merupakan daftar Tender yang ada pada PT Adi Banuwa</flux:text>
         </div>
 
-    <div class="overflow-x-auto rounded-md border border-gray-200">
-        <table class="w-full text-sm">
-            <thead class="bg-green-50 text-white">
-                <tr>
-                    <th class="px-4 py-3 font-medium">Nama Tender</th>
-                    <th class="px-4 py-3 font-medium">Nama Klien</th>
-                    <th class="px-4 py-3 font-medium">Status</th>
-                    <th class="px-4 py-3 font-medium">Edit</th>
-                    <th class="px-4 py-3 font-medium">Detail</th>
-                </tr>
-            </thead>
+        <div class="overflow-x-auto rounded-md border border-gray-200">
+            <table class="w-full text-sm text-center">
+                <thead class="bg-green-50 text-white">
+                    <tr>
+                        <th class="px-4 py-3 font-medium">Nama Tender</th>
+                        <th class="px-4 py-3 font-medium">Nama Klien</th>
+                        <th class="px-4 py-3 font-medium">Status</th>
+                        <th class="px-4 py-3 font-medium">Edit</th>
+                        <th class="px-4 py-3 font-medium">Dokumen Pra Kualifikasi</th>
+                        <th class="px-4 py-3 font-medium">Detail</th>
+                    </tr>
+                </thead>
 
             <tbody class="divide-y divide-gray-200">
                 @if ($tenders->isEmpty())

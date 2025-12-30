@@ -71,7 +71,7 @@ class Index extends Component
         $this->password = '';
         $this->password_confirmation = '';
         $this->role = $user->roles->first()?->name ?? '';
-        $this->permissions = $user->getDirectPermissions()->pluck('name')->toArray();
+        $this->permissions = $user->getPermissionsViaRoles()->pluck('name')->toArray();
 
         $this->isEditing = true;
     }
