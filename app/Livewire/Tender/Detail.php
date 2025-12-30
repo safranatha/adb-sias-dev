@@ -3,6 +3,7 @@
 namespace App\Livewire\Tender;
 
 use App\Helpers\ApprovalTenderDocHelper;
+use App\Helpers\ApprovalTenderDocHelperDirektur;
 use App\Helpers\DokumenTenderHelper;
 use App\Models\DocumentApprovalWorkflow;
 use App\Models\Proposal;
@@ -84,7 +85,7 @@ class Detail extends Component
 
     public function approve_proposal($id)
     {
-        $approve = ApprovalTenderDocHelper::approveDocumentProposal(DocumentApprovalWorkflow::class, $id, auth()->user()->roles->first()->name);
+        $approve = ApprovalTenderDocHelperDirektur::approveDocumentProposal(DocumentApprovalWorkflow::class, $id, auth()->user()->roles->first()->name);
 
         if (!$approve) {
             session()->flash('error', 'Proses approval proposal gagal!');
@@ -110,7 +111,7 @@ class Detail extends Component
         $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi Proposal');
 
         // panggil helper untuk reject document proposal
-        $documentApproval = ApprovalTenderDocHelper::rejectDocumentProposal(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
+        $documentApproval = ApprovalTenderDocHelperDirektur::rejectDocumentProposal(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
 
         if (!$documentApproval) {
             session()->flash('error', 'Proses approval proposal gagal!');
@@ -126,7 +127,7 @@ class Detail extends Component
         // check role of user
         $nama_role = auth()->user()->roles->first()->name;
 
-        $approve = ApprovalTenderDocHelper::approveDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role);
+        $approve = ApprovalTenderDocHelperDirektur::approveDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role);
 
         if (!$approve) {
             session()->flash('error', 'Proses approval proposal gagal!');
@@ -151,8 +152,7 @@ class Detail extends Component
         // call helper for upload file revisi
         $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi SPH');
 
-        $documentApproval = ApprovalTenderDocHelper
-            ::rejectDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
+        $documentApproval = ApprovalTenderDocHelperDirektur::rejectDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
 
         if (!$documentApproval) {
             session()->flash('error', 'Proses approval proposal gagal!');
