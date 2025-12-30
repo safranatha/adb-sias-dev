@@ -48,7 +48,7 @@
             </div>
             <div class="content-center ml-auto">
                 @if (
-                        $tender->level_propo == 'Proposal ditolak oleh Direktur' ||
+                    $tender->level_propo == 'Proposal ditolak oleh Direktur' ||
                         $tender->level_propo == 'Proposal telah disetujui Manajer Teknik')
                     <flux:button variant="primary" color="emerald" icon="arrow-down-tray"
                         wire:click="get_data_proposal({{ $tender->id }})"></flux:button>
@@ -62,14 +62,12 @@
                 <flux:icon name="check-circle" class="text-green-50 size-12" />
                 <flux:text size="md" class="ml-4 mt-2">Sudah diperiksa</flux:text>
             </div>
-        @elseif(
-            $tender->level_propo == 'Proposal ditolak oleh Direktur')
+        @elseif($tender->level_propo == 'Proposal ditolak oleh Direktur')
             <div class="color-white bg-red-500 p-5 rounded-lg shadow-md flex">
                 <flux:icon name="x-circle" class="text-red-50 size-12" />
                 <flux:text size="md" class="ml-4 mt-2 text-accent-content">Ditolak Direktur</flux:text>
             </div>
-        @elseif (
-                $tender->level_propo == 'Proposal telah disetujui Manajer Teknik')
+        @elseif ($tender->level_propo == 'Proposal telah disetujui Manajer Teknik')
             <div class="color-white bg-green-100 p-5 rounded-lg shadow-md flex">
                 <div class="content-center">
                     <flux:button icon="check" class="" wire:click="approve_proposal({{ $tender->id }})"
@@ -95,7 +93,7 @@
                                 @error('file_path_revisi')
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
-                                
+
                                 <flux:textarea wire:model="pesan_revisi"></flux:textarea>
                                 @error('pesan_revisi')
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -155,21 +153,29 @@
                 $tender->level_sph == 'SPH telah disetujui Manajer Admin')
             <div class="color-white bg-green-100 p-5 rounded-lg shadow-md flex">
                 <div class="content-center">
-                    <flux:button icon="check" class="" wire:click="approve({{ $tender->id }})"
+                    <flux:button icon="check" class="" wire:click="approve_sph({{ $tender->id }})"
                         variant="primary" color="green"></flux:button>
                 </div>
             </div>
             <div class="color-white bg-red-100 p-5 rounded-lg shadow-md flex">
                 <div class="content-center">
-                    <flux:modal.trigger name="reject-proposal-{{ $tender->id }}">
+                    <flux:modal.trigger name="reject-sph-{{ $tender->id }}">
                         <flux:button icon="x-mark" class="" wire:click="" variant="danger"></flux:button>
                     </flux:modal.trigger>
 
                     {{-- modal form reject --}}
-                    <flux:modal name="reject-proposal-{{ $tender->id }}" class="max-w-3xl content-center">
-                        <form wire:submit.prevent="reject({{ $tender->id }})">
+                    <flux:modal name="reject-sph-{{ $tender->id }}" class="max-w-3xl content-center">
+                        <form wire:submit.prevent="reject_sph({{ $tender->id }})">
                             <flux:field>
                                 <flux:label class="mt-3">Alasan Penolakan</flux:label>
+                                <flux:input type="file" wire:model="file_path_revisi" />
+                                {{-- Loading indicator saat upload --}}
+                                <div wire:loading wire:target="file_path_revisi" class="text-sm text-gray-500 mt-1">
+                                    Uploading file...
+                                </div>
+                                @error('file_path_revisi')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
                                 <flux:textarea wire:model="pesan_revisi"></flux:textarea>
                                 @error('pesan_revisi')
                                     <span class="text-red-500 text-sm">{{ $message }}</span>

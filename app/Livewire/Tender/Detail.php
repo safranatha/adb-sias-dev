@@ -121,6 +121,47 @@ class Detail extends Component
         session()->flash('success', 'Proposal berhasil di tolak!');
     }
 
+    public function approve_sph($id)
+    {
+        // check role of user
+        $nama_role = auth()->user()->roles->first()->name;
+
+        $approve = ApprovalTenderDocHelper::approveDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role);
+
+        if (!$approve) {
+            session()->flash('error', 'Proses approval proposal gagal!');
+            return;
+        }
+
+        session()->flash('success', 'Surat Penawaran Harga berhasil di approve!');
+    }
+
+    public function reject_sph($id)
+    {
+        // check role of user
+        $nama_role = auth()->user()->roles->first()->name;
+
+        $rules = [
+            'pesan_revisi' => ['required', 'string', 'max:255'],
+            'file_path_revisi' => ['required', 'file', 'max:10240']
+        ];
+
+        $this->validate($rules);
+
+        // call helper for upload file revisi
+        $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi SPH');
+
+        $documentApproval = ApprovalTenderDocHelper
+            ::rejectDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
+
+        if (!$documentApproval) {
+            session()->flash('error', 'Proses approval proposal gagal!');
+            return;
+        }
+
+        session()->flash('success', 'Surat Penawaran Harga berhasil di tolak!');
+    }
+
 
     public function render()
     {
