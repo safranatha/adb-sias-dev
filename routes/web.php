@@ -13,7 +13,6 @@ use App\Livewire\FormTugas\Index as FormTugasIndex;
 use App\Livewire\FormTugas\Create as FormTugasCreate;
 use App\Livewire\FormTugas\Penerima as FormTugasPenerima;
 use App\Livewire\FormTugas\Detail as FormTugasDetail;
-use App\Livewire\Tender\Detail as TenderDetail;
 use App\Livewire\SuratPenawaranHarga\Index as SuratPenawaranHargaIndex;
 use App\Livewire\SuratPenawaranHarga\Create as SuratPenawaranHargaCreate;
 use App\Livewire\SuratPenawaranHarga\Active as SuratPenawaranHargaActive;
