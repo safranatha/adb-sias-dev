@@ -65,16 +65,7 @@ class Active extends Component
 
     public function storeWaktuDibaca($id)
     {
-        $workflow = DocumentApprovalWorkflow::where('proposal_id', $id)
-            ->whereNull('waktu_pesan_dibaca')
-            ->latest('created_at') // atau latest() saja, default ke created_at
-            ->first();
-
-        if ($workflow) {
-            $workflow->update([
-                'waktu_pesan_dibaca' => now(),
-            ]);
-        }
+        return DokumenTenderHelper::storeWaktuDibaca($id, DocumentApprovalWorkflow::class, 'proposal_id');
     }
 
 
