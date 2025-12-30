@@ -26,53 +26,57 @@
                     </tr>
                 </thead>
 
-            <tbody class="divide-y divide-gray-200">
-                @if ($tenders->isEmpty())
-                    <tr class="text-center">
-                        <td colspan="3" class="px-4 py-6">
-                            Tidak ada tender untuk ditampilkan.
-                        </td>
-                    </tr>
-                @else
-                    @foreach ($tenders as $item)
-                        <tr> 
-                            <td class="px-4 py-3 text-center">{{ $item->nama_tender }}</td>
-                            <td class="px-4 py-3 text-center">{{ $item->nama_klien }}</td>
-                            <td class="px-4 py-3 text-center"> {{ $item->status }}</td>
-                            <td class="px-4 py-3 text-center">
-                                <flux:modal.trigger name="edit-tender-{{ $item->id }}">
-                                    <flux:button icon="pencil" class="mr-2"
-                                        wire:click="edit({{ $item->id }})"
-                                        variant="primary" color="yellow" />
-                                </flux:modal.trigger>
+                <tbody class="divide-y divide-gray-200">
+                    @if ($tenders->isEmpty())
+                        <tr class="text-center">
+                            <td colspan="3" class="px-4 py-6">
+                                Tidak ada tender untuk ditampilkan.
+                            </td>
+                        </tr>
+                    @else
+                        @foreach ($tenders as $item)
+                            <tr>
+                                <td class="px-4 py-3 text-center">{{ $item->nama_tender }}</td>
+                                <td class="px-4 py-3 text-center">{{ $item->nama_klien }}</td>
+                                <td class="px-4 py-3 text-center"> {{ $item->status }}</td>
+                                <td class="px-4 py-3 text-center">
+                                    <flux:modal.trigger name="edit-tender-{{ $item->id }}">
+                                        <flux:button icon="pencil" class="mr-2"
+                                            wire:click="edit({{ $item->id }})" variant="primary" color="yellow" />
+                                    </flux:modal.trigger>
 
-                                <flux:modal name="edit-tender-{{ $item->id }}" class="max-w-2xl">
-                                    <div class="space-y-4">
+                                    <flux:modal name="edit-tender-{{ $item->id }}" class="max-w-2xl">
+                                        <div class="space-y-4">
 
-                                        <flux:field>
-                                            <flux:label>Nama Tender</flux:label>
-                                            <flux:input wire:model="nama_tender" />
-                                            @error('nama_tender')
-                                                <span class="text-red-500 text-sm">{{ $message }}</span>
-                                            @enderror
-                                        </flux:field>
+                                            <flux:field>
+                                                <flux:label>Nama Tender</flux:label>
+                                                <flux:input wire:model="nama_tender" />
+                                                @error('nama_tender')
+                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                @enderror
+                                            </flux:field>
 
-                                        <flux:field>
-                                            <flux:label>Nama Klien</flux:label>
-                                            <flux:input wire:model="nama_klien" />
-                                            @error('nama_klien')
-                                                <span class="text-red-500 text-sm">{{ $message }}</span>
-                                            @enderror
-                                        </flux:field>
+                                            <flux:field>
+                                                <flux:label>Nama Klien</flux:label>
+                                                <flux:input wire:model="nama_klien" />
+                                                @error('nama_klien')
+                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                @enderror
+                                            </flux:field>
 
-                                        {{-- Trigger KONFIRMASI --}}
-                                        <flux:modal.trigger name="confirm-update-{{ $item->id }}">
-                                            <flux:button class="mt-3 w-full" variant="primary" color="emerald">
-                                                Update
-                                            </flux:button>
-                                        </flux:modal.trigger>
-                                    </div>
-                                </flux:modal>
+                                            {{-- Trigger KONFIRMASI --}}
+                                            <flux:modal.trigger name="confirm-update-{{ $item->id }}">
+                                                <flux:button class="mt-3 w-full" variant="primary" color="emerald">
+                                                    Update
+                                                </flux:button>
+                                            </flux:modal.trigger>
+                                        </div>
+                                    </flux:modal>
+
+                                <td class="px-4 py-3">
+                                    <flux:button icon="arrow-down-tray" class="mr-2"
+                                        wire:click="download({{ $item->id }})"></flux:button>
+                                </td>
 
                                 <flux:modal name="confirm-update-{{ $item->id }}" class="min-w-[22rem]">
                                     <form wire:submit.prevent="update">
@@ -94,7 +98,7 @@
                                                         Batal
                                                     </flux:button>
                                                 </flux:modal.close>
-                                                
+
                                                 <flux:button type="submit" variant="primary" color="emerald">
                                                     Yakin
                                                 </flux:button>
@@ -104,18 +108,18 @@
                                     </form>
                                 </flux:modal>
 
-                            </td>
-                            <td class="px-4 py-3">
-                                <flux:button icon="information-circle" class="mr-2"
-                                    href="{{ route('tender.detail', $item->id) }}"></flux:button>
-                            </td>
-                        </tr>
-                    @endforeach
-                @endif
-            </tbody>
-        </table>
-        <div class=" pl-1 m-2">
-            {{ $tenders->links() }}
+                                </td>
+                                <td class="px-4 py-3">
+                                    <flux:button icon="information-circle" class="mr-2"
+                                        href="{{ route('tender.detail', $item->id) }}"></flux:button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+            <div class=" pl-1 m-2">
+                {{ $tenders->links() }}
+            </div>
         </div>
     </div>
-</div>
