@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" >
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     @include('partials.head')
@@ -136,15 +136,23 @@
                         :current="request()->routeIs('form-tugas.index')" wire:navigate class="mt-2">
                         {{ __('Riwayat Form Tugas') }}
                     </flux:navlist.item>
-                    
-                </flux:navlist.group>
-            </flux:navlist>
-        @endcan
+                @endcan
+
+                @if(!auth()->user()->hasrole(['Direktur', 'Asisten Direktur']))
+                    <flux:navlist.item icon="document-minus" :href="route('form-tugas.active')"
+                        :current="request()->routeIs('form-tugas.active')" wire:navigate class="mt-2">
+                        {{ __('Form Tugas Aktif') }}
+                    </flux:navlist.item>
+                @endif
+
+            </flux:navlist.group>
+        </flux:navlist>
 
         <flux:navlist variant="outline">
             <flux:navlist.group class="grid">
-                <flux:navlist.item icon="magnifying-glass" :href="route('tracking-document.index')" :current="request()->routeIs('tracking-document.index')" class="text-neutral-50"
-                    wire:navigate>Tracking Dokumen</flux:navlist.item>
+                <flux:navlist.item icon="magnifying-glass" :href="route('tracking-document.index')"
+                    :current="request()->routeIs('tracking-document.index')" class="text-neutral-50" wire:navigate>
+                    Tracking Dokumen</flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
 
