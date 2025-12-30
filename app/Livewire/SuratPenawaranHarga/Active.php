@@ -2,11 +2,10 @@
 
 namespace App\Livewire\SuratPenawaranHarga;
 
+use App\Helpers\ApprovalTenderDocHelper;
 use App\Helpers\DokumenTenderHelper;
-use App\Helpers\DownloadHelper;
 use App\Models\DocumentApprovalWorkflow;
 use App\Models\SuratPenawaranHarga;
-use App\Models\Tender;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -23,6 +22,8 @@ class Active extends Component
     public $isEditing = false;
 
     public $pesan_revisi;
+
+    public $file_path_revisi;
 
     protected $rules = [
         'tender_id' => ['required', 'exists:tenders,id'],
@@ -60,21 +61,17 @@ class Active extends Component
 
     public function storeWaktuDibaca($id)
     {
-        $workflow = DocumentApprovalWorkflow::where('surat_penawaran_harga_id', $id)
-            ->whereNull('waktu_pesan_dibaca')
-            ->latest('created_at') // atau latest() saja, default ke created_at
-            ->first();
-
-        if ($workflow) {
-            $workflow->update([
-                'waktu_pesan_dibaca' => now(),
-            ]);
-        }
+        return DokumenTenderHelper::storeWaktuDibaca($id, DocumentApprovalWorkflow::class, 'surat_penawaran_harga_id');
     }
 
     public function download($id)
     {
         return DokumenTenderHelper::downloadHelper(SuratPenawaranHarga::class, $id, 'file_path_sph', 'Surat Penawaran Harga');
+    }
+
+    public function downloadFileRevisi($id)
+    {
+        return DokumenTenderHelper::downloadRevisionHelper(DocumentApprovalWorkflow::class, $id, 'file_path_revisi', 'File revisi SPH', 'surat_penawaran_harga_id');
     }
 
     public function update()
@@ -135,17 +132,12 @@ class Active extends Component
         // check role of user
         $nama_role = auth()->user()->roles->first()->name;
 
-        // Cari document approval berdasarkan surat_penawaran_harga_id
-        $documentApproval = DocumentApprovalWorkflow::where('surat_penawaran_harga_id', $id)
-            ->latest() // Ambil yang terbaru
-            ->first();
+        $approve = ApprovalTenderDocHelper::approveDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role);
 
-        $documentApproval->update([
-            'user_id' => auth()->user()->id,
-            'status' => true,
-            'level' => ($nama_role == "Manajer Admin") ? "2" : ($nama_role == "Direktur" ? "3" : null),
-            'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga disetujui oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga disetujui oleh Direktur" : null),
-        ]);
+        if (!$approve) {
+            session()->flash('error', 'Proses approval proposal gagal!');
+            return;
+        }
 
         session()->flash('success', 'Surat Penawaran Harga berhasil di approve!');
 
@@ -156,22 +148,23 @@ class Active extends Component
         // check role of user
         $nama_role = auth()->user()->roles->first()->name;
 
-        $rules = ['pesan_revisi' => ['required', 'string', 'max:255']];
+        $rules = [
+            'pesan_revisi' => ['required', 'string', 'max:255'],
+            'file_path_revisi' => ['required', 'file', 'max:10240']
+        ];
 
         $this->validate($rules);
 
-        // Cari document approval berdasarkan surat_penawaran_harga_id
-        $documentApproval = DocumentApprovalWorkflow::where('surat_penawaran_harga_id', $id)
-            ->latest() // Ambil yang terbaru
-            ->first();
+        // call helper for upload file revisi
+        $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi SPH');
 
-        $documentApproval->update([
-            'user_id' => auth()->user()->id,
-            'status' => false,
-            'level' => ($nama_role == "Manajer Admin") ? "2" : ($nama_role == "Direktur" ? "3" : null),
-            'pesan_revisi' => $this->pesan_revisi,
-            'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga ditolak oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga ditolak oleh Direktur" : null),
-        ]);
+        $documentApproval = ApprovalTenderDocHelper
+        ::rejectDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
+
+        if (!$documentApproval) {
+            session()->flash('error', 'Proses approval proposal gagal!');
+            return;
+        }
 
         session()->flash('success', 'Surat Penawaran Harga berhasil di tolak!');
 
