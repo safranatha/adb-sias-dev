@@ -36,6 +36,12 @@ class SuratPenawaranHarga extends Model
             ->latest()
             ->value('status'); // langsung ambil status, tidak butuh first()
     }
+    public function getLevelAttribute()
+    {
+        return $this->document_approval_workflows()
+            ->latest()
+            ->value('level'); // langsung ambil status, tidak butuh first()
+    }
 
     public function getPesanRevisiAttribute()
     {

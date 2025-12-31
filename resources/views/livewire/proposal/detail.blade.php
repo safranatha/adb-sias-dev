@@ -9,6 +9,13 @@
             <flux:heading size="lg">Status</flux:heading>
             <flux:text size="md" class="mt-2">{{ $item->status_proposal }}</flux:text>
 
+            <flux:heading size="lg">Validator</flux:heading>
+            @if ($item->level === "3")
+                <flux:text size="md" class="mt-2">Direktur</flux:text>
+            @elseif ($item->level === "2")
+                <flux:text size="md" class="mt-2">Manajer Teknik</flux:text>
+            @endif
+
             <flux:heading size="lg" class="mt-6">Tanggal Revisi</flux:heading>
             <flux:text size="md" class="mt-2">{{ $item->updated_at->format('d-m-y') }}</flux:text>
 
