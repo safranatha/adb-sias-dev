@@ -9,6 +9,7 @@ use App\Models\SuratPenawaranHarga;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 
 class Active extends Component
@@ -159,7 +160,7 @@ class Active extends Component
         $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi SPH');
 
         $documentApproval = ApprovalTenderDocHelper
-        ::rejectDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
+            ::rejectDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
 
         if (!$documentApproval) {
             session()->flash('error', 'Proses approval proposal gagal!');
@@ -174,8 +175,14 @@ class Active extends Component
     {
         return view('livewire.surat-penawaran-harga.active', [
             'sphs' => SuratPenawaranHarga::with(['tender', 'user', 'document_approval_workflows'])
+                ->where('user_id', '=', auth()->user()->id)
                 ->whereDoesntHave('document_approval_workflows', function ($query) {
-                    $query->where('status', 1);
+                    $query->where('status', 1)
+                        ->whereColumn(
+                            'document_approval_workflow.id',
+                            '=',
+                            DB::raw('(SELECT MAX(id) FROM document_approval_workflow WHERE surat_penawaran_harga_id = surat_penawaran_hargas.id)')
+                        );
                 })
                 ->select('surat_penawaran_hargas.*')
                 ->orderBy('created_at', 'desc')
