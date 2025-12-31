@@ -28,12 +28,57 @@
             </div>
             <div>
                 <flux:heading size="lg" class="ml-4">Status Tender</flux:heading>
-                <flux:text size="md" class="ml-4 mt-2">{{ $tender->status }}</flux:text>
+                <flux:text size="md" class="ml-4 mt-2">{{ $tender->status }} </flux:text>
+            </div>
+            <div class="content-center ml-auto">
+                <flux:modal.trigger name="edit-status-tender">
+                    <flux:button variant="primary" color="yellow" icon="pencil" />
+                </flux:modal.trigger>
+
+                <flux:modal name="edit-status-tender" class="max-w-3xl">
+                    <form wire:submit.prevent="update_status_tender">
+                        <div class=" space-y-3">
+                            <flux:heading size="lg">Edit Status Tender</flux:heading>
+
+                            <flux:select wire:model.defer="status" placeholder="--Pilih Status--">
+                                <flux:select.option value="Gagal">Gagal</flux:select.option>
+                                <flux:select.option value="Berhasil">Berhasil</flux:select.option>
+                                <flux:select.option value="Dalam Proses">Dalam Proses</flux:select.option>
+
+                            </flux:select>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <flux:modal.trigger name="confirm-edit-status-tender">
+                                <flux:button variant="primary" color="emerald" class="w-full mt-10">
+                                    Simpan
+                                </flux:button>
+                            </flux:modal.trigger>
+
+                            <flux:modal name="confirm-edit-status-tender" class="min-w-[22rem]">
+                                <div class="space-y-6">
+                                    <div>
+                                        <flux:heading size="lg">Konfirmasi Perubahan Status Tender?</flux:heading>
+                                        <flux:text class="mt-2">
+                                            Anda akan mengubah status tender ini.<br>
+                                            Tindakan ini tidak dapat dibatalkan.
+                                        </flux:text>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <flux:spacer />
+                                        <flux:modal.close>
+                                            <flux:button variant="ghost">Batal</flux:button>
+                                        </flux:modal.close>
+                                        <flux:button type="submit" variant="danger">Ubah Status</flux:button>
+                                    </div>
+                                </div>
+                            </flux:modal>
+                        </div>
+                    </form>
+                </flux:modal>
             </div>
         </div>
-    </div>
-
-
+    </div>    
 
     <!-- Baris 2 -->
     <div class="flex gap-4 mt-6">
