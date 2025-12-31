@@ -30,6 +30,16 @@ class Tender extends Model
         return $this->hasOne(InternalMemo::class);
     }
 
+    public function getStatusTenderAttribute(): string
+    {
+        return match ($this->status) {
+            'Gagal' => 'Gagal',
+            'Berhasil' => 'Berhasil',
+            'Dalam Proses' => 'Dalam Proses',
+            default => 'Status Tidak Diketahui',
+        };
+    }
+
     public function getLevelPropoAttribute()
     {
         $latestWorkflow = $this->proposal?->document_approval_workflows()

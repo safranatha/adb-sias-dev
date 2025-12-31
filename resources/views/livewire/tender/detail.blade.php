@@ -32,7 +32,7 @@
             </div>
             <div class="content-center ml-auto">
                 <flux:modal.trigger name="edit-status-tender">
-                    <flux:button variant="primary" color="yellow" icon="pencil" />
+                    <flux:button variant="primary" color="yellow" icon="pencil" wire:click="editStatus({{ $tender->id }})"/>
                 </flux:modal.trigger>
 
                 <flux:modal name="edit-status-tender" class="max-w-3xl">
@@ -40,7 +40,7 @@
                         <div class=" space-y-3">
                             <flux:heading size="lg">Edit Status Tender</flux:heading>
 
-                            <flux:select wire:model.defer="status" placeholder="--Pilih Status--">
+                            <flux:select wire:model.live="status" placeholder="--Pilih Status--">
                                 <flux:select.option value="Gagal">Gagal</flux:select.option>
                                 <flux:select.option value="Berhasil">Berhasil</flux:select.option>
                                 <flux:select.option value="Dalam Proses">Dalam Proses</flux:select.option>
@@ -92,7 +92,12 @@
                     {{ $tender->proposal->keterangan ?? 'Sedang dalam pengerjaan' }}</flux:text>
             </div>
             <div class="content-center ml-auto">
-                @if (
+                @if($tender->status_tender == 'Gagal')
+                    <flux:button variant="danger" disabled icon="x-mark">Tender Gagal</flux:button>
+                @elseif ($tender->status_tender == 'Berhasil')
+                    <flux:button variant="primary" color="emerald" icon="arrow-down-tray"
+                        wire:click="get_data_proposal({{ $tender->id }})">Proposal Final</flux:button>
+                @elseif (
                     $tender->level_propo == 'Proposal ditolak oleh Direktur' ||
                         $tender->level_propo == 'Proposal telah disetujui Manajer Teknik')
                     <flux:button variant="primary" color="emerald" icon="arrow-down-tray"
@@ -102,11 +107,22 @@
                 @endif
             </div>
         </div>
-        @if ($tender->level_propo == 'Proposal telah disetujui Direktur')
+        @if($tender->status_tender == 'Gagal')
+            <div class="color-white bg-red-500 p-5 rounded-lg shadow-md flex">
+                <flux:icon name="x-circle" class="text-red-50 size-12" />
+                <flux:text size="md" class="ml-4 mt-2 text-accent-content">Tender Gagal</flux:text>
+            </div>
+        @elseif($tender->status_tender == 'Berhasil')
+            <div class="color-white bg-green-500 p-5 rounded-lg shadow-md flex">
+                <flux:icon name="check-circle" class="text-amber-50 size-12" />
+                <flux:text size="md" class="ml-4 mt-2 text-amber-50">Tender Berhasil</flux:text>
+            </div>
+        @elseif ($tender->level_propo == 'Proposal telah disetujui Direktur')
             <div class="color-white bg-green-200 p-5 rounded-lg shadow-md flex">
                 <flux:icon name="check-circle" class="text-green-50 size-12" />
                 <flux:text size="md" class="ml-4 mt-2">Sudah diperiksa</flux:text>
             </div>
+        
         @elseif($tender->level_propo == 'Proposal ditolak oleh Direktur')
             <div class="color-white bg-red-500 p-5 rounded-lg shadow-md flex">
                 <flux:icon name="x-circle" class="text-red-50 size-12" />
@@ -151,6 +167,8 @@
                     </flux:modal>
                 </div>
             </div>
+            
+        
         @else
             <div class="color-white bg-zinc-100 p-5 rounded-lg shadow-md flex">
                 <div class="content-center">
@@ -177,7 +195,12 @@
                     {{ $tender->surat_penawaran_harga->keterangan ?? 'Sedang dalam pengerjaan' }}</flux:text>
             </div>
             <div class="content-center ml-auto">
-                @if (
+                @if($tender->status_tender == 'Gagal')
+                    <flux:button variant="danger" disabled icon="x-mark">Tender Gagal</flux:button>
+                @elseif ($tender->status_tender == 'Berhasil')
+                    <flux:button variant="primary" color="emerald" icon="arrow-down-tray"
+                        wire:click="get_data_SPH({{ $tender->id }})">SPH Final</flux:button>
+                @elseif (
                     $tender->level_sph == 'SPH ditolak oleh Direktur' ||
                         $tender->level_sph == 'SPH telah disetujui Manajer Admin')
                     <flux:button variant="primary" color="emerald" icon="arrow-down-tray"
@@ -187,7 +210,17 @@
                 @endif
             </div>
         </div>
-        @if ($tender->level_sph == 'SPH telah disetujui Direktur')
+        @if($tender->status_tender == 'Gagal')
+            <div class="color-white bg-red-500 p-5 rounded-lg shadow-md flex">
+                <flux:icon name="x-circle" class="text-red-50 size-12" />
+                <flux:text size="md" class="ml-4 mt-2 text-accent-content">Tender Gagal</flux:text>
+            </div>
+        @elseif($tender->status_tender == 'Berhasil')
+            <div class="color-white bg-green-500 p-5 rounded-lg shadow-md flex">
+                <flux:icon name="check-circle" class="text-amber-50 size-12" />
+                <flux:text size="md" class="ml-4 mt-2 text-amber-50">Tender Berhasil</flux:text>
+            </div>
+        @elseif ($tender->level_sph == 'SPH telah disetujui Direktur')
             <div class="color-white bg-green-200 p-5 rounded-lg shadow-md flex">
                 <flux:icon name="check-circle" class="text-green-50 size-12" />
                 <flux:text size="md" class="ml-4 mt-2">Sudah diperiksa</flux:text>

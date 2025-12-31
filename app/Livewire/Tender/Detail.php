@@ -84,8 +84,16 @@ class Detail extends Component
 
     }
 
+    public function editStatus($id)
+    {
+    $tender = Tender::findOrFail($id);
+
+    $this->tender_id = $tender->id;
+    $this->status   = $tender->status; // ⬅️ INI KUNCI
+    }
+
     public function update_status_tender()
-{
+    {
     Tender::where('id', $this->tender_id)
         ->update([
             'status' => $this->status
@@ -97,6 +105,8 @@ class Detail extends Component
 
     $this->dispatch('modal-close', name: 'confirm-edit-status-tender');
     }
+
+    
 
     public function approve_proposal($id)
     {
