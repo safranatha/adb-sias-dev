@@ -63,8 +63,7 @@
                                 <td class="px-4 py-3">
                                     {{-- validate sph --}} {{-- button approve --}}
                                     <flux:modal.trigger name="approve-proposal">
-                                        <flux:button icon="check" class="mr-2"
-                                            variant="primary" color="green">
+                                        <flux:button icon="check" class="mr-2" variant="primary" color="green">
                                         </flux:button>
                                     </flux:modal.trigger>
 
@@ -82,7 +81,8 @@
                                                 <flux:modal.close>
                                                     <flux:button variant="ghost">Batal</flux:button>
                                                 </flux:modal.close>
-                                                <flux:button wire:click="approve({{ $item->proposal->id }})" variant="primary" color="emerald">Yakin</flux:button>
+                                                <flux:button wire:click="approve({{ $item->proposal->id }})"
+                                                    variant="primary" color="emerald">Yakin</flux:button>
                                             </div>
                                         </div>
                                     </flux:modal>
@@ -212,27 +212,20 @@
                                 @if ($item->status === 0 && $item->keterangan !== null)
                                     {{-- kondisi jika ada revisi --}}
                                     <flux:modal.trigger name="edit-proposal-{{ $item->id }}">
-                                    @if ($item->latestWorkflow?->waktu_pesan_dibaca === null)
-                                        {{-- BELUM DIBACA --}}
-                                        <flux:button
-                                            icon="envelope"
-                                            class="mr-2"
-                                            wire:click="edit({{ $item->id }})"
-                                            variant="primary"
-                                            color="red">
-                                            {{ $item->keterangan }}
-                                        </flux:button>
-                                    @else
-                                        {{-- SUDAH DIBACA --}}
-                                        <flux:button
-                                            icon="envelope-open"
-                                            class="mr-2"
-                                            wire:click="edit({{ $item->id }})"
-                                            variant="filled">
-                                            {{ $item->keterangan }}
-                                        </flux:button>
-                                    @endif
-                                </flux:modal.trigger>
+                                        @if ($item->latestWorkflow?->waktu_pesan_dibaca === null)
+                                            {{-- BELUM DIBACA --}}
+                                            <flux:button icon="envelope" class="mr-2"
+                                                wire:click="edit({{ $item->id }})" variant="primary" color="red">
+                                                {{ $item->keterangan }}
+                                            </flux:button>
+                                        @else
+                                            {{-- SUDAH DIBACA --}}
+                                            <flux:button icon="envelope-open" class="mr-2"
+                                                wire:click="edit({{ $item->id }})" variant="filled">
+                                                {{ $item->keterangan }}
+                                            </flux:button>
+                                        @endif
+                                    </flux:modal.trigger>
 
                                     {{-- modal form --}}
                                     <flux:modal name="edit-proposal-{{ $item->id }}">
