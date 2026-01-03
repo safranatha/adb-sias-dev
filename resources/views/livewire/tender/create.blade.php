@@ -32,7 +32,7 @@
             </div>
 
             <div class="flex gap-3 mt-5">
-                <flux:modal.trigger name="submit-tender">
+                <flux:modal.trigger name="submit-tender" wire:loading.attr="disabled">
                     <flux:button variant="primary" color="emerald" wire:loading.attr="disabled">Buat Tender</flux:button>
                 </flux:modal.trigger>
 
