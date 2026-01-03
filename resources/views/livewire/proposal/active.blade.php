@@ -262,7 +262,7 @@
                                             </flux:field>
                                             <flux:modal.trigger name="revisi-proposal">
                                                 <flux:button class="mt-6" variant="primary" color="emerald"
-                                                    wire:loading.attr="disabled">
+                                                    wire:loading.attr="disabled" wire:target="file_path_proposal">
                                                     Revisi
                                                 </flux:button>
                                             </flux:modal.trigger>

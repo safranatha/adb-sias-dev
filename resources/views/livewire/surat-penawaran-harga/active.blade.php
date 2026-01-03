@@ -243,7 +243,7 @@
 
                                                 <flux:modal.trigger name="revisi-sph">
                                                     <flux:button class="mt-6" variant="primary"
-                                                        color="emerald" wire:loading.attr="disabled">
+                                                        color="emerald" wire:loading.attr="disabled" wire:target="file_path_sph">
                                                         Revisi
                                                     </flux:button>
                                                 </flux:modal.trigger>
