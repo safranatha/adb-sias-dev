@@ -37,8 +37,6 @@ class Detail extends Component
                 Disposisi::where('form_tugas_id', '=', $id)->update(['waktu_disposisi_dibaca' => now(), 'status' => '1']);
             }
         }
-
-
     }
 
     public function updateStatus($id)
@@ -56,6 +54,6 @@ class Detail extends Component
     {
         return view('livewire.form-tugas.detail', [
             'formtugas' => FormTugas::find($this->form_tugas_id),
-        ]);
+        ])->title('Detail Form Tugas');
     }
 }
