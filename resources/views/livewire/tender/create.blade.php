@@ -18,16 +18,18 @@
 
             {{-- File Upload Field --}}
             <flux:field>
-                <flux:label class="mt-3">File Pra Kualifikasi</flux:label>
-                <flux:input type="file" wire:model="file_pra_kualifikasi" />
-                {{-- Loading indicator saat upload --}}
-                <div wire:loading wire:target="file_pra_kualifikasi" class="text-sm text-gray-500 mt-1">
-                    Uploading file...
-                </div>
-                @error('file_pra_kualifikasi')
-                    <span class="text-red-500 text-sm">{{ $message }}</span>
-                @enderror
-            </flux:field>
+            <div class="bg-white p-5 rounded-2xl shadow-2xs mt-3">
+                <flux:label>File Pra Kualifikasi</flux:label>
+                    <flux:input type="file" wire:model="file_pra_kualifikasi" />
+                    {{-- Loading indicator saat upload --}}
+                    <div wire:loading wire:target="file_pra_kualifikasi" class="text-sm text-gray-500">
+                        Uploading file...
+                    </div>
+                    @error('file_pra_kualifikasi')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </flux:field>
+            </div>
 
             <flux:spacer />
 
