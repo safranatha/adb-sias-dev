@@ -14,8 +14,8 @@
         @endif
 
         <div class="mb-5">
-            <flux:heading size="xl">Form Tugas Aktif</flux:heading>
-            <flux:text class="mt-2">Berikut merupakan Form Tugas Aktif yang telah diberikan kepada Anda
+            <flux:heading size="xl">Tugas Anda</flux:heading>
+            <flux:text class="mt-2">Berikut merupakan Form Tugas yang telah diberikan kepada Anda
             </flux:text>
         </div>
 
@@ -24,14 +24,15 @@
                 <thead class="bg-green-50 text-white">
                     <tr>
                         {{-- <th class="px-4 py-3 font-medium">Pembuat</th> --}}
+                        <th class="px-4 py-3 font-medium">Ditugaskan Oleh</th>
                         <th class="px-4 py-3 font-medium">Jenis Permintaan</th>
                         <th class="px-4 py-3 font-medium">Kegiatan</th>
                         {{-- <th class="px-4 py-3 font-medium">Keterangan</th> --}}
                         {{-- <th class="px-4 py-3 font-medium">Lingkup Kerja</th> --}}
-                        <th class="px-4 py-3 font-medium">Due Date</th>
+                        <th class="px-4 py-3 font-medium">Tenggat Waktu</th>
                         {{-- <th class="px-4 py-3 font-medium">File</th> --}}
                         <th class="px-4 py-3 font-medium">Penerima</th>
-                        {{-- <th class="px-4 py-3 font-medium">Status</th> --}}
+                        <th class="px-4 py-3 font-medium">Status</th>
                         {{-- <th class="px-4 py-3 font-medium">Waktu Dibaca</th> --}}
                         <th class="px-4 py-3 font-medium">Detail</th>
                     </tr>
@@ -46,6 +47,7 @@
                     @else
                         @foreach ($formtugas_penerima as $item)
                             <tr>
+                                <td class="px-4 py-3"> {{ $item->user->name }}</td>
                                 <td class="px-4 py-3">{{ $item->jenis_permintaan }}</td>
                                 <td class="px-4 py-3">{{ $item->kegiatan }}</td>
                                 {{-- <td class="px-4 py-3"> {{ $item->keterangan }}</td> --}}
@@ -61,15 +63,21 @@
 
                                     </td> --}}
                                 <td class="px-4 py-3"> {{ $item->penerima }}</td>
-                                {{-- <td class="px-4 py-3">
+                                <td class="px-4 py-3">
                                     @if ($item->status === '0')
-                                        Belum dibaca penerima
+                                        <div class="mx-auto bg-red-500 text-white text-s px-2 py-1 rounded-md w-fit">
+                                            Belum Anda Baca
+                                        </div>
                                     @elseif ($item->status === '1')
-                                        Sedang dalam pengerjaan
+                                        <div class="mx-auto bg-yellow-500 text-black text-s px-2 py-1 rounded-md w-fit">
+                                            Sudah Anda Baca | Dikerjakan
+                                        </div>
                                     @elseif($item->status === '2')
-                                        Tugas telah selesai dikerjakan
+                                        <div class="mx-auto bg-green-500 text-white text-s px-2 py-1 rounded-md w-fit">
+                                            Tugas Telah Anda Kerjakan
+                                        </div>
                                     @endif
-                                </td> --}}
+                                </td>
                                 {{-- <td class="px-4 py-3">
                                     @if ($item->waktu_dibaca === null)
                                         Belum dibaca penerima
