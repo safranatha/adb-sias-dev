@@ -31,11 +31,9 @@
                 </flux:field>
             </div>
 
-            <flux:spacer />
-
-            <div class="flex gap-3 mt-6">
+            <div class="flex gap-3 mt-5">
                 <flux:modal.trigger name="submit-tender">
-                    <flux:button variant="primary" color="emerald">Buat</flux:button>
+                    <flux:button variant="primary" color="emerald" wire:loading.attr="disabled">Buat Tender</flux:button>
                 </flux:modal.trigger>
 
                 <flux:modal name="submit-tender" class="min-w-[22rem]">
