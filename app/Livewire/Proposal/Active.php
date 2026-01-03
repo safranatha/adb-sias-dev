@@ -10,6 +10,7 @@ use App\Models\Tender;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 
 class Active extends Component
@@ -177,8 +178,14 @@ class Active extends Component
         return view('livewire.proposal.active', [
             //mengambil data proposal yang aktif, dinilai dari status proposal, diambil yang bukan 1D 
             'proposals_active' => Proposal::with(['tender', 'user', 'document_approval_workflows'])
+                ->where('user_id', '=', auth()->user()->id)
                 ->whereDoesntHave('document_approval_workflows', function ($query) {
-                    $query->where('status', 1);
+                    $query->where('status', 1)
+                        ->whereColumn(
+                            'document_approval_workflow.id',
+                            '=',
+                            DB::raw('(SELECT MAX(id) FROM document_approval_workflow WHERE proposal_id = proposals.id)')
+                        );
                 })
                 ->select('proposals.*')
                 ->orderBy('created_at', 'desc')
