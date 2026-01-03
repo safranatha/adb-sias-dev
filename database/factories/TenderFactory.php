@@ -28,6 +28,7 @@ class TenderFactory extends Factory
             ),
             'nama_klien' => fake()->name(),
             'status' => fake()->randomElement(['Gagal', 'Berhasil', 'Dalam Proses']),
+            'file_pra_kualifikasi' => fake()->imageUrl(),
         ];
     }
 }
