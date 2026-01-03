@@ -73,12 +73,7 @@
                                         </div>
                                     </flux:modal>
 
-                                <td class="px-4 py-3">
-                                    <flux:button icon="arrow-down-tray" class="mr-2"
-                                        wire:click="download({{ $item->id }})"></flux:button>
-                                </td>
-
-                                <flux:modal name="confirm-update-{{ $item->id }}" class="min-w-[22rem]">
+                                    <flux:modal name="confirm-update-{{ $item->id }}" class="min-w-[22rem]">
                                     <form wire:submit.prevent="update">
                                         <div class="space-y-6 text-left">
 
@@ -103,10 +98,14 @@
                                                     Yakin
                                                 </flux:button>
                                             </div>
-
                                         </div>
                                     </form>
                                 </flux:modal>
+
+                                <td class="px-4 py-3">
+                                    <flux:button icon="arrow-down-tray" class="mr-2"
+                                        wire:click="download({{ $item->id }})"></flux:button>
+                                </td>
 
                                 </td>
                                 <td class="px-4 py-3">
