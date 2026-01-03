@@ -160,7 +160,7 @@
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                             </flux:field>
-                            <flux:button type="submit" class="mt-6 w-full" variant="danger" wire:loading.attr="disabled">
+                            <flux:button type="submit" class="mt-6 w-full" variant="danger" wire:loading.attr="disabled" wire:target="file_path_revisi">
                                 Tolak
                             </flux:button>
                         </form>
@@ -263,7 +263,7 @@
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                             </flux:field>
-                            <flux:button type="submit" class="mt-6 w-full" variant="danger" wire:loading.attr="disabled">
+                            <flux:button type="submit" class="mt-6 w-full" variant="danger" wire:loading.attr="disabled" wire:target="file_path_revisi">
                                 Tolak
                             </flux:button>
                         </form>
