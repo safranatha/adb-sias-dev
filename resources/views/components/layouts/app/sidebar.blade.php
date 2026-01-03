@@ -25,7 +25,7 @@
 
         @if (auth()->user()->hasRole('Super Admin'))
             <flux:navlist variant="outline">
-                <flux:navlist.group expandable :expanded="false" class="text-white">
+                <flux:navlist.group expandable :expanded="true" class="text-white">
                     <x-slot:heading>
                         <span class="text-white! font-medium">User Management</span>
                     </x-slot:heading>
@@ -44,7 +44,7 @@
 
         @can('view tender')
             <flux:navlist variant="outline">
-                <flux:navlist.group expandable :expanded="false" class="text-white">
+                <flux:navlist.group expandable :expanded="true" class="text-white">
                     <x-slot:heading>
                         <span class="text-white! font-medium">Tender</span>
                     </x-slot:heading>
@@ -66,7 +66,7 @@
 
         @can('view proposal')
             <flux:navlist variant="outline">
-                <flux:navlist.group expandable :expanded="false" class="text-white">
+                <flux:navlist.group expandable :expanded="true" class="text-white">
                     <x-slot:heading>
                         <span class="text-white! font-medium">Proposal</span>
                     </x-slot:heading>
@@ -96,7 +96,7 @@
 
         @can('view surat penawaran harga')
             <flux:navlist variant="outline">
-                <flux:navlist.group expandable :expanded="false" class="text-white">
+                <flux:navlist.group expandable :expanded="true" class="text-white">
                     <x-slot:heading>
                         <span class="text-white! font-medium">Surat Penawaran Harga</span>
                     </x-slot:heading>
@@ -121,7 +121,7 @@
 
 
         <flux:navlist variant="outline">
-            <flux:navlist.group expandable :expanded="false" class="text-white">
+            <flux:navlist.group expandable :expanded="true" class="text-white">
                 <x-slot:heading>
                     <span class="text-white! font-medium">Form Tugas</span>
                 </x-slot:heading>

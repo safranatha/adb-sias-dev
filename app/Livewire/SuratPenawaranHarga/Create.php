@@ -65,7 +65,7 @@ class Create extends Component
 
         $this->resetForm();
 
-        return redirect()->route('surat-penawaran-harga.index');
+        return redirect()->route('surat-penawaran-harga.active');
     }
 
     public function render()

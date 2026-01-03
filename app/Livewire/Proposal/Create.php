@@ -62,7 +62,7 @@ class Create extends Component
         $this->dispatch('modal-closed', id: 'store');
         $this->resetForm();
 
-        return redirect()->route('proposal.index');
+        return redirect()->route('proposal.active');
     }
 
     public function render()
