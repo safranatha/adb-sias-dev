@@ -99,7 +99,7 @@
                         wire:click="get_data_proposal({{ $tender->id }})">Proposal Final</flux:button>
                 @elseif (
                     $tender->level_propo == 'Proposal ditolak oleh Direktur' ||
-                        $tender->level_propo == 'Proposal telah disetujui Manajer Teknik')
+                        $tender->level_propo == 'Proposal telah disetujui Manajer Teknik' || $tender->level_propo == 'Proposal telah disetujui Direktur')
                     <flux:button variant="primary" color="emerald" icon="arrow-down-tray"
                         wire:click="get_data_proposal({{ $tender->id }})"></flux:button>
                 @else
@@ -160,7 +160,7 @@
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                             </flux:field>
-                            <flux:button type="submit" class="mt-6 w-full" variant="danger">
+                            <flux:button type="submit" class="mt-6 w-full" variant="danger" wire:loading.attr="disabled">
                                 Tolak
                             </flux:button>
                         </form>
@@ -202,7 +202,7 @@
                         wire:click="get_data_SPH({{ $tender->id }})">SPH Final</flux:button>
                 @elseif (
                     $tender->level_sph == 'SPH ditolak oleh Direktur' ||
-                        $tender->level_sph == 'SPH telah disetujui Manajer Admin')
+                        $tender->level_sph == 'SPH telah disetujui Manajer Admin' || $tender->level_sph == 'SPH telah disetujui Direktur')
                     <flux:button variant="primary" color="emerald" icon="arrow-down-tray"
                         wire:click="get_data_SPH({{ $tender->id }})"></flux:button>
                 @else
@@ -263,7 +263,7 @@
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                             </flux:field>
-                            <flux:button type="submit" class="mt-6 w-full" variant="danger">
+                            <flux:button type="submit" class="mt-6 w-full" variant="danger" wire:loading.attr="disabled">
                                 Tolak
                             </flux:button>
                         </form>
