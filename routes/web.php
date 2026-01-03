@@ -7,8 +7,6 @@ use App\Livewire\Proposal\Detail as ProposalDetail;
 use App\Livewire\Tender\Index as TenderIndex;
 use App\Livewire\Tender\Detail as TenderDetail;
 use App\Livewire\Tender\Create as TenderCreate;
-use App\Livewire\InternalMemo\Index as InternalMemoIndex;
-use App\Livewire\InternalMemo\Create as InternalMemoCreate;
 use App\Livewire\FormTugas\Index as FormTugasIndex;
 use App\Livewire\FormTugas\Create as FormTugasCreate;
 use App\Livewire\FormTugas\Penerima as FormTugasPenerima;
