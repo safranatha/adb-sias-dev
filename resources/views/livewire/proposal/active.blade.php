@@ -253,22 +253,39 @@
                                             </flux:field>
 
                                             <flux:field>
+                                                <flux:label class="mt-3">Upload Proposal Revisi</flux:label>
                                                 {{-- <flux:label class="mt-3">File Proposal</flux:label> --}}
-
-                                                @if ($file_path_proposal)
-                                                    <p class="text-sm mt-3">
-                                                        File saat ini: {{ basename($file_path_proposal) }}
-                                                    </p>
-                                                @endif
                                                 <flux:input type="file" wire:model="file_path_proposal" />
                                                 @error('file_path_proposal')
                                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                                 @enderror
                                             </flux:field>
+                                            <flux:modal.trigger name="revisi-proposal">
+                                                <flux:button class="mt-6" variant="primary" color="emerald"
+                                                    wire:loading.attr="disabled">
+                                                    Revisi
+                                                </flux:button>
+                                            </flux:modal.trigger>
 
-                                            <flux:button type="submit" class="mt-6" variant="primary">
-                                                Update
-                                            </flux:button>
+                                            <flux:modal name="revisi-proposal" class="min-w-[22rem] text-left">
+                                                <div class="space-y-6">
+                                                    <div>
+                                                        <flux:heading size="lg">Revisi Proposal?</flux:heading>
+                                                        <flux:text class="mt-2">
+                                                            Anda akan merevisi proposal tersebut.<br>
+                                                            Proposal yang sudah direvisi akan diberikan ke Manajer Teknik.
+                                                        </flux:text>
+                                                    </div>
+                                                    <div class="flex gap-2">
+                                                        <flux:spacer />
+                                                        <flux:modal.close>
+                                                            <flux:button variant="ghost">Batal</flux:button>
+                                                        </flux:modal.close>
+                                                        <flux:button type="submit" variant="primary" color="emerald">
+                                                            Yakin</flux:button>
+                                                    </div>
+                                                </div>
+                                            </flux:modal>
                                         </form>
                                     </flux:modal>
                                 @else
