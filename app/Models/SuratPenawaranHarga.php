@@ -56,6 +56,20 @@ class SuratPenawaranHarga extends Model
             ->latest()
             ->value('keterangan'); // langsung ambil status, tidak butuh first()
     }
+
+    public function getValidatorAttribute()
+    {
+        $user = $this->document_approval_workflows()
+            ->latest()
+            ->first();
+
+        if ($user) {
+            return $user->user->getRoleNames()->implode(', ');
+        }
+
+        return null;
+    }
+    
     public function latestWorkflow()
     {
         return $this->hasOne(DocumentApprovalWorkflow::class)
