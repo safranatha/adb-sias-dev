@@ -32,6 +32,7 @@
                     backgroundColor: [
                         '#B31919',
                         '#C97E04',
+                        '#050A55',
                         '#057A55',         
                     ],
                     borderWidth: 2
