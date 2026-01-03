@@ -33,7 +33,7 @@
                         <th class="px-4 py-3 font-medium">File Surat Penawaran Harga</th>
                         <th class="px-4 py-3 font-medium">Dibuat Oleh</th>
                         <th class="px-4 py-3 font-medium">Validate</th>
-                        <!-- <th class="px-4 py-3 font-medium">Validator</th> -->
+                        <th class="px-4 py-3 font-medium">Validator</th>
                         <th class="px-4 py-3 font-medium">Riwayat Status</th>
                     </tr>
                 </thead>
@@ -80,11 +80,10 @@
                                     </td>
                                 @endif
 
-
                                 {{-- validator --}}
-                                <!-- <td class="px-4 py-3">
-                                    {{ $item->user->name }}
-                                </td> -->
+                                <td class="px-4 py-3">
+                                    {{ $item->validator }}
+                                </td>
 
                                 <!-- {{-- status Surat Penawaran Harga --}}
                                 <td class="px-4 py-3">
