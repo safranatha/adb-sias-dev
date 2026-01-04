@@ -242,31 +242,33 @@
                                                 </flux:field>
 
                                                 <flux:modal.trigger name="revisi-sph">
-                                                    <flux:button class="mt-6" variant="primary"
-                                                        color="emerald" wire:loading.attr="disabled" wire:target="file_path_sph">
+                                                    <flux:button class="mt-6" variant="primary" color="emerald"
+                                                        wire:loading.attr="disabled" wire:target="file_path_sph">
                                                         Revisi
                                                     </flux:button>
                                                 </flux:modal.trigger>
 
                                                 <flux:modal name="revisi-sph" class="min-w-[22rem] text-left">
-                                                <div class="space-y-6">
-                                                    <div>
-                                                        <flux:heading size="lg">Revisi SPH?</flux:heading>
-                                                        <flux:text class="mt-2">
-                                                            Anda akan merevisi surat penawaran harga tersebut.<br>
-                                                            Surat penawaran harga yang sudah direvisi akan diberikan ke Manajer Teknik.
-                                                        </flux:text>
+                                                    <div class="space-y-6">
+                                                        <div>
+                                                            <flux:heading size="lg">Revisi SPH?</flux:heading>
+                                                            <flux:text class="mt-2">
+                                                                Anda akan merevisi surat penawaran harga tersebut.<br>
+                                                                Surat penawaran harga yang sudah direvisi akan diberikan ke
+                                                                Manajer Teknik.
+                                                            </flux:text>
+                                                        </div>
+                                                        <div class="flex gap-2">
+                                                            <flux:spacer />
+                                                            <flux:modal.close>
+                                                                <flux:button variant="ghost">Batal</flux:button>
+                                                            </flux:modal.close>
+                                                            <flux:button type="submit" variant="primary"
+                                                                color="emerald">
+                                                                Yakin</flux:button>
+                                                        </div>
                                                     </div>
-                                                    <div class="flex gap-2">
-                                                        <flux:spacer />
-                                                        <flux:modal.close>
-                                                            <flux:button variant="ghost">Batal</flux:button>
-                                                        </flux:modal.close>
-                                                        <flux:button type="submit" variant="primary" color="emerald">
-                                                            Yakin</flux:button>
-                                                    </div>
-                                                </div>
-                                            </flux:modal>
+                                                </flux:modal>
                                             </form>
                                         </flux:modal>
                                     @else
