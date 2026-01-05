@@ -1,13 +1,13 @@
 <?php
-namespace App\Helpers;
+namespace App\Services\Tender;
 
 use App\Models\Proposal;
 use App\Models\SuratPenawaranHarga;
 use Illuminate\Database\Eloquent\Model;
 
-class ApprovalTenderDocHelperDirektur
+class ApprovalTenderDocServiceDirektur
 {
-    public static function rejectDocumentProposal(
+    public function rejectDocumentProposal(
         string $modelClass,
         int $id,
         string $nama_role,
@@ -29,7 +29,7 @@ class ApprovalTenderDocHelperDirektur
         ]);
     }
 
-    public static function approveDocumentProposal(
+    public function approveDocumentProposal(
         string $modelClass,
         int $id,
         string $nama_role
@@ -47,7 +47,7 @@ class ApprovalTenderDocHelperDirektur
         ]);
     }
 
-    public static function rejectDocumentSPH(
+    public function rejectDocumentSPH(
         string $modelClass,
         int $id,
         string $nama_role,
@@ -69,7 +69,7 @@ class ApprovalTenderDocHelperDirektur
         ]);
     }
 
-    public static function approveDocumentSPH(
+    public function approveDocumentSPH(
         string $modelClass,
         int $id,
         string $nama_role
