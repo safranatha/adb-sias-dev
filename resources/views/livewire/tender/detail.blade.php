@@ -162,8 +162,8 @@
                                 @enderror
                             </flux:field>
                             <flux:modal.trigger name="reject-proposal-confirmation">
-                                <flux:button class="mt-6 w-full" variant="danger"
-                                    wire:loading.attr="disabled" wire:target="file_path_revisi">
+                                <flux:button class="mt-6 w-full" variant="danger" wire:loading.attr="disabled"
+                                    wire:target="file_path_revisi">
                                     Tolak
                                 </flux:button>
                             </flux:modal.trigger>
