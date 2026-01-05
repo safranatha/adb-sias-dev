@@ -48,8 +48,9 @@
                 </div>
             </div>
             <div class="flex items-center">
-                <flux:button icon="magnifying-glass" variant="primary" color="emerald">
-                    Detail Tender
+                {{-- Belum disesuaikan route dengan ID --}}
+                <flux:button icon="magnifying-glass" variant="primary" color="emerald" href="{{ route('tracking-document.detail') }}">
+                    Detail Tracking
                 </flux:button>
             </div>
         </div>
