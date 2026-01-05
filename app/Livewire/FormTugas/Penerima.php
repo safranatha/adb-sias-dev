@@ -14,6 +14,6 @@ class Penerima extends Component
                 $q->where('penerima_id', auth()->user()->id);
             })->get(),
 
-        ]);
+        ])->title('Tugas Anda');
     }
 }

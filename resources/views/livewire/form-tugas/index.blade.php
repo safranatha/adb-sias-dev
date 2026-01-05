@@ -15,12 +15,13 @@
         @endif
 
         <div class="mb-5">
-            <flux:heading size="xl">History Pemberian Form Tugas</flux:heading>
             @if (auth()->user()->hasRole(['Direktur', 'Asisten Direktur']))
-                <flux:text class="mt-2">Berikut merupakan History Form Tugas yang telah diberikan kepada Manager
+                <flux:heading size="xl">Tugas Manajer</flux:heading>
+                <flux:text class="mt-2">Berikut merupakan Form Tugas yang telah diberikan kepada Manager
                 </flux:text>
             @elseif(auth()->user()->hasRole(['Manajer Teknik', 'Manajer Admin']))
-                <flux:text class="mt-2">Berikut merupakan History Form Tugas yang telah diberikan kepada para Staff
+                <flux:heading size="xl">Tugas Staff</flux:heading>
+                <flux:text class="mt-2">Berikut merupakan Form Tugas yang telah diberikan kepada para Staff
                 </flux:text>
             @endif
         </div>
@@ -34,7 +35,7 @@
                         <th class="px-4 py-3 font-medium">Kegiatan</th>
                         {{-- <th class="px-4 py-3 font-medium">Keterangan</th> --}}
                         {{-- <th class="px-4 py-3 font-medium">Lingkup Kerja</th> --}}
-                        <th class="px-4 py-3 font-medium">Due Date</th>
+                        <th class="px-4 py-3 font-medium">Tenggat Waktu</th>
                         {{-- <th class="px-4 py-3 font-medium">File</th> --}}
                         <th class="px-4 py-3 font-medium">Penerima</th>
                         <th class="px-4 py-3 font-medium">Status</th>
@@ -68,15 +69,22 @@
 
                                     </td> --}}
                                     <td class="px-4 py-3"> {{ $item->penerima }}</td>
-                                    <td class="px-4 py-3">
+                                    <td class="px-4 py-3 text-center align-middle">
                                         @if ($item->status === '0')
-                                            Belum dibaca penerima
+                                            <div class="mx-auto bg-red-100 text-red-800 w-fit p-1 rounded">
+                                                Belum dibaca penerima
+                                            </div>
                                         @elseif ($item->status === '1')
-                                            Sedang dalam pengerjaan
-                                        @elseif($item->status === '2')
-                                            Tugas telah selesai dikerjakan
+                                            <div class="mx-auto bg-yellow-100 text-yellow-800 w-fit p-1 rounded">
+                                                Sedang dalam pengerjaan
+                                            </div>
+                                        @elseif ($item->status === '2')
+                                            <div class="mx-auto bg-green-100 text-green-800 w-fit p-1 rounded">
+                                                Tugas telah selesai dikerjakan
+                                            </div>
                                         @endif
                                     </td>
+
                                     <td class="px-4 py-3">
                                         @if ($item->waktu_dibaca === null)
                                             Belum dibaca penerima
@@ -124,13 +132,19 @@
 
                                     </td> --}}
                                     <td class="px-4 py-3"> {{ $item->penerima }}</td>
-                                    <td class="px-4 py-3">
+                                    <td class="px-4 py-3 text-center align-middle">
                                         @if ($item->status === '0')
-                                            Belum dibaca penerima
+                                            <div class="mx-auto bg-red-100 text-red-800 w-fit p-1 rounded">
+                                                Belum dibaca penerima
+                                            </div>
                                         @elseif ($item->status === '1')
-                                            Sedang dalam pengerjaan
-                                        @elseif($item->status === '2')
-                                            Tugas telah selesai dikerjakan
+                                            <div class="mx-auto bg-yellow-100 text-yellow-800 w-fit p-1 rounded">
+                                                Sedang dalam pengerjaan
+                                            </div>
+                                        @elseif ($item->status === '2')
+                                            <div class="mx-auto bg-green-100 text-green-800 w-fit p-1 rounded">
+                                                Tugas telah selesai dikerjakan
+                                            </div>
                                         @endif
                                     </td>
                                     <td class="px-4 py-3">
@@ -179,13 +193,19 @@
 
                                     </td> --}}
                                     <td class="px-4 py-3"> {{ $item->penerima }}</td>
-                                    <td class="px-4 py-3">
+                                    <td class="px-4 py-3 text-center align-middle">
                                         @if ($item->status === '0')
-                                            Belum dibaca penerima
+                                            <div class="mx-auto bg-red-100 text-red-800 w-fit p-1 rounded">
+                                                Belum dibaca penerima
+                                            </div>
                                         @elseif ($item->status === '1')
-                                            Sedang dalam pengerjaan
-                                        @elseif($item->status === '2')
-                                            Tugas telah selesai dikerjakan
+                                            <div class="mx-auto bg-yellow-100 text-yellow-800 w-fit p-1 rounded">
+                                                Sedang dalam pengerjaan
+                                            </div>
+                                        @elseif ($item->status === '2')
+                                            <div class="mx-auto bg-green-100 text-green-800 w-fit p-1 rounded">
+                                                Tugas telah selesai dikerjakan
+                                            </div>
                                         @endif
                                     </td>
                                     <td class="px-4 py-3">

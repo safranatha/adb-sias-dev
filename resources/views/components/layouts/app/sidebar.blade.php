@@ -85,7 +85,7 @@
                         </flux:navlist.item>
                     @endif
 
-                    <flux:navlist.item icon="clock" :href="route('proposal.index')"
+                    <flux:navlist.item icon="user-circle" :href="route('proposal.index')"
                         :current="request()->routeIs('proposal.index')" wire:navigate class="mt-2">
                         {{ __('Riwayat Proposal') }}
                     </flux:navlist.item>
@@ -110,7 +110,7 @@
                         :current="request()->routeIs('surat-penawaran-harga.active')" wire:navigate class="mt-2">
                         {{ __('Daftar SPH Aktif') }}
                     </flux:navlist.item>
-                    <flux:navlist.item icon="clock" :href="route('surat-penawaran-harga.index')"
+                    <flux:navlist.item icon="user-circle" :href="route('surat-penawaran-harga.index')"
                         :current="request()->routeIs('surat-penawaran-harga.index')" wire:navigate class="mt-2">
                         {{ __('Riwayat SPH') }}
                     </flux:navlist.item>
@@ -131,17 +131,24 @@
                         :current="request()->routeIs('form-tugas.create')" wire:navigate class="mt-2">
                         {{ __('Buat Form Tugas') }}
                     </flux:navlist.item>
-
-                    <flux:navlist.item icon="document-minus" :href="route('form-tugas.index')"
+                
+                    @if (!auth()->user()->hasrole(['Direktur', 'Asisten Direktur']))
+                    <flux:navlist.item icon="user-circle" :href="route('form-tugas.index')"
                         :current="request()->routeIs('form-tugas.index')" wire:navigate class="mt-2">
-                        {{ __('Riwayat Form Tugas') }}
+                        {{ __('Tugas Staff') }}
                     </flux:navlist.item>
+                    @else
+                    <flux:navlist.item icon="user-circle" :href="route('form-tugas.index')"
+                        :current="request()->routeIs('form-tugas.index')" wire:navigate class="mt-2">
+                        {{ __('Tugas Manajer') }}
+                    </flux:navlist.item>
+                    @endif
                 @endcan
 
-                @if(!auth()->user()->hasrole(['Direktur', 'Asisten Direktur']))
-                    <flux:navlist.item icon="document-minus" :href="route('form-tugas.active')"
+                @if (!auth()->user()->hasrole(['Direktur', 'Asisten Direktur']))
+                    <flux:navlist.item icon="inbox-arrow-down" :href="route('form-tugas.active')"
                         :current="request()->routeIs('form-tugas.active')" wire:navigate class="mt-2">
-                        {{ __('Form Tugas Aktif') }}
+                        {{ __('Tugas Anda') }}
                     </flux:navlist.item>
                 @endif
 

@@ -8,6 +8,6 @@ class Index extends Component
 {
     public function render()
     {
-        return view('livewire.tracking-document.index');
+        return view('livewire.tracking-document.index')->title('Tracking Document');
     }
 }

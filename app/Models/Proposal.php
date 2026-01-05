@@ -66,7 +66,7 @@ class Proposal extends Model
             ->first();
 
         if ($user) {
-            return $user->user->name;
+            return $user->user->getRoleNames()->implode(', ');
         }
 
         return null;

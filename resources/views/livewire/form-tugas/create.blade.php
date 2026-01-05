@@ -73,7 +73,7 @@
 
                 <div class="col-span-1">
                     {{-- due date Field --}}
-                    <flux:label class="mt-3">Due Date</flux:label>
+                    <flux:label class="mt-3">Tenggat Waktu</flux:label>
                     <flux:input type="date" max="2999-12-31" wire:model="due_date" />
                     @error('lingkup_kerja')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -109,10 +109,31 @@
         <flux:spacer />
 
         <div class="flex gap-3 mt-6">
-            <flux:button type="submit" variant="primary" color="emerald" wire:loading.attr="disabled"
-                wire:target="file_path_form_tugas">
-                Buat Form Tugas
-            </flux:button>
+            <flux:modal.trigger name="submit-form-tugas">
+                <flux:button variant="primary" color="emerald" wire:loading.attr="disabled"
+                    wire:target="file_path_form_tugas">
+                    Buat Form Tugas
+                </flux:button>
+            </flux:modal.trigger>
+
+            <flux:modal name="submit-form-tugas" class="min-w-[22rem]">
+                <div class="space-y-6">
+                    <div>
+                        <flux:heading size="lg">Buat Form Tugas?</flux:heading>
+                        <flux:text class="mt-2">
+                            Anda akan membuat Form Tugas tersebut.<br>
+                            Form Tugas yang sudah dibuat tidak dapat dihapus.
+                        </flux:text>
+                    </div>
+                    <div class="flex gap-2">
+                        <flux:spacer />
+                        <flux:modal.close>
+                            <flux:button variant="ghost">Batal</flux:button>
+                        </flux:modal.close>
+                        <flux:button type="submit" variant="primary" color="emerald">Yakin</flux:button>
+                    </div>
+                </div>
+            </flux:modal>
 
             <flux:button variant="ghost" href="{{ route('form-tugas.index') }}">
                 Batal

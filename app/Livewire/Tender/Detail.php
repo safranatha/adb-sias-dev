@@ -143,6 +143,7 @@ class Detail extends Component
             return;
         }
 
+        $this->reset(['pesan_revisi', 'file_path_revisi']);
 
         session()->flash('success', 'Proposal berhasil di tolak!');
     }
@@ -183,6 +184,8 @@ class Detail extends Component
             session()->flash('error', 'Proses approval proposal gagal!');
             return;
         }
+
+        $this->reset(['pesan_revisi', 'file_path_revisi']);
 
         session()->flash('success', 'Surat Penawaran Harga berhasil di tolak!');
     }
