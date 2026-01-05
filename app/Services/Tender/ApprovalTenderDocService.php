@@ -1,12 +1,12 @@
 <?php
-namespace App\Helpers;
+namespace App\Services\Tender;
 
 use Illuminate\Database\Eloquent\Model;
 
 
-class ApprovalTenderDocHelper
+class ApprovalTenderDocService
 {
-    public static function rejectDocumentProposal(
+    public function rejectDocumentProposal(
         string $modelClass,
         int $id,
         string $nama_role,
@@ -35,7 +35,7 @@ class ApprovalTenderDocHelper
         return $documentApproval;
     }
 
-    public static function approveDocumentProposal(
+    public function approveDocumentProposal(
         string $modelClass,
         int $id,
         string $nama_role
@@ -56,7 +56,7 @@ class ApprovalTenderDocHelper
         return $documentApproval;
     }
 
-    public static function rejectDocumentSPH(
+    public function rejectDocumentSPH(
         string $modelClass,
         int $id,
         string $nama_role,
@@ -79,7 +79,7 @@ class ApprovalTenderDocHelper
         return $documentApproval;
     }
 
-    public static function approveDocumentSPH(
+    public function approveDocumentSPH(
         string $modelClass,
         int $id,
         string $nama_role
