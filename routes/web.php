@@ -16,6 +16,7 @@ use App\Livewire\SuratPenawaranHarga\Create as SuratPenawaranHargaCreate;
 use App\Livewire\SuratPenawaranHarga\Active as SuratPenawaranHargaActive;
 use App\Livewire\SuratPenawaranHarga\Detail as SuratPenawaranHargaDetail;
 use App\Livewire\TrackingDocument\Index as TrackingDocumentIndex;
+use App\Livewire\TrackingDocument\Detail as TrackingDetail;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -114,8 +115,12 @@ Route::get('/form-tugas-active',FormTugasPenerima::class)->middleware(['auth'])-
 
 // form tugas detail
 Route::get('/form-tugas/{id}',FormTugasDetail::class)->middleware(['auth'])->name('form-tugas.detail');
+
 // tracking document
 Route::get('/tracking-document',TrackingDocumentIndex::class)->middleware(['auth'])->name('tracking-document.index');
+
+// tracking document detail
+Route::get('/tracking-document/detail',TrackingDetail::class)->middleware(['auth'])->name('tracking-document.detail');
 
 // ⚠️⚠️🔴🔴FORTIFY AUTH DO NOT CHANGE ⚠️⚠️🔴🔴
 Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
