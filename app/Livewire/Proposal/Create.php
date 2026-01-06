@@ -8,6 +8,7 @@ use App\Models\Proposal;
 use App\Models\Tender;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Services\apiWa\ApiWa;
 use Livewire\Attributes\Title;
 
 class Create extends Component
@@ -23,6 +24,13 @@ class Create extends Component
         'nama_proposal' => ['required', 'string', 'max:255'],
         'file_path_proposal' => ['required', 'file', 'mimes:pdf', 'max:10240'],
     ];
+
+    protected ApiWa $apiWa;
+
+    public function boot(ApiWa $apiWa)
+    {
+        $this->apiWa = $apiWa;
+    }
 
     public function mount()
     {
@@ -57,10 +65,16 @@ class Create extends Component
             'keterangan' => "Proposal belum diperiksa oleh Manajer Teknik",
             'level' => 0,
         ]);
-
+        
+        // send wa to manajer teknik
+        // 0895396706912
+        // 085967061693
+        $this->apiWa->Kirimfonnte('62895396706912', 'Proposal dengan nama ' . $proposal->nama_proposal . ' telah diupload, silahkan diperiksa!');
+        
         session()->flash('success', 'Proposal berhasil diupload!');
         $this->dispatch('modal-closed', id: 'store');
         $this->resetForm();
+
 
         return redirect()->route('proposal.active');
     }
