@@ -9,24 +9,30 @@
 
         </div>
         <div class="grid auto-rows-min gap-4 md:grid-cols-2">
-            @can('create tender')
+            @if (auth()->user()->hasRole('Direktur'))
                 <div
                     class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
                     <livewire:dashboard.chart />
                 </div>
-            @endcan
-            @can('validate proposal')
                 <div
                     class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
                     <livewire:dashboard.ChartProposal />
                 </div>
-            @endcan
-            @can('validate surat penawaran harga')
-            <div
-                class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <livewire:dashboard.ChartSph />
-            </div>
-            @endcan
+                <div
+                    class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+                    <livewire:dashboard.ChartSph />
+                </div>
+            @elseif (auth()->user()->hasRole('Manajer Teknik'))
+                <div
+                    class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+                    <livewire:dashboard.ChartProposal />
+                </div>
+            @elseif (auth()->user()->hasRole('Manajer Admin'))
+                <div
+                    class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+                    <livewire:dashboard.ChartSph />
+                </div>
+            @endif
         </div>
 
     </div>
