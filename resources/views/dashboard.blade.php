@@ -9,7 +9,7 @@
 
         </div>
         <div class="grid auto-rows-min gap-4 md:grid-cols-2">
-            @if (auth()->user()->hasRole('Direktur'))
+            @if (auth()->user()->hasRole('Direktur') || auth()->user()->hasRole('Super Admin'))
                 <div
                     class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
                     <livewire:dashboard.chart />
