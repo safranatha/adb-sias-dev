@@ -94,7 +94,7 @@
             </flux:navlist>
         @endcan
 
-        @can('view surat penawaran harga')
+        @if (auth()->user()->hasRole(roles: 'Manajer Admin')||auth()->user()->hasRole(roles: 'Super Admin') || auth()->user()->hasRole(roles: 'Staff Admin'))
             <flux:navlist variant="outline">
                 <flux:navlist.group expandable :expanded="true" class="text-white">
                     <x-slot:heading>
@@ -117,7 +117,7 @@
 
                 </flux:navlist.group>
             </flux:navlist>
-        @endcan
+        @endif
 
 
         <flux:navlist variant="outline">
