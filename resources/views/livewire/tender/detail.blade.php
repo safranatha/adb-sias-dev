@@ -296,7 +296,7 @@
                                         SPH yang ditolak akan diberikan kepada Staff.
                                     </flux:text>
                                 </div>
-                                <div class="flex justify-end p-4">
+                                <div class="flex justify-end">
                                     <flux:modal.close>
                                         <flux:button variant="ghost">Batal</flux:button>
                                     </flux:modal.close>

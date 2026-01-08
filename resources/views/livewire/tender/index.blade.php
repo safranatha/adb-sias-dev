@@ -14,7 +14,7 @@
         </div>
 
         <div class="overflow-x-auto rounded-md border border-gray-200">
-            <table class="w-full text-sm text-center">
+            <table class="w-full text-sm text-center bg-white">
                 <thead class="bg-green-50 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama Tender</th>
@@ -29,7 +29,7 @@
                 <tbody class="divide-y divide-gray-200">
                     @if ($tenders->isEmpty())
                         <tr class="text-center">
-                            <td colspan="3" class="px-4 py-6">
+                            <td colspan="6" class="px-4 py-6">
                                 Tidak ada tender untuk ditampilkan.
                             </td>
                         </tr>

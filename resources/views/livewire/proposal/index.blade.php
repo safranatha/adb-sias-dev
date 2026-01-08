@@ -26,7 +26,7 @@
     @can('validate proposal')
         {{-- tabel manajer --}}
         <div class="overflow-x-auto rounded-md border border-gray-200">
-            <table class="w-full text-sm text-center">
+            <table class="w-full text-sm text-center bg-white">
                 <thead class="bg-green-50 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama Tender</th>
@@ -42,7 +42,7 @@
                 <tbody class="divide-y divide-gray-200">
                     @if ($proposals->isEmpty())
                         <tr>
-                            <td colspan="5" class="px-4 py-6">
+                            <td colspan="6" class="px-4 py-6">
                                 Tidak ada proposal untuk ditampilkan.
                             </td>
                         </tr>
@@ -90,22 +90,22 @@
 
                                 {{-- tipe dokumen --}}
                                 <!-- <td class="px-4 py-3">
-                                    {{-- logic pengambilan data ada di model proposal --}}
-                                    {{-- {{ $item->status_proposal }} --}}
-                                </td> -->
-                                
+                                            {{-- logic pengambilan data ada di model proposal --}}
+                                            {{-- {{ $item->status_proposal }} --}}
+                                        </td> -->
+
                                 {{-- riwayat status --}}
                                 <td class="px-4 py-3">
                                     <flux:button icon="information-circle" class="mr-2"
-                                            :href="route('proposal.detail', ['id' => $item->id])"
-                                            :current="request()->routeIs('proposal.detail', ['id' => $item->id])" wire:navigate variant="primary"
-                                            color="yellow">
-                                        </flux:button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
+                                        :href="route('proposal.detail', ['id' => $item->id])"
+                                        :current="request()->routeIs('proposal.detail', ['id' => $item->id])" wire:navigate
+                                        variant="primary" color="yellow">
+                                    </flux:button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
             </table>
             <div class=" pl-1 m-2">
                 {{ $proposals->links() }}
@@ -119,9 +119,8 @@
     @can(['view proposal'])
         @cannot(['validate proposal'])
             @cannot(['create proposal'])
-
                 <div class="overflow-x-auto rounded-md border border-gray-200">
-                    <table class="w-full text-sm text-center">
+                    <table class="w-full text-sm text-center bg-white">
                         <thead class="bg-green-50 text-white">
                             <tr>
                                 <th class="px-4 py-3 font-medium">Nama Tender</th>
@@ -184,7 +183,7 @@
     {{-- pengecekan permssion, jika memenuhi syarat maka bisa tampil, staff memiliki permission yang tidak dimilki oleh manajer yakni create proposal. staff ada permission view,create dan validate --}}
     @can('create proposal')
         <div class="overflow-x-auto rounded-md border border-gray-200">
-            <table class="w-full text-sm text-center">
+            <table class="w-full text-sm text-center bg-white">
                 <thead class="bg-green-50 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama Tender</th>
@@ -198,7 +197,7 @@
                 <tbody class="divide-y divide-gray-200">
                     @if ($proposals->isEmpty())
                         <tr>
-                            <td colspan="3" class="px-4 py-6">
+                            <td colspan="4" class="px-4 py-6">
                                 Tidak ada proposal untuk ditampilkan.
                             </td>
                         </tr>

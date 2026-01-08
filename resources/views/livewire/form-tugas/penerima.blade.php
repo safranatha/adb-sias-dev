@@ -20,7 +20,7 @@
         </div>
 
         <div class="overflow-x-auto rounded-md border border-gray-200">
-            <table class="w-full text-sm text-center">
+            <table class="w-full text-sm text-center bg-white">
                 <thead class="bg-green-50 text-white">
                     <tr>
                         {{-- <th class="px-4 py-3 font-medium">Pembuat</th> --}}
@@ -40,7 +40,7 @@
                 <tbody class="divide-y divide-gray-200">
                     @if ($formtugas_penerima->isEmpty())
                         <tr>
-                            <td colspan="5" class="px-4 py-6">
+                            <td colspan="7" class="px-4 py-6">
                                 Tidak ada Form tugas untuk ditampilkan.
                             </td>
                         </tr>
