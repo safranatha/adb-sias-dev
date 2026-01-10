@@ -26,8 +26,8 @@
     {{-- pengecekan permission, jika memenuhi syarat maka bisa tampil, manajer permissionnya view proposal dan validate saja --}}
     @can('validate proposal')
         <div class="overflow-x-auto rounded-md border border-gray-200">
-            <table class="w-full text-sm text-center">
-                <thead class="bg-green-700 text-white">
+            <table class="w-full text-sm text-center bg-white">
+                <thead class="bg-green-50 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama Tender</th>
                         <th class="px-4 py-3 font-medium">File Proposal</th>
@@ -112,7 +112,8 @@
                                                 @enderror
                                             </flux:field>
                                             <flux:modal.trigger name="reject-proposal">
-                                                <flux:button class="mt-6" variant="danger">
+                                                <flux:button class="mt-6" variant="danger" wire:loading.attr="disabled"
+                                                    wire:target="file_path_revisi">
                                                     Tolak
                                                 </flux:button>
                                             </flux:modal.trigger>
@@ -168,8 +169,8 @@
     {{-- tabel staff --}}
     @can('create proposal')
         <div class="overflow-x-auto rounded-md border border-gray-200 ">
-            <table class="w-full text-sm text-center">
-                <thead class="bg-green-700 text-white">
+            <table class="w-full text-sm text-center bg-white">
+                <thead class="bg-green-50 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama Tender</th>
                         <th class="px-4 py-3 font-medium">File Proposal</th>
@@ -182,7 +183,7 @@
                 <tbody class="divide-y divide-gray-200 bg-white">
                     @if ($proposals_active->isEmpty())
                         <tr>
-                            <td colspan="3" class="px-4 py-6">
+                            <td colspan="4" class="px-4 py-6">
                                 Tidak ada proposal status aktif.
                             </td>
                         </tr>

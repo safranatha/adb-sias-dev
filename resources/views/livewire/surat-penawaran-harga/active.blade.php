@@ -28,7 +28,7 @@
     @can('validate surat penawaran harga')
         <div class="overflow-x-auto rounded-md border border-gray-200">
             <table class="w-full text-sm text-center">
-                <thead class="bg-green-700 text-white">
+                <thead class="bg-green-50 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama SPH</th>
                         <th class="px-4 py-3 font-medium">File SPH</th>
@@ -118,7 +118,8 @@
                                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                                 @enderror
                                             </flux:field>
-                                            <flux:modal.trigger name="reject-sph">
+                                            <flux:modal.trigger name="reject-sph" wire:loading.attr="disabled"
+                                                wire:target="file_path_revisi">
                                                 <flux:button class="mt-6" variant="danger">Tolak</flux:button>
                                             </flux:modal.trigger>
                                             <flux:modal name="reject-sph" class="min-w-[22rem] text-left">
@@ -161,7 +162,7 @@
     @can('create surat penawaran harga')
         <div class="overflow-x-auto rounded-md border border-gray-200 ">
             <table class="w-full text-sm text-center">
-                <thead class="bg-green-700 text-white">
+                <thead class="bg-green-50 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama Tender</th>
                         <th class="px-4 py-3 font-medium">File Surat Penawaran Harga</th>

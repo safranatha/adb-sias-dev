@@ -31,8 +31,9 @@
                     data: @json($values),
                     backgroundColor: [
                         '#B31919',
+                        '#057A55',
                         '#C97E04',
-                        '#057A55',         
+                                 
                     ],
                     borderWidth: 2
                 }]

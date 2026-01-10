@@ -6,7 +6,7 @@
     {{-- <flux:text>SPH yang harus diperiksa:</flux:text>
     <h1 class="mt-2 font-bold text-4xl">📚 7 Surat Penawaran Harga</h1> --}}
 
-    @if (auth()->user()->hasRole('Manajer Teknik'))
+    @if (auth()->user()->hasRole(roles: 'Manajer Teknik'))
         <flux:text>Proposal yang harus diperiksa:</flux:text>
         <h1 class="mt-2 font-bold text-4xl">📚{{ $proposal_periksa }} Proposal</h1>
     @elseif (auth()->user()->hasRole('Manajer Admin'))
