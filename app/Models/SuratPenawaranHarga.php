@@ -36,6 +36,12 @@ class SuratPenawaranHarga extends Model
             ->latest()
             ->value('status'); // langsung ambil status, tidak butuh first()
     }
+    public function getLevelAttribute()
+    {
+        return $this->document_approval_workflows()
+            ->latest()
+            ->value('level'); // langsung ambil status, tidak butuh first()
+    }
 
     public function getPesanRevisiAttribute()
     {
@@ -49,5 +55,24 @@ class SuratPenawaranHarga extends Model
         return $this->document_approval_workflows()
             ->latest()
             ->value('keterangan'); // langsung ambil status, tidak butuh first()
+    }
+
+    public function getValidatorAttribute()
+    {
+        $user = $this->document_approval_workflows()
+            ->latest()
+            ->first();
+
+        if ($user) {
+            return $user->user->getRoleNames()->implode(', ');
+        }
+
+        return null;
+    }
+    
+    public function latestWorkflow()
+    {
+        return $this->hasOne(DocumentApprovalWorkflow::class)
+            ->latestOfMany('created_at');
     }
 }

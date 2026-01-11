@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('internal_memos', function (Blueprint $table) {
+        Schema::create('form_tugas', function (Blueprint $table) {
             $table->id();
+            // created by
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('tender_id')->unique()->constrained()->onDelete('cascade');
-            $table->string('nama_internal_memo');
-            $table->string('isi_internal_memo');
+            $table->date('due_date');
+            $table->string('jenis_permintaan');
+            $table->string('kegiatan');
+            $table->string('lingkup_kerja');
+            $table->string('keterangan')->nullable();
+            $table->string('file_path_form_tugas')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('internal_memos');
+        Schema::dropIfExists('form_tugas');
     }
 };

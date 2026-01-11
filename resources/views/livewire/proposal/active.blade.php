@@ -26,8 +26,8 @@
     {{-- pengecekan permission, jika memenuhi syarat maka bisa tampil, manajer permissionnya view proposal dan validate saja --}}
     @can('validate proposal')
         <div class="overflow-x-auto rounded-md border border-gray-200">
-            <table class="w-full text-sm text-center">
-                <thead class="bg-green-700 text-white">
+            <table class="w-full text-sm text-center bg-white">
+                <thead class="bg-green-50 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama Tender</th>
                         <th class="px-4 py-3 font-medium">File Proposal</th>
@@ -62,9 +62,30 @@
                                 {{-- validate --}}
                                 <td class="px-4 py-3">
                                     {{-- validate sph --}} {{-- button approve --}}
-                                    <flux:button icon="check" class="mr-2"
-                                        wire:click="approve({{ $item->proposal->id }})" variant="primary" color="green">
-                                    </flux:button>
+                                    <flux:modal.trigger name="approve-proposal">
+                                        <flux:button icon="check" class="mr-2" variant="primary" color="green">
+                                        </flux:button>
+                                    </flux:modal.trigger>
+
+                                    <flux:modal name="approve-proposal" class="min-w-[22rem] text-left">
+                                        <div class="space-y-6">
+                                            <div>
+                                                <flux:heading size="lg">Setujui proposal?</flux:heading>
+                                                <flux:text class="mt-2">
+                                                    Anda akan menyetujui proposal tersebut.<br>
+                                                    Proposal yang sudah disetujui akan dilanjutkan ke Direktur.
+                                                </flux:text>
+                                            </div>
+                                            <div class="flex gap-2">
+                                                <flux:spacer />
+                                                <flux:modal.close>
+                                                    <flux:button variant="ghost">Batal</flux:button>
+                                                </flux:modal.close>
+                                                <flux:button wire:click="approve({{ $item->proposal->id }})"
+                                                    variant="primary" color="emerald">Yakin</flux:button>
+                                            </div>
+                                        </div>
+                                    </flux:modal>
 
                                     {{-- button reject --}}
                                     <flux:modal.trigger name="reject-sph-{{ $item->proposal->id }}">
@@ -76,14 +97,44 @@
                                         <form wire:submit.prevent="reject({{ $item->proposal->id }})">
                                             <flux:field>
                                                 <flux:label class="mt-3">Alasan Penolakan</flux:label>
+                                                <flux:input type="file" wire:model="file_path_revisi" />
+                                                {{-- Loading indicator saat upload --}}
+                                                <div wire:loading wire:target="file_path_revisi"
+                                                    class="text-sm text-gray-500 mt-1">
+                                                    Uploading file...
+                                                </div>
+                                                @error('file_path_revisi')
+                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                @enderror
                                                 <flux:textarea wire:model="pesan_revisi"></flux:textarea>
                                                 @error('pesan_revisi')
                                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                                 @enderror
                                             </flux:field>
-                                            <flux:button type="submit" class="mt-6" variant="danger">
-                                                Tolak
-                                            </flux:button>
+                                            <flux:modal.trigger name="reject-proposal">
+                                                <flux:button class="mt-6" variant="danger" wire:loading.attr="disabled"
+                                                    wire:target="file_path_revisi">
+                                                    Tolak
+                                                </flux:button>
+                                            </flux:modal.trigger>
+                                            <flux:modal name="reject-proposal" class="min-w-[22rem] text-left">
+                                                <div class="space-y-6">
+                                                    <div>
+                                                        <flux:heading size="lg">Tolak proposal?</flux:heading>
+                                                        <flux:text class="mt-2">
+                                                            Anda akan menolak proposal tersebut.<br>
+                                                            Proposal yang ditolak akan dikembalikan lagi ke Staff.
+                                                        </flux:text>
+                                                    </div>
+                                                    <div class="flex gap-2">
+                                                        <flux:spacer />
+                                                        <flux:modal.close>
+                                                            <flux:button variant="ghost">Batal</flux:button>
+                                                        </flux:modal.close>
+                                                        <flux:button type="submit" variant="danger">Tolak</flux:button>
+                                                    </div>
+                                                </div>
+                                            </flux:modal>
                                         </form>
                                     </flux:modal>
                                 </td>
@@ -109,7 +160,7 @@
 
             {{-- Static Pagination Info --}}
             <div class="pl-1 m-2">
-                {{ $document_approvals ->links() }}
+                {{ $document_approvals->links() }}
             </div>
         </div>
     @endcan
@@ -118,8 +169,8 @@
     {{-- tabel staff --}}
     @can('create proposal')
         <div class="overflow-x-auto rounded-md border border-gray-200 ">
-            <table class="w-full text-sm text-center">
-                <thead class="bg-green-700 text-white">
+            <table class="w-full text-sm text-center bg-white">
+                <thead class="bg-green-50 text-white">
                     <tr>
                         <th class="px-4 py-3 font-medium">Nama Tender</th>
                         <th class="px-4 py-3 font-medium">File Proposal</th>
@@ -132,7 +183,7 @@
                 <tbody class="divide-y divide-gray-200 bg-white">
                     @if ($proposals_active->isEmpty())
                         <tr>
-                            <td colspan="3" class="px-4 py-6">
+                            <td colspan="4" class="px-4 py-6">
                                 Tidak ada proposal status aktif.
                             </td>
                         </tr>
@@ -162,10 +213,19 @@
                                 @if ($item->status === 0 && $item->keterangan !== null)
                                     {{-- kondisi jika ada revisi --}}
                                     <flux:modal.trigger name="edit-proposal-{{ $item->id }}">
-                                        <flux:button icon="envelope" class="mr-2" wire:click="edit({{ $item->id }})"
-                                            variant="primary" color="red">
-                                            {{ $item->keterangan }}
-                                        </flux:button>
+                                        @if ($item->latestWorkflow?->waktu_pesan_dibaca === null)
+                                            {{-- BELUM DIBACA --}}
+                                            <flux:button icon="envelope" class="mr-2"
+                                                wire:click="edit({{ $item->id }})" variant="primary" color="red">
+                                                {{ $item->keterangan }}
+                                            </flux:button>
+                                        @else
+                                            {{-- SUDAH DIBACA --}}
+                                            <flux:button icon="envelope-open" class="mr-2"
+                                                wire:click="edit({{ $item->id }})" variant="filled">
+                                                {{ $item->keterangan }}
+                                            </flux:button>
+                                        @endif
                                     </flux:modal.trigger>
 
                                     {{-- modal form --}}
@@ -187,22 +247,46 @@
                                             </flux:field>
 
                                             <flux:field>
-                                                {{-- <flux:label class="mt-3">File Proposal</flux:label> --}}
+                                                <flux:label class="mt-3">Doc Rev</flux:label>
+                                                <flux:button icon="arrow-down-tray" class="mr-2"
+                                                    wire:click="downloadFileRevisi({{ $item->id }})">
+                                                </flux:button>
+                                            </flux:field>
 
-                                                @if ($file_path_proposal)
-                                                    <p class="text-sm mt-3">
-                                                        File saat ini: {{ basename($file_path_proposal) }}
-                                                    </p>
-                                                @endif
+                                            <flux:field>
+                                                <flux:label class="mt-3">Upload Proposal Revisi</flux:label>
+                                                {{-- <flux:label class="mt-3">File Proposal</flux:label> --}}
                                                 <flux:input type="file" wire:model="file_path_proposal" />
                                                 @error('file_path_proposal')
                                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                                 @enderror
                                             </flux:field>
+                                            <flux:modal.trigger name="revisi-proposal">
+                                                <flux:button class="mt-6" variant="primary" color="emerald"
+                                                    wire:loading.attr="disabled" wire:target="file_path_proposal">
+                                                    Revisi
+                                                </flux:button>
+                                            </flux:modal.trigger>
 
-                                            <flux:button type="submit" class="mt-6" variant="primary">
-                                                Update
-                                            </flux:button>
+                                            <flux:modal name="revisi-proposal" class="min-w-[22rem] text-left">
+                                                <div class="space-y-6">
+                                                    <div>
+                                                        <flux:heading size="lg">Revisi Proposal?</flux:heading>
+                                                        <flux:text class="mt-2">
+                                                            Anda akan merevisi proposal tersebut.<br>
+                                                            Proposal yang sudah direvisi akan diberikan ke Manajer Teknik.
+                                                        </flux:text>
+                                                    </div>
+                                                    <div class="flex gap-2">
+                                                        <flux:spacer />
+                                                        <flux:modal.close>
+                                                            <flux:button variant="ghost">Batal</flux:button>
+                                                        </flux:modal.close>
+                                                        <flux:button type="submit" variant="primary" color="emerald">
+                                                            Yakin</flux:button>
+                                                    </div>
+                                                </div>
+                                            </flux:modal>
                                         </form>
                                     </flux:modal>
                                 @else

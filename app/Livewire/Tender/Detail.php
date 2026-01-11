@@ -2,18 +2,31 @@
 
 namespace App\Livewire\Tender;
 
+use App\Services\Tender\ApprovalTenderDocServiceDirektur;
+use App\Helpers\DokumenTenderHelper;
 use App\Models\DocumentApprovalWorkflow;
 use App\Models\Proposal;
 use App\Models\SuratPenawaranHarga;
 use App\Models\Tender;
 use Livewire\Component;
 use Livewire\Attributes\Title;
+use Livewire\WithFileUploads;
 
 class Detail extends Component
 {
+    use WithFileUploads;
 
     public $tender_id; // wajib ada
     public $pesan_revisi;
+    public $file_path_revisi;
+    public $status;
+
+    protected ApprovalTenderDocServiceDirektur $approvalTenderDocServiceDirektur;
+
+    public function boot(ApprovalTenderDocServiceDirektur $approvalTenderDocServiceDirektur)
+    {
+        $this->approvalTenderDocServiceDirektur = $approvalTenderDocServiceDirektur;
+    }
 
     public function mount($id)
     {
@@ -76,60 +89,110 @@ class Detail extends Component
 
     }
 
-    public function approve($id)
+    public function editStatus($id)
     {
+        $tender = Tender::findOrFail($id);
 
-        // check role of user
-        $nama_role = auth()->user()->roles->first()->name;
-
-        // // Cari document approval berdasarkan surat_penawaran_harga_id
-        // $documentApproval = DocumentApprovalWorkflow::where('surat_penawaran_harga_id', $id)
-        //     ->latest() // Ambil yang terbaru
-        //     ->first();
-
-        $proposal_id = Proposal::where('tender_id', $id)->pluck('id')->first();
-
-        $sph_id = SuratPenawaranHarga::where('tender_id', $id)->pluck('id')->first();
-
-
-        DocumentApprovalWorkflow::create([
-            'user_id' => auth()->user()->id,
-            'status' => true,
-            'proposal_id' => $proposal_id,
-            'surat_penawaran_harga_id' => $sph_id,
-            'level' => ($nama_role == "Manajer Admin") ? "2" : ($nama_role == "Direktur" ? "3" : null),
-            'keterangan' => ($nama_role == "Manajer Admin") ? "Berkas Tender disetujui oleh Manajer Admin" : ($nama_role == "Direktur" ? "Berkas Tender disetujui oleh Direktur" : null),
-        ]);
-
-        session()->flash('success', 'Berkas Tender berhasil di approve!');
-
+        $this->tender_id = $tender->id;
+        $this->status = $tender->status; // ⬅️ INI KUNCI
     }
 
-    public function reject($id)
+    public function update_status_tender()
+    {
+        Tender::where('id', $this->tender_id)
+            ->update([
+                'status' => $this->status
+            ]);
+
+        session()->flash('success', 'Status tender berhasil diperbarui');
+
+        $this->dispatch('modal-close', name: 'edit-status-tender');
+
+        $this->dispatch('modal-close', name: 'confirm-edit-status-tender');
+    }
+
+
+
+    public function approve_proposal($id)
+    {
+        $approve = $this->approvalTenderDocServiceDirektur->approveDocumentProposal(DocumentApprovalWorkflow::class, $id, auth()->user()->roles->first()->name);
+
+        if (!$approve) {
+            session()->flash('error', 'Proses approval proposal gagal!');
+            return;
+        }
+
+        session()->flash('success', 'Proposal berhasil di approve!');
+    }
+
+    public function reject_proposal($id)
     {
         // check role of user
         $nama_role = auth()->user()->roles->first()->name;
 
-        $rules = ['pesan_revisi' => ['required', 'string', 'max:255']];
+        $rules = [
+            'pesan_revisi' => ['nullable', 'string', 'max:255'],
+            'file_path_revisi' => ['required', 'file', 'max:10240']
+        ];
 
         $this->validate($rules);
 
-         $proposal_id = Proposal::where('tender_id', $id)->pluck('id')->first();
+        // call helper for upload file revisi
+        $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi Proposal');
 
-        $sph_id = SuratPenawaranHarga::where('tender_id', $id)->pluck('id')->first();
+        // panggil helper untuk reject document proposal
+        $documentApproval = $this->approvalTenderDocServiceDirektur->rejectDocumentProposal(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
 
+        if (!$documentApproval) {
+            session()->flash('error', 'Proses approval proposal gagal!');
+            return;
+        }
 
-        DocumentApprovalWorkflow::create([
-            'user_id' => auth()->user()->id,
-            'status' => false,
-            'proposal_id' => $proposal_id,
-            'surat_penawaran_harga_id' => $sph_id,
-            'level' => ($nama_role == "Manajer Admin") ? "2" : ($nama_role == "Direktur" ? "3" : null),
-            'keterangan' => ($nama_role == "Manajer Admin") ? "Berkas Tender ditolak oleh Manajer Admin" : ($nama_role == "Direktur" ? "Berkas Tender ditolak oleh Direktur" : null),
-            'pesan_revisi' => $this->pesan_revisi
-        ]);
+        $this->reset(['pesan_revisi', 'file_path_revisi']);
 
-        session()->flash('success', 'Berkas Tender berhasil ditolak!');
+        session()->flash('success', 'Proposal berhasil di tolak!');
+    }
+
+    public function approve_sph($id)
+    {
+        // check role of user
+        $nama_role = auth()->user()->roles->first()->name;
+
+        $approve = $this->approvalTenderDocServiceDirektur->approveDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role);
+
+        if (!$approve) {
+            session()->flash('error', 'Proses approval proposal gagal!');
+            return;
+        }
+
+        session()->flash('success', 'Surat Penawaran Harga berhasil di approve!');
+    }
+
+    public function reject_sph($id)
+    {
+        // check role of user
+        $nama_role = auth()->user()->roles->first()->name;
+
+        $rules = [
+            'pesan_revisi' => ['required', 'string', 'max:255'],
+            'file_path_revisi' => ['required', 'file', 'max:10240']
+        ];
+
+        $this->validate($rules);
+
+        // call helper for upload file revisi
+        $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi SPH');
+
+        $documentApproval = $this->approvalTenderDocServiceDirektur->rejectDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
+
+        if (!$documentApproval) {
+            session()->flash('error', 'Proses approval proposal gagal!');
+            return;
+        }
+
+        $this->reset(['pesan_revisi', 'file_path_revisi']);
+
+        session()->flash('success', 'Surat Penawaran Harga berhasil di tolak!');
     }
 
 

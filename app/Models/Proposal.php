@@ -38,6 +38,12 @@ class Proposal extends Model
             ->latest()
             ->value('status'); // langsung ambil status, tidak butuh first()
     }
+    public function getLevelAttribute()
+    {
+        return $this->document_approval_workflows()
+            ->latest()
+            ->value('level'); // langsung ambil status, tidak butuh first()
+    }
 
     public function getPesanRevisiAttribute()
     {
@@ -60,10 +66,16 @@ class Proposal extends Model
             ->first();
 
         if ($user) {
-            return $user->user->name;
+            return $user->user->getRoleNames()->implode(', ');
         }
 
         return null;
+    }
+
+    public function latestWorkflow()
+    {
+        return $this->hasOne(DocumentApprovalWorkflow::class)
+            ->latestOfMany('created_at');
     }
 
 

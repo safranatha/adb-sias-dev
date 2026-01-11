@@ -7,14 +7,30 @@
         <div class="color-white bg-white p-10 rounded-lg shadow-md mt-6">
             <flux:heading size="lg">Status</flux:heading>
             <flux:text size="md" class="mt-2">{{ $item->status_proposal }}</flux:text>
+    
+            <flux:heading size="lg" class="mt-6">Validator</flux:heading>
+            @if ($item->level === "3")
+                <flux:text size="md" class="mt-2">Direktur</flux:text>
+            @elseif ($item->level === "2")
+                <flux:text size="md" class="mt-2">Manajer Admin</flux:text>
+            @endif
 
             <flux:heading size="lg" class="mt-6">Tanggal Revisi</flux:heading>
             <flux:text size="md" class="mt-2">{{ $item->updated_at->format('d-m-y') }}</flux:text>
 
             <flux:heading size="lg" class="mt-6">Tanggal Dibaca</flux:heading>
-            <flux:text size="md" class="mt-2">
-                {{ \Carbon\Carbon::parse($item->waktu_pesan_dibaca)->diffForHumans() }}</flux:text>
+            @if ($item->waktu_pesan_dibaca === null)
+                <flux:text size="md" class="mt-2">Belum dibaca penerima</flux:text>
+            @else
+                <flux:text size="md" class="mt-2">
+                    {{ \Carbon\Carbon::parse($item->waktu_pesan_dibaca)->diffForHumans() }}</flux:text>
+            @endif
 
+            @if ($item->file_path_revisi)
+                <flux:heading size="lg" class="mt-6">Dokumen Revisi</flux:heading>
+                <flux:button icon="arrow-down-tray" class="mr-2" wire:click="download({{ $item->id }})">
+                </flux:button>
+            @endif
 
 
             <flux:heading size="lg" class="mt-6">Status Dokumen</flux:heading>

@@ -41,7 +41,7 @@
                 <tbody class="divide-y divide-gray-200">
                     @if ($sphs->isEmpty())
                         <tr>
-                            <td colspan="3" class="px-4 py-6">
+                            <td colspan="6" class="px-4 py-6">
                                 Tidak ada Surat Penawaran Harga untuk ditampilkan.
                             </td>
                         </tr>
@@ -80,10 +80,9 @@
                                     </td>
                                 @endif
 
-
                                 {{-- validator --}}
                                 <td class="px-4 py-3">
-                                    {{ $item->user->name }}
+                                    {{ $item->validator }}
                                 </td>
 
                                 <!-- {{-- status Surat Penawaran Harga --}}
@@ -128,7 +127,7 @@
                 <tbody class="divide-y divide-gray-200">
                     @if ($sphs->isEmpty())
                         <tr>
-                            <td colspan="3" class="px-4 py-6">
+                            <td colspan="4" class="px-4 py-6">
                                 Tidak ada Surat Penawaran Harga untuk ditampilkan.
                             </td>
                         </tr>

@@ -2,12 +2,14 @@
 
 namespace App\Livewire\SuratPenawaranHarga;
 
+use App\Services\Tender\ApprovalTenderDocService;
+use App\Helpers\DokumenTenderHelper;
 use App\Models\DocumentApprovalWorkflow;
 use App\Models\SuratPenawaranHarga;
-use App\Models\Tender;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 
 class Active extends Component
@@ -22,11 +24,20 @@ class Active extends Component
 
     public $pesan_revisi;
 
+    public $file_path_revisi;
+
     protected $rules = [
         'tender_id' => ['required', 'exists:tenders,id'],
         'nama_sph' => ['required', 'string', 'max:255'],
         'file_path_sph' => ['required', 'file', 'mimes:pdf', 'max:10240'],
     ];
+
+    protected ApprovalTenderDocService $approvalTenderDocService;
+
+    public function boot(ApprovalTenderDocService $approvalTenderDocService)
+    {
+        $this->approvalTenderDocService = $approvalTenderDocService;
+    }
 
     public function mount()
     {
@@ -58,33 +69,17 @@ class Active extends Component
 
     public function storeWaktuDibaca($id)
     {
-        $workflow = DocumentApprovalWorkflow::where('surat_penawaran_harga_id', $id)
-            ->whereNull('waktu_pesan_dibaca')
-            ->latest('created_at') // atau latest() saja, default ke created_at
-            ->first();
-
-        if ($workflow) {
-            $workflow->update([
-                'waktu_pesan_dibaca' => now(),
-            ]);
-        }
+        return DokumenTenderHelper::storeWaktuDibaca($id, DocumentApprovalWorkflow::class, 'surat_penawaran_harga_id');
     }
 
     public function download($id)
     {
-        $sph = SuratPenawaranHarga::findOrFail($id);
+        return DokumenTenderHelper::downloadHelper(SuratPenawaranHarga::class, $id, 'file_path_sph', 'Surat Penawaran Harga');
+    }
 
-        if (!$sph) {
-            return session()->flash('error', 'Surat Penawaran Harga tidak ditemukan.');
-        }
-
-        $file_path = public_path('storage/' . $sph->file_path_sph);
-
-        if (!file_exists($file_path)) {
-            return session()->flash('error', 'File Surat Penawaran Harga tidak ditemukan di storage.');
-        }
-
-        return response()->download($file_path);
+    public function downloadFileRevisi($id)
+    {
+        return DokumenTenderHelper::downloadRevisionHelper(DocumentApprovalWorkflow::class, $id, 'file_path_revisi', 'File revisi SPH', 'surat_penawaran_harga_id');
     }
 
     public function update()
@@ -116,14 +111,8 @@ class Active extends Component
                 unlink(public_path('storage/' . $sph->file_path_sph));
             }
 
-            $original = $this->file_path_sph->getClientOriginalName();
+            $path = DokumenTenderHelper::storeRevisionFileOnStroage($this->file_path_sph, 'surat_penawaran_hargas');
 
-            $timestamp = time();
-            $format_timestamp = date('g i a,d-m-Y', $timestamp);
-            $filename = "Revision" . "_" . $format_timestamp . "_" . $original;
-
-            // store to laravel storage
-            $path = $this->file_path_sph->storeAs('surat_penawaran_hargas', $filename, 'public');
 
             $sph->update([
                 'file_path_sph' => $path,
@@ -144,41 +133,6 @@ class Active extends Component
         $this->resetForm();
     }
 
-    public function store()
-    {
-        $this->validate();
-
-        // save to laravel storage
-        $original = $this->file_path_sph->getClientOriginalName();
-        $timestamp = time();
-        $format_timestamp = date('g i a,d-m-Y', $timestamp);
-        $filename = "New" . "_" . $format_timestamp . "_" . $original;
-        // store to laravel storage
-        $path = $this->file_path_sph->storeAs('surat_penawaran_hargas', $filename, 'public');
-
-        // save to database
-        $sph = SuratPenawaranHarga::create([
-            'user_id' => auth()->user()->id,
-            'tender_id' => $this->tender_id,
-            'nama_sph' => $this->nama_sph,
-            'file_path_sph' => $path,
-        ]);
-
-        // create status on document approval workflow
-        DocumentApprovalWorkflow::create([
-            'user_id' => auth()->user()->id,
-            'surat_penawaran_harga_id' => $sph->id,
-            'keterangan' => "Surat Penawaran Harga belum diperiksa oleh Manajer Admin",
-            'level' => 0,
-        ]);
-
-        session()->flash('success', 'Surat Penawaran Harga berhasil diupload!');
-
-        $this->dispatch('modal-closed', id: 'store');
-
-        $this->resetForm();
-
-    }
 
     public function approve($id)
     {
@@ -186,17 +140,12 @@ class Active extends Component
         // check role of user
         $nama_role = auth()->user()->roles->first()->name;
 
-        // Cari document approval berdasarkan surat_penawaran_harga_id
-        $documentApproval = DocumentApprovalWorkflow::where('surat_penawaran_harga_id', $id)
-            ->latest() // Ambil yang terbaru
-            ->first();
+        $approve = $this->approvalTenderDocService->approveDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role);
 
-        $documentApproval->update([
-            'user_id' => auth()->user()->id,
-            'status' => true,
-            'level' => ($nama_role == "Manajer Admin") ? "2" : ($nama_role == "Direktur" ? "3" : null),
-            'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga disetujui oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga disetujui oleh Direktur" : null),
-        ]);
+        if (!$approve) {
+            session()->flash('error', 'Proses approval proposal gagal!');
+            return;
+        }
 
         session()->flash('success', 'Surat Penawaran Harga berhasil di approve!');
 
@@ -207,22 +156,22 @@ class Active extends Component
         // check role of user
         $nama_role = auth()->user()->roles->first()->name;
 
-        $rules = ['pesan_revisi' => ['required', 'string', 'max:255']];
+        $rules = [
+            'pesan_revisi' => ['required', 'string', 'max:255'],
+            'file_path_revisi' => ['required', 'file', 'max:10240']
+        ];
 
         $this->validate($rules);
 
-        // Cari document approval berdasarkan surat_penawaran_harga_id
-        $documentApproval = DocumentApprovalWorkflow::where('surat_penawaran_harga_id', $id)
-            ->latest() // Ambil yang terbaru
-            ->first();
+        // call helper for upload file revisi
+        $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi SPH');
 
-        $documentApproval->update([
-            'user_id' => auth()->user()->id,
-            'status' => false,
-            'level' => ($nama_role == "Manajer Admin") ? "2" : ($nama_role == "Direktur" ? "3" : null),
-            'pesan_revisi' => $this->pesan_revisi,
-            'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga ditolak oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga ditolak oleh Direktur" : null),
-        ]);
+        $documentApproval = $this->approvalTenderDocService->rejectDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
+
+        if (!$documentApproval) {
+            session()->flash('error', 'Proses approval proposal gagal!');
+            return;
+        }
 
         session()->flash('success', 'Surat Penawaran Harga berhasil di tolak!');
 
@@ -232,8 +181,14 @@ class Active extends Component
     {
         return view('livewire.surat-penawaran-harga.active', [
             'sphs' => SuratPenawaranHarga::with(['tender', 'user', 'document_approval_workflows'])
+                ->where('user_id', '=', auth()->user()->id)
                 ->whereDoesntHave('document_approval_workflows', function ($query) {
-                    $query->where('status', 1);
+                    $query->where('status', 1)
+                        ->whereColumn(
+                            'document_approval_workflow.id',
+                            '=',
+                            DB::raw('(SELECT MAX(id) FROM document_approval_workflow WHERE surat_penawaran_harga_id = surat_penawaran_hargas.id)')
+                        );
                 })
                 ->select('surat_penawaran_hargas.*')
                 ->orderBy('created_at', 'desc')

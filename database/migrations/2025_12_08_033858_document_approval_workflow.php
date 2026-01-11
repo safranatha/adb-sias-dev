@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->char('level', 1);
             $table->boolean('status')->nullable();
             $table->string('keterangan');
+            $table->string('file_path_revisi')->nullable();
             $table->string('pesan_revisi')->nullable();
             $table->timestamp('waktu_pesan_dibaca')->nullable();
             $table->timestamps();

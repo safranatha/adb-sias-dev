@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Proposal;
 
+use App\Helpers\DokumenTenderHelper;
 use App\Models\DocumentApprovalWorkflow;
-use App\Models\Proposal;
 use Livewire\Component;
 
 class Detail extends Component
@@ -14,6 +14,11 @@ class Detail extends Component
     public function mount($id)
     {
         $this->proposal_id = $id;
+    }
+
+    public function download($id)
+    {
+        return DokumenTenderHelper::downloadHelper(DocumentApprovalWorkflow::class, $id, 'file_path_revisi', 'File revisi');
     }
 
 

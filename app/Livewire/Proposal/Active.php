@@ -2,12 +2,15 @@
 
 namespace App\Livewire\Proposal;
 
+use App\Services\Tender\ApprovalTenderDocService;
+use App\Helpers\DokumenTenderHelper;
 use App\Models\Proposal;
 use App\Models\DocumentApprovalWorkflow;
 use App\Models\Tender;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 
 class Active extends Component
@@ -22,11 +25,20 @@ class Active extends Component
 
     public $pesan_revisi;
 
+    public $file_path_revisi;
+
     protected $rules = [
         'tender_id' => ['required', 'exists:tenders,id'],
         'nama_proposal' => ['required', 'string', 'max:255'],
         'file_path_proposal' => ['required', 'file', 'mimes:pdf', 'max:10240'],
     ];
+
+    protected ApprovalTenderDocService $approvalTenderDocService;
+
+    public function boot(ApprovalTenderDocService $approvalTenderDocService)
+    {
+        $this->approvalTenderDocService = $approvalTenderDocService;
+    }
 
     public function mount()
     {
@@ -61,34 +73,18 @@ class Active extends Component
 
     public function storeWaktuDibaca($id)
     {
-        $workflow = DocumentApprovalWorkflow::where('proposal_id', $id)
-            ->whereNull('waktu_pesan_dibaca')
-            ->latest('created_at') // atau latest() saja, default ke created_at
-            ->first();
-
-        if ($workflow) {
-            $workflow->update([
-                'waktu_pesan_dibaca' => now(),
-            ]);
-        }
+        return DokumenTenderHelper::storeWaktuDibaca($id, DocumentApprovalWorkflow::class, 'proposal_id');
     }
 
 
     public function download($id)
     {
-        $proposal = Proposal::findOrFail($id);
+        return DokumenTenderHelper::downloadHelper(Proposal::class, $id, 'file_path_proposal', 'File Proposal');
+    }
 
-        if (!$proposal) {
-            return session()->flash('error', 'Proposal tidak ditemukan.');
-        }
-
-        $file_path = public_path('storage/' . $proposal->file_path_proposal);
-
-        if (!file_exists($file_path)) {
-            return session()->flash('error', 'File Proposal tidak ditemukan di storage.');
-        }
-
-        return response()->download($file_path);
+    public function downloadFileRevisi($id)
+    {
+        return DokumenTenderHelper::downloadRevisionHelper(DocumentApprovalWorkflow::class, $id, 'file_path_revisi', 'File revisi proposal', 'proposal_id');
     }
 
     public function update()
@@ -120,13 +116,7 @@ class Active extends Component
                 unlink(public_path('storage/' . $proposal->file_path_proposal));
             }
 
-            $original = $this->file_path_proposal->getClientOriginalName();
-            $timestamp = time();
-            $format_timestamp = date('g i a,d-m-Y', $timestamp);
-            $filename = "Revision" . "_" . $format_timestamp . "_" . $original;
-
-            // store ke storage
-            $path = $this->file_path_proposal->storeAs('proposals', $filename, 'public');
+            $path = DokumenTenderHelper::storeRevisionFileOnStroage($this->file_path_proposal, 'proposals');
 
             // store ke db
             $proposal->update([
@@ -148,61 +138,15 @@ class Active extends Component
     }
 
 
-    public function store()
-    {
-        // dd($this->tender_id, $this->nama_proposal, $this->file_path_proposal);
-        $this->validate();
-
-        // save to laravel storage
-        $original = $this->file_path_proposal->getClientOriginalName();
-        $timestamp = time();
-        $format_timestamp = date('g i a,d-m-Y', $timestamp);
-        $filename = "New" . "_" . $format_timestamp . "_" . $original;
-        // store to laravel storage
-        $path = $this->file_path_proposal->storeAs('proposals', $filename, 'public');
-
-        // save to database
-        $proposal = Proposal::create([
-            'user_id' => auth()->user()->id,
-            'tender_id' => $this->tender_id,
-            'nama_proposal' => $this->nama_proposal,
-            'file_path_proposal' => $path,
-        ]);
-
-        // create status on document approval workflow
-        DocumentApprovalWorkflow::create([
-            'user_id' => auth()->user()->id,
-            'proposal_id' => $proposal->id,
-            'keterangan' => "Proposal belum diperiksa oleh Manajer Teknik",
-            'level' => 0,
-        ]);
-
-
-        session()->flash('success', 'Proposal berhasil diupload!');
-
-        $this->dispatch('modal-closed', id: 'store');
-
-        $this->resetForm();
-        // return redirect()->route('proposal.index');
-    }
-
     public function approve($id)
     {
 
-        // check role of user
-        $nama_role = auth()->user()->roles->first()->name;
+        $approve = $this->approvalTenderDocService->approveDocumentProposal(DocumentApprovalWorkflow::class, $id, auth()->user()->roles->first()->name);
 
-        // Cari document approval berdasarkan proposal_id
-        $documentApproval = DocumentApprovalWorkflow::where('proposal_id', $id)
-            ->latest() // Ambil yang terbaru
-            ->first();
-
-        $documentApproval->update([
-            'user_id' => auth()->user()->id,
-            'status' => true,
-            'level' => ($nama_role == "Manajer Teknik") ? "2" : ($nama_role == "Direktur" ? "3" : null),
-            'keterangan' => ($nama_role == "Manajer Teknik") ? "Proposal disetujui oleh Manajer Teknik" : ($nama_role == "Direktur" ? "Proposal disetujui oleh Direktur" : null),
-        ]);
+        if (!$approve) {
+            session()->flash('error', 'Proses approval proposal gagal!');
+            return;
+        }
 
         session()->flash('success', 'Proposal berhasil di approve!');
 
@@ -213,23 +157,23 @@ class Active extends Component
         // check role of user
         $nama_role = auth()->user()->roles->first()->name;
 
-        $rules = ['pesan_revisi' => ['required', 'string', 'max:255']];
+        $rules = [
+            'pesan_revisi' => ['nullable', 'string', 'max:255'],
+            'file_path_revisi' => ['required', 'file', 'max:10240']
+        ];
 
         $this->validate($rules);
 
+        // call helper for upload file revisi
+        $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi Proposal');
 
-        // Cari document approval berdasarkan proposal_id
-        $documentApproval = DocumentApprovalWorkflow::where('proposal_id', $id)
-            ->latest() // Ambil yang terbaru
-            ->first();
+        // panggil helper untuk reject document proposal
+        $documentApproval = $this->approvalTenderDocService->rejectDocumentProposal(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
 
-        $documentApproval->update([
-            'user_id' => auth()->user()->id,
-            'status' => false,
-            'level' => ($nama_role == "Manajer Teknik") ? "2" : ($nama_role == "Direktur" ? "3" : null),
-            'keterangan' => ($nama_role == "Manajer Teknik") ? "Proposal ditolak oleh Manajer Teknik" : ($nama_role == "Direktur" ? "Proposal ditolak oleh Direktur" : null),
-            'pesan_revisi' => $this->pesan_revisi
-        ]);
+        if (!$documentApproval) {
+            session()->flash('error', 'Proses approval proposal gagal!');
+            return;
+        }
 
 
         session()->flash('success', 'Proposal berhasil di tolak!');
@@ -241,13 +185,19 @@ class Active extends Component
         return view('livewire.proposal.active', [
             //mengambil data proposal yang aktif, dinilai dari status proposal, diambil yang bukan 1D 
             'proposals_active' => Proposal::with(['tender', 'user', 'document_approval_workflows'])
+                ->where('user_id', '=', auth()->user()->id)
                 ->whereDoesntHave('document_approval_workflows', function ($query) {
-                    $query->where('status', 1);
+                    $query->where('status', 1)
+                        ->whereColumn(
+                            'document_approval_workflow.id',
+                            '=',
+                            DB::raw('(SELECT MAX(id) FROM document_approval_workflow WHERE proposal_id = proposals.id)')
+                        );
                 })
                 ->select('proposals.*')
                 ->orderBy('created_at', 'desc')
                 ->paginate(5),
-            
+
             // ambil data documen approval yang berelasi dengan proposal (proposal id not null)
             'document_approvals' => DocumentApprovalWorkflow::with(['proposal'])
                 ->whereNotNull('proposal_id')

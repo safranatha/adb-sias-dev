@@ -2,6 +2,7 @@
 
 namespace App\Livewire\SuratPenawaranHarga;
 
+use App\Helpers\DokumenTenderHelper;
 use App\Models\DocumentApprovalWorkflow;
 use App\Models\SuratPenawaranHarga;
 use App\Models\Tender;
@@ -39,14 +40,8 @@ class Create extends Component
     {
         $this->validate();
 
-        // save to laravel storage
-        $original = $this->file_path_sph->getClientOriginalName();
-        $timestamp = time();
-        $format_timestamp = date('g i a,d-m-Y', $timestamp);
-        $filename = "New" . "_" . $format_timestamp . "_" . $original;
-        
-        // store to laravel storage
-        $path = $this->file_path_sph->storeAs('surat_penawaran_hargas', $filename, 'public');
+        $path=DokumenTenderHelper::storeFileOnStroage($this->file_path_sph, 'surat_penawaran_hargas');
+
 
         // save to database
         $sph = SuratPenawaranHarga::create([
@@ -70,7 +65,7 @@ class Create extends Component
 
         $this->resetForm();
 
-        return redirect()->route('surat-penawaran-harga.index');
+        return redirect()->route('surat-penawaran-harga.active');
     }
 
     public function render()
