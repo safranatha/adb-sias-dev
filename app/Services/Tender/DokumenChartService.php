@@ -1,12 +1,13 @@
 <?php
-namespace App\Helpers;
+namespace App\Services\Tender;
+
 
 use App\Models\DocumentApprovalWorkflow;
 use Illuminate\Support\Facades\DB;
 
-class DokumenChart
+class DokumenChartService
 {
-    public static function dokumenBelumDisetujuiManajer(
+    public function dokumenBelumDisetujuiManajer(
         string $dokumen_id
     ) {
         $count_doc_belum_disetujui = DocumentApprovalWorkflow::whereNull('status')->where('level', '=', 0)->whereNotNull($dokumen_id)->count();
@@ -14,7 +15,7 @@ class DokumenChart
         return $count_doc_belum_disetujui;
     }
 
-    public static function dokumenDitolakManajer(
+    public function dokumenDitolakManajer(
         string $dokumen_id
     ) {
         // DocumentApprovalWorkflow::where('level', 2)
@@ -41,7 +42,7 @@ class DokumenChart
         return $count_doc_ditolak;
     }
 
-    public static function dokumenSudahDisetujuiManajer(
+    public function dokumenSudahDisetujuiManajer(
         string $dokumen_id
     ) {
         // DocumentApprovalWorkflow::where('level', 2)
@@ -72,7 +73,7 @@ class DokumenChart
         return $count_doc_sudah_disetujui;
     }
 
-    public static function dokumenDitolakDirektur(
+    public function dokumenDitolakDirektur(
         string $dokumen_id
     ) {
         // DocumentApprovalWorkflow::where('level', 3)
@@ -99,7 +100,7 @@ class DokumenChart
         return $count_doc_ditolak;
     }
 
-    public static function dokumenSudahDisetujuiDirektur(
+    public function dokumenSudahDisetujuiDirektur(
         string $dokumen_id
     ) {
         // DocumentApprovalWorkflow::where('level', 3)

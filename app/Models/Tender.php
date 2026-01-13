@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Laravel\Scout\Searchable;
 
 class Tender extends Model
 {
     use HasFactory;
+    use Searchable;
 
     // fillable
     protected $fillable = [
@@ -93,5 +95,14 @@ class Tender extends Model
         }
 
         return 'Menunggu proses persetujuan';
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            // 'id' => $this->id,
+            'nama_tender' => $this->nama_tender,
+            'nama_klien' => $this->nama_klien,
+        ];
     }
 }

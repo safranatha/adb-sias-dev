@@ -1,13 +1,12 @@
 <?php
-namespace App\Helpers;
+namespace App\Services\Tender;
 
-use App\Models\Proposal;
-use App\Models\SuratPenawaranHarga;
 use Illuminate\Database\Eloquent\Model;
 
-class ApprovalTenderDocHelperDirektur
+
+class ApprovalTenderDocService
 {
-    public static function rejectDocumentProposal(
+    public function rejectDocumentProposal(
         string $modelClass,
         int $id,
         string $nama_role,
@@ -16,74 +15,87 @@ class ApprovalTenderDocHelperDirektur
     ) {
         // Cari document approval berdasarkan proposal_id
         /** @var Model|null $data */
-        $proposal_id = Proposal::where('tender_id', $id)->first()->id;
+        $documentApproval = $modelClass::where('proposal_id', $id)
+            ->latest() // Ambil yang terbaru
+            ->first();
 
-        return $modelClass::create([
+        if (!$documentApproval) {
+            return null;
+        }
+
+        $documentApproval->update([
             'user_id' => auth()->user()->id,
-            'proposal_id' => $proposal_id,
             'status' => false,
             'level' => ($nama_role == "Manajer Teknik") ? "2" : ($nama_role == "Direktur" ? "3" : null),
             'keterangan' => ($nama_role == "Manajer Teknik") ? "Proposal ditolak oleh Manajer Teknik" : ($nama_role == "Direktur" ? "Proposal ditolak oleh Direktur" : null),
             'file_path_revisi' => $path,
             'pesan_revisi' => $pesan_revisi
         ]);
+
+        return $documentApproval;
     }
 
-    public static function approveDocumentProposal(
+    public function approveDocumentProposal(
         string $modelClass,
         int $id,
         string $nama_role
     ) {
         // Cari document approval berdasarkan proposal_id
-        $proposal_id = Proposal::where('tender_id', $id)->first()->id;
-
         /** @var Model|null $data */
-        return $modelClass::create([
+        $documentApproval = $modelClass::where('proposal_id', $id)
+            ->latest() // Ambil yang terbaru
+            ->first();
+
+        $documentApproval->update([
             'user_id' => auth()->user()->id,
-            'proposal_id' => $proposal_id,
             'status' => true,
             'level' => ($nama_role == "Manajer Teknik") ? "2" : ($nama_role == "Direktur" ? "3" : null),
             'keterangan' => ($nama_role == "Manajer Teknik") ? "Proposal disetujui oleh Manajer Teknik" : ($nama_role == "Direktur" ? "Proposal disetujui oleh Direktur" : null),
         ]);
+
+        return $documentApproval;
     }
 
-    public static function rejectDocumentSPH(
+    public function rejectDocumentSPH(
         string $modelClass,
         int $id,
         string $nama_role,
         string $pesan_revisi,
         string $path
     ) {
-        $sph_id=SuratPenawaranHarga::where('tender_id', $id)->first()->id;
         // Cari document approval berdasarkan surat_penawaran_harga_id
-        /** @var Model|null $data */
+        $documentApproval = $modelClass::where('surat_penawaran_harga_id', $id)
+            ->latest() // Ambil yang terbaru
+            ->first();
 
-        return $modelClass::create([
+        $documentApproval->update([
             'user_id' => auth()->user()->id,
-            'surat_penawaran_harga_id' => $sph_id,
             'status' => false,
             'level' => ($nama_role == "Manajer Admin") ? "2" : ($nama_role == "Direktur" ? "3" : null),
             'file_path_revisi' => $path,
             'pesan_revisi' => $pesan_revisi,
             'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga ditolak oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga ditolak oleh Direktur" : null),
         ]);
+        return $documentApproval;
     }
 
-    public static function approveDocumentSPH(
+    public function approveDocumentSPH(
         string $modelClass,
         int $id,
         string $nama_role
     ) {
-        $sph_id=SuratPenawaranHarga::where('tender_id', $id)->first()->id;
+         // Cari document approval berdasarkan surat_penawaran_harga_id
+        $documentApproval = $modelClass::where('surat_penawaran_harga_id', $id)
+            ->latest() // Ambil yang terbaru
+            ->first();
 
-        // Cari document approval berdasarkan surat_penawaran_harga_id
-        /** @var Model|null $data */
-        return $modelClass::create([
+        $documentApproval->update([
             'user_id' => auth()->user()->id,
-            'surat_penawaran_harga_id' => $sph_id,
             'status' => true,
             'level' => ($nama_role == "Manajer Admin") ? "2" : ($nama_role == "Direktur" ? "3" : null),
             'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga disetujui oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga disetujui oleh Direktur" : null),
         ]);
+
+        return $documentApproval;
     }
 }

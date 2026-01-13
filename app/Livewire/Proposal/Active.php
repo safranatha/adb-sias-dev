@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Proposal;
 
-use App\Helpers\ApprovalTenderDocHelper;
+use App\Services\Tender\ApprovalTenderDocService;
 use App\Helpers\DokumenTenderHelper;
 use App\Models\Proposal;
 use App\Models\DocumentApprovalWorkflow;
@@ -32,6 +32,13 @@ class Active extends Component
         'nama_proposal' => ['required', 'string', 'max:255'],
         'file_path_proposal' => ['required', 'file', 'mimes:pdf', 'max:10240'],
     ];
+
+    protected ApprovalTenderDocService $approvalTenderDocService;
+
+    public function boot(ApprovalTenderDocService $approvalTenderDocService)
+    {
+        $this->approvalTenderDocService = $approvalTenderDocService;
+    }
 
     public function mount()
     {
@@ -134,7 +141,7 @@ class Active extends Component
     public function approve($id)
     {
 
-        $approve = ApprovalTenderDocHelper::approveDocumentProposal(DocumentApprovalWorkflow::class, $id, auth()->user()->roles->first()->name);
+        $approve = $this->approvalTenderDocService->approveDocumentProposal(DocumentApprovalWorkflow::class, $id, auth()->user()->roles->first()->name);
 
         if (!$approve) {
             session()->flash('error', 'Proses approval proposal gagal!');
@@ -161,7 +168,7 @@ class Active extends Component
         $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi Proposal');
 
         // panggil helper untuk reject document proposal
-        $documentApproval = ApprovalTenderDocHelper::rejectDocumentProposal(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
+        $documentApproval = $this->approvalTenderDocService->rejectDocumentProposal(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
 
         if (!$documentApproval) {
             session()->flash('error', 'Proses approval proposal gagal!');

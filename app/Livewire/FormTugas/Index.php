@@ -15,18 +15,31 @@ class Index extends Component
 
     public function render()
     {
-        return view('livewire.form-tugas.index', [
-            'formtugas_direktur' => FormTugas::whereHas('disposisis', function ($q) {
-                $q->whereIn('penerima_id', [4, 5]);
-            })->get(),
-            'formtugas_manajer_teknik' => FormTugas::whereHas('disposisis', function ($q) {
-                $q->where('penerima_id', 6);
-            })->get(),
-            'formtugas_manajer_admin' => FormTugas::whereHas('disposisis', function ($q) {
-                $q->where('penerima_id', 7);
-            })->get(),
-            
+        $user = auth()->user();
+        $role_name = $user->getRoleNames()->first();
+        // $penerima_id_direktur = [];
+        // // yang diget hanya manajer admin dan teknik
+        // $penerima_id_direktur = [4, 5];
+        // $formtugas_direktur = FormTugas::whereHas('disposisis', function ($q) use ($penerima_id_direktur) {
+        //     $q->whereIn('penerima_id', $penerima_id_direktur);
+        // })->get();
+        $formtugas_direktur = FormTugas::whereHas('disposisis.user.roles', function ($q) {
+            $q->where('name', 'Manajer Admin')->orWhere('name', 'Manajer Teknik');
+        })->get();
 
+        $formtugas_manajer_teknik = FormTugas::whereHas('disposisis.user.roles', function ($q) {
+            $q->where('name', 'Staff Teknik');
+        })->get();
+
+        $formtugas_manajer_admin = FormTugas::whereHas('disposisis.user.roles', function ($q) {
+            $q->where('name', 'Staff Admin');
+        })->get();
+
+
+        return view('livewire.form-tugas.index', [
+            'formtugas_direktur' => $formtugas_direktur,
+            'formtugas_manajer_teknik' => $formtugas_manajer_teknik,
+            'formtugas_manajer_admin' => $formtugas_manajer_admin,
         ])->title('Daftar Form Tugas');
     }
 }
