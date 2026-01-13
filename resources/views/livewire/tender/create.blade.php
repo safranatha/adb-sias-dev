@@ -7,12 +7,14 @@
         <form wire:submit.prevent="store">
             {{-- Name Field --}}
             <flux:field>
-                <flux:label class="mt-3">Nama Tender</flux:label>
+                <flux:label class="mt-3">Nama Tender <x-required-badge /></flux:label>
+
                 <flux:input wire:model="nama_tender" placeholder="Masukkan nama tender" />
             </flux:field>
 
             <flux:field>
-                <flux:label class="mt-3">Nama Klien</flux:label>
+                <flux:label class="mt-3">Nama Klien <x-required-badge /></flux:label>
+
                 <flux:input wire:model="nama_klien" placeholder="Masukkan nama klien" />
             </flux:field>
 
@@ -20,6 +22,7 @@
             <flux:field>
                 <div class="bg-white p-5 rounded-2xl shadow-2xs mt-3">
                     <flux:label>File Pra Kualifikasi</flux:label>
+                    <x-required-badge />
                     <flux:input type="file" wire:model="file_pra_kualifikasi" />
                     {{-- Loading indicator saat upload --}}
                     <div wire:loading wire:target="file_pra_kualifikasi" class="text-sm text-gray-500">
@@ -58,8 +61,8 @@
             </div>
         </flux:modal>
         <!-- <flux:button type="submit" variant="primary" color="emerald">
-                        Buat Tender
-                    </flux:button> -->
+                            Buat Tender
+                        </flux:button> -->
 
         <flux:button variant="ghost" href="{{ route('tender.index') }}">
             Batal
@@ -70,8 +73,8 @@
     </div>
 @else
     <!-- <div class="max-w-2xl mx-auto py-6">
-            <flux:heading size="lg">Access Denied</flux:heading>
-            <p class="mt-4">You don't have permission to create tenders.</p>
-        </div> -->
+                <flux:heading size="lg">Access Denied</flux:heading>
+                <p class="mt-4">You don't have permission to create tenders.</p>
+            </div> -->
     @php abort(403); @endphp
 @endcan
