@@ -31,6 +31,7 @@
                     @error('file_pra_kualifikasi')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
+                    <flux:description class="mt-2">Tipe Dokumen: .zip atau .pdf</flux:description>
             </flux:field>
     </div>
 
@@ -61,8 +62,8 @@
             </div>
         </flux:modal>
         <!-- <flux:button type="submit" variant="primary" color="emerald">
-                            Buat Tender
-                        </flux:button> -->
+                                Buat Tender
+                            </flux:button> -->
 
         <flux:button variant="ghost" href="{{ route('tender.index') }}">
             Batal
@@ -73,8 +74,8 @@
     </div>
 @else
     <!-- <div class="max-w-2xl mx-auto py-6">
-                <flux:heading size="lg">Access Denied</flux:heading>
-                <p class="mt-4">You don't have permission to create tenders.</p>
-            </div> -->
+                    <flux:heading size="lg">Access Denied</flux:heading>
+                    <p class="mt-4">You don't have permission to create tenders.</p>
+                </div> -->
     @php abort(403); @endphp
 @endcan
