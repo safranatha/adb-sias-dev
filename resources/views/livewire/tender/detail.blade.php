@@ -270,10 +270,12 @@
 
                     {{-- modal form reject --}}
                     <flux:modal name="reject-sph-{{ $tender->id }}" class="max-w-3xl content-center">
-                        <form wire:submit.prevent="reject_sph({{ $tender->id }})">
+                        <form wire:submit.prevent="reject_sph({{ $tender->id }})" class="p-5">
                             <flux:field>
-                                <flux:label class="mt-3">Alasan Penolakan</flux:label>
+                                <flux:heading size="xl">Alasan Penolakan Dokumen SPH</flux:heading>
+                                <flux:label class="mt-3">Lampiran Revisi</flux:label>
                                 <flux:input type="file" wire:model="file_path_revisi" />
+                                <flux:description>Tipe Dokumen: .docx atau .pdf</flux:description>
                                 {{-- Loading indicator saat upload --}}
                                 <div wire:loading wire:target="file_path_revisi" class="text-sm text-gray-500 mt-1">
                                     Uploading file...
@@ -281,6 +283,7 @@
                                 @error('file_path_revisi')
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
+                                <flux:label class="mt-3">Alasan Penolakan <x-required-badge /></flux:label>
                                 <flux:textarea wire:model="pesan_revisi"></flux:textarea>
                                 @error('pesan_revisi')
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
