@@ -94,10 +94,12 @@
 
                                     {{-- modal form reject --}}
                                     <flux:modal name="reject-sph-{{ $item->proposal->id }}">
-                                        <form wire:submit.prevent="reject({{ $item->proposal->id }})">
+                                        <form wire:submit.prevent="reject({{ $item->proposal->id }})" class="p-5">
                                             <flux:field>
-                                                <flux:label class="mt-3">Alasan Penolakan</flux:label>
+                                                <flux:heading size="xl">Alasan Penolakan Dokumen Proposal</flux:heading>
+                                                <flux:label class="mt-3">Lampiran Revisi</flux:label>
                                                 <flux:input type="file" wire:model="file_path_revisi" />
+                                                <flux:description class="text-left">Tipe Dokumen: .docx atau .pdf</flux:description>
                                                 {{-- Loading indicator saat upload --}}
                                                 <div wire:loading wire:target="file_path_revisi"
                                                     class="text-sm text-gray-500 mt-1">
@@ -106,13 +108,14 @@
                                                 @error('file_path_revisi')
                                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                                 @enderror
+                                                <flux:label class="mt-3">Deskripsi Revisi <x-required-badge /></flux:label>
                                                 <flux:textarea wire:model="pesan_revisi"></flux:textarea>
                                                 @error('pesan_revisi')
                                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                                 @enderror
                                             </flux:field>
                                             <flux:modal.trigger name="reject-proposal">
-                                                <flux:button class="mt-6" variant="danger" wire:loading.attr="disabled"
+                                                <flux:button class="mt-6 w-full" variant="danger" wire:loading.attr="disabled"
                                                     wire:target="file_path_revisi">
                                                     Tolak
                                                 </flux:button>
@@ -254,9 +257,10 @@
                                             </flux:field>
 
                                             <flux:field>
-                                                <flux:label class="mt-3">Upload Proposal Revisi</flux:label>
+                                                <flux:label class="mt-3">Upload Proposal Revisi  <x-required-badge /></flux:label>
                                                 {{-- <flux:label class="mt-3">File Proposal</flux:label> --}}
-                                                <flux:input type="file" wire:model="file_path_proposal" />
+                                                <flux:input type="file" wire:model="file_path_proposal"/>
+                                                <flux:description>Tipe Dokumen: .docx atau .pdf</flux:description>
                                                 @error('file_path_proposal')
                                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                                 @enderror
