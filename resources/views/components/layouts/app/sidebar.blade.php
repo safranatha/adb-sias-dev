@@ -163,6 +163,14 @@
             </flux:navlist.group>
         </flux:navlist>
 
+        <flux:navlist variant="outline">
+             <flux:navlist.group class="grid">
+                <flux:navlist.item icon="bell" :href="route('telegram.connect')"
+                    :current="request()->routeIs('telegram.connect')" class="text-neutral-50" wire:navigate>
+                    Connect Acc Telegram</flux:navlist.item>
+            </flux:navlist.group>
+        </flux:navlist>
+
         <flux:spacer />
 
 

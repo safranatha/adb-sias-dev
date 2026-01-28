@@ -1,0 +1,53 @@
+<div>
+    {{-- The best athlete wants his opponent at his best. --}}
+    <div class="max-w-xl mx-auto mt-10 p-6 border rounded-lg">
+
+        <h2 class="text-xl font-bold mb-4">
+            🔔 Hubungkan Telegram
+        </h2>
+
+        {{-- STATUS --}}
+        @if ($user->telegram_chat_id)
+            <div class="p-4 bg-green-100 rounded mb-4">
+                ✅ Telegram sudah terhubung
+            </div>
+        @else
+            <div class="p-4 bg-yellow-100 rounded mb-4">
+                ⚠️ Telegram belum terhubung
+            </div>
+        @endif
+
+        {{-- JIKA BELUM CONNECT --}}
+        @if (!$user->telegram_chat_id)
+
+            <p class="mb-3 text-sm text-gray-700">
+                Untuk menerima notifikasi, hubungkan akun Telegram Anda.
+            </p>
+
+            <ol class="list-decimal ml-5 text-sm mb-4">
+                <li>Klik tombol <b>Generate Token</b></li>
+                <li>Buka bot Telegram</li>
+                <li>Kirim perintah di bawah</li>
+            </ol>
+
+            {{-- TOMBOL GENERATE --}}
+            <button wire:click="generateToken" class="px-4 py-2 bg-blue-600 text-white rounded">
+                🔑 Generate Token
+            </button>
+
+            {{-- TAMPILKAN TOKEN --}}
+            @if ($rawToken)
+                <div class="mt-4 p-3 bg-gray-100 rounded">
+                    <p class="text-sm mb-1">Kirim pesan ini ke bot:</p>
+                    <code class="block bg-white p-2 rounded text-center">
+                        /connect {{ $rawToken }}
+                    </code>
+                </div>
+            @endif
+
+
+        @endif
+
+    </div>
+
+</div>
