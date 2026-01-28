@@ -61,7 +61,7 @@
 
                                 {{-- validate --}}
                                 <td class="px-4 py-3">
-                                    {{-- validate sph --}} {{-- button approve --}}
+                                    {{-- validate proposal --}} {{-- button approve --}}
                                     <flux:modal.trigger name="approve-proposal">
                                         <flux:button icon="check" class="mr-2" variant="primary" color="green">
                                         </flux:button>
@@ -88,12 +88,12 @@
                                     </flux:modal>
 
                                     {{-- button reject --}}
-                                    <flux:modal.trigger name="reject-sph-{{ $item->proposal->id }}">
+                                    <flux:modal.trigger name="reject-proposal-{{ $item->proposal->id }}">
                                         <flux:button icon="x-mark" variant="danger"></flux:button>
                                     </flux:modal.trigger>
 
                                     {{-- modal form reject --}}
-                                    <flux:modal name="reject-sph-{{ $item->proposal->id }}">
+                                    <flux:modal name="reject-proposal-{{ $item->proposal->id }}">
                                         <form wire:submit.prevent="reject({{ $item->proposal->id }})" class="p-5">
                                             <flux:field>
                                                 <flux:heading size="xl">Alasan Penolakan Dokumen Proposal</flux:heading>
