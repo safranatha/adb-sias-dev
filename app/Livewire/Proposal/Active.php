@@ -11,6 +11,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use App\Services\SendTelegram\Tender\Proposal\ReviseProposalTele;
 
 
 class Active extends Component
@@ -35,9 +36,10 @@ class Active extends Component
 
     protected ApprovalTenderDocService $approvalTenderDocService;
 
-    public function boot(ApprovalTenderDocService $approvalTenderDocService)
+    public function boot(ApprovalTenderDocService $approvalTenderDocService, ReviseProposalTele $reviseProposalTele)
     {
         $this->approvalTenderDocService = $approvalTenderDocService;
+        $this->reviseProposalTele = $reviseProposalTele;
     }
 
     public function mount()
@@ -130,6 +132,11 @@ class Active extends Component
                 'keterangan' => "Proposal belum diperiksa oleh Manajer Teknik",
                 'level' => 0,
             ]);
+
+            $nama_tender= $proposal->tender()->where('id', $proposal->tender_id)->value('nama_tender');
+
+            $this->reviseProposalTele->sendMessageToManajer("Proposal {$nama_tender} telah direvisi 🚀");
+
         }
 
         session()->flash('success', 'Proposal berhasil diupdate!');

@@ -10,6 +10,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use App\Services\SendTelegram\Tender\SPH\ReviseSPHTele;
 
 
 class Active extends Component
@@ -34,9 +35,10 @@ class Active extends Component
 
     protected ApprovalTenderDocService $approvalTenderDocService;
 
-    public function boot(ApprovalTenderDocService $approvalTenderDocService)
+    public function boot(ApprovalTenderDocService $approvalTenderDocService, ReviseSPHTele $reviseSPHTele)
     {
         $this->approvalTenderDocService = $approvalTenderDocService;
+        $this->reviseSPHTele = $reviseSPHTele;
     }
 
     public function mount()
@@ -125,6 +127,10 @@ class Active extends Component
                 'keterangan' => "Surat Penawaran Harga belum diperiksa oleh Manajer Admin",
                 'level' => 0,
             ]);
+
+            $nama_tender= $sph->tender()->where('id', $sph->tender_id)->value('nama_tender');
+
+            $this->reviseSPHTele->sendMessageToManajer("Ada revisi SPH untuk tender $nama_tender");
         }
 
         session()->flash('success', 'Surat Penawaran Harga berhasil diupdate!.');
