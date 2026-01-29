@@ -40,4 +40,19 @@ class ValidateSPHTele
             'text' => $text,
         ]);
     }
+
+    public function sendMessageToStaff(string $text, string $chatId): void
+    {
+        // $staff = User::role('Staff Teknik')
+        //     ->whereNotNull('telegram_chat_id')
+        //     ->first();
+
+        // $chatId = $staff->telegram_chat_id;
+
+        Http::post("https://api.telegram.org/bot{$this->token}/sendMessage", [
+            'chat_id' => $chatId,
+            'text' => $text,
+        ]);
+    }
+
 }
