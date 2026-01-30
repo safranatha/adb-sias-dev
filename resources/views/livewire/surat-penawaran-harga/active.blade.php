@@ -105,43 +105,92 @@
 
                                     {{-- modal form reject --}}
                                     <flux:modal name="reject-sph-{{ $item->surat_penawaran_harga->id }}">
-                                        <form wire:submit.prevent="reject({{ $item->surat_penawaran_harga->id }})">
+                                        <form wire:submit.prevent="reject({{ $item->surat_penawaran_harga->id }})"
+                                            class="p-5">
+
                                             <flux:field>
-                                                <flux:label class="mt-3">Alasan Penolakan</flux:label>
+                                                <flux:heading size="xl">
+                                                    Alasan Penolakan Dokumen SPH
+                                                </flux:heading>
+
+                                                <flux:label class="mt-3">
+                                                    Lampiran Revisi
+                                                </flux:label>
+
                                                 <flux:input type="file" wire:model="file_path_revisi" />
+
+                                                <flux:description class="text-left">
+                                                    Tipe Dokumen: .docx atau .pdf
+                                                </flux:description>
+
+                                                <!-- Loading indicator -->
                                                 <div wire:loading wire:target="file_path_revisi"
                                                     class="text-sm text-gray-500 mt-1">
                                                     Uploading file...
                                                 </div>
+
+                                                @error('file_path_revisi')
+                                                    <span class="text-red-500 text-sm">
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+
+                                                <flux:label class="mt-3">
+                                                    Deskripsi Revisi <x-required-badge />
+                                                </flux:label>
+
                                                 <flux:textarea wire:model="pesan_revisi"></flux:textarea>
+
                                                 @error('pesan_revisi')
-                                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                    <span class="text-red-500 text-sm">
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </flux:field>
-                                            <flux:modal.trigger name="reject-sph" wire:loading.attr="disabled"
-                                                wire:target="file_path_revisi">
-                                                <flux:button class="mt-6" variant="danger">Tolak</flux:button>
+
+                                            <!-- Trigger modal konfirmasi -->
+                                            <flux:modal.trigger
+                                                name="reject-sph-confirm-{{ $item->surat_penawaran_harga->id }}">
+                                                <flux:button class="mt-6 w-full" variant="danger"
+                                                    wire:loading.attr="disabled" wire:target="file_path_revisi">
+                                                    Tolak
+                                                </flux:button>
                                             </flux:modal.trigger>
-                                            <flux:modal name="reject-sph" class="min-w-[22rem] text-left">
+
+                                            <!-- Modal konfirmasi -->
+                                            <flux:modal name="reject-sph-confirm-{{ $item->surat_penawaran_harga->id }}"
+                                                class="min-w-[22rem] text-left">
                                                 <div class="space-y-6">
                                                     <div>
-                                                        <flux:heading size="lg">Tolak proposal?</flux:heading>
+                                                        <flux:heading size="lg">
+                                                            Tolak SPH?
+                                                        </flux:heading>
+
                                                         <flux:text class="mt-2">
                                                             Anda akan menolak SPH tersebut.<br>
                                                             SPH yang ditolak akan dikembalikan lagi ke Staff.
                                                         </flux:text>
                                                     </div>
+
                                                     <div class="flex gap-2">
                                                         <flux:spacer />
+
                                                         <flux:modal.close>
-                                                            <flux:button variant="ghost">Batal</flux:button>
+                                                            <flux:button variant="ghost">
+                                                                Batal
+                                                            </flux:button>
                                                         </flux:modal.close>
-                                                        <flux:button type="submit" variant="danger">Tolak</flux:button>
+
+                                                        <flux:button type="submit" variant="danger">
+                                                            Tolak
+                                                        </flux:button>
                                                     </div>
                                                 </div>
                                             </flux:modal>
+
                                         </form>
                                     </flux:modal>
+
                                 </td>
                                 {{-- status Surat Penawaran Harga --}}
                                 <td class="px-4 py-3">
@@ -235,8 +284,12 @@
                                                 </flux:field>
 
                                                 <flux:field>
-                                                    <flux:label class="mt-3">Upload SPH Revisi</flux:label>
+                                                    <flux:label class="mt-3">Upload SPH Revisi <x-required-badge />
+                                                    </flux:label>
                                                     <flux:input type="file" wire:model="file_path_sph" />
+                                                    <flux:description class="text-center">
+                                                        Tipe Dokumen: .docx atau .pdf
+                                                    </flux:description>
                                                     @error('file_path_sph')
                                                         <span class="text-red-500 text-sm">{{ $message }}</span>
                                                     @enderror

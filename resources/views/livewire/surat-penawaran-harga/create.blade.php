@@ -8,7 +8,7 @@
             <form wire:submit.prevent="store">
                 {{-- Nama Surat Field --}}
                 <flux:field>
-                    <flux:label class="mt-3">Nama Surat Penawaran Harga</flux:label>
+                    <flux:label class="mt-3">Nama Surat Penawaran Harga <x-required-badge /></flux:label>
                     <flux:input wire:model="nama_sph" placeholder="Enter nama surat" />
                     @error('nama_sph')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -18,8 +18,9 @@
                 {{-- File Upload Field --}}
                 <div class="bg-white rounded-2xl mt-3 p-5 shadow-md">
                     <flux:field>
-                        <flux:label>File Surat Penawaran Harga</flux:label>
+                        <flux:label>File Surat Penawaran Harga <x-required-badge /></flux:label>
                         <flux:input type="file" wire:model="file_path_sph" />
+                        <flux:description>Tipe Dokumen: .pdf</flux:description>
                         {{-- Loading indicator saat upload --}}
                         <div wire:loading wire:target="file_path_sph" class="text-sm text-gray-500 mt-1">
                             Uploading file...
@@ -32,7 +33,7 @@
 
                 {{-- Tender Selection --}}
                 <flux:field>
-                    <flux:label class="mt-3">Tender</flux:label>
+                    <flux:label class="mt-3">Tender <x-required-badge /></flux:label>
                     <flux:select wire:model="tender_id">
                         <flux:select.option value="">-- Pilih Tender --</flux:select.option>
                         @foreach ($tender_status as $tender)
