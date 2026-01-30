@@ -5,7 +5,9 @@ namespace App\Livewire\FormTugas;
 use App\Helpers\DokumenTenderHelper;
 use App\Models\Disposisi;
 use App\Models\FormTugas;
+use App\Models\User;
 use Livewire\Component;
+use App\Services\SendTelegram\Tender\FormTugas\UpdateStatusFormTugasTele;
 
 class Detail extends Component
 {
@@ -17,6 +19,10 @@ class Detail extends Component
         $this->timestamp_baca($id);
     }
 
+    public function boot(UpdateStatusFormTugasTele $updateStatusFormTugasTele)
+    {
+        $this->updateStatusFormTugasTele = $updateStatusFormTugasTele;
+    }
     public function download($id)
     {
         return DokumenTenderHelper::downloadHelper(FormTugas::class, $id, 'file_path_form_tugas', 'File Form Tugas');
@@ -47,6 +53,14 @@ class Detail extends Component
         if ($user_id === $penerima_id_on_disposisi) {
             // update status on disposisi table
             Disposisi::where('form_tugas_id', '=', $id)->update(['status' => '2']);
+
+            $pengirim=FormTugas::where('id', '=', $id)->first()->user_id;
+
+            $chat_id_pengirim=User::where('id', '=', $pengirim)->first()->telegram_chat_id;
+
+            $jenis_permintaan=FormTugas::where('id', '=', $id)->first()->jenis_permintaan;
+
+            $this->updateStatusFormTugasTele->sendMessageToPengirim($jenis_permintaan, $penerima_id_on_disposisi, $chat_id_pengirim,);
         }
     }
 
