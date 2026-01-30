@@ -8,6 +8,7 @@ use App\Models\FormTugas;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Services\SendTelegram\Tender\FormTugas\CreateFormTugasTele;
 
 class Create extends Component
 {
@@ -30,6 +31,11 @@ class Create extends Component
         'keterangan' => 'nullable',
         'file_path_form_tugas' => 'nullable|mimes:pdf',
     ];
+
+    public function boot(CreateFormTugasTele $createFormTugasTele)
+    {
+        $this->createFormTugasTele = $createFormTugasTele;
+    }
 
     public function mount()
     {
@@ -75,6 +81,11 @@ class Create extends Component
                 'file_path_form_tugas' => $path,
             ]);
         }
+
+        $chat_id = User::where('id', $this->penerima)->first()->telegram_chat_id;
+
+        // send telegram to penerima
+        $this->createFormTugasTele->sendMessageToPenerima($this->jenis_permintaan, $chat_id);
 
         session()->flash('success', 'Form tugas berhasil diupload!');
 
