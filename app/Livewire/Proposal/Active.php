@@ -31,7 +31,7 @@ class Active extends Component
     protected $rules = [
         'tender_id' => ['required', 'exists:tenders,id'],
         'nama_proposal' => ['required', 'string', 'max:255'],
-        'file_path_proposal' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+        'file_path_proposal' => ['required', 'file', 'max:10240'],
     ];
 
     protected ApprovalTenderDocService $approvalTenderDocService;
@@ -97,7 +97,7 @@ class Active extends Component
             $rules['nama_proposal'] = ['required', 'string', 'max:255'];
         }
         if ($this->file_path_proposal instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
-            $rules['file_path_proposal'] = ['file', 'mimes:pdf', 'max:10240'];
+            $rules['file_path_proposal'] = ['file', 'max:10240'];
         }
 
         if (!empty($rules)) {

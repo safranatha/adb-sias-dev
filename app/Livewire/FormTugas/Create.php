@@ -29,7 +29,7 @@ class Create extends Component
         'jenis_permintaan' => 'required',
         'kegiatan' => 'required',
         'keterangan' => 'nullable',
-        'file_path_form_tugas' => 'nullable|mimes:pdf',
+        'file_path_form_tugas' => 'nullable',
     ];
 
     public function boot(CreateFormTugasTele $createFormTugasTele)
