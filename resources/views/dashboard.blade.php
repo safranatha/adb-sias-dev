@@ -1,5 +1,6 @@
 <x-layouts.app :title="__('Dashboard')">
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+        <div class="bg-emerald-900 h-40 rounded-xl text-center overflow-hidden relative content-center"><livewire:dashboard.dekorasi /></div>
         <div class="grid auto-rows-min gap-4 md:grid-cols-2">
             <div class="relative h-30 p-6 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
                 <flux:text>Hallo, selamat datang kembali 👋</flux:text>
