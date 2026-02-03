@@ -9,6 +9,8 @@ use App\Models\Tender;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Title;
+use App\Services\SendTelegram\Tender\SPH\CreateSPHTele;
+
 
 class Create extends Component
 {
@@ -21,7 +23,7 @@ class Create extends Component
     protected $rules = [
         'tender_id' => ['required', 'exists:tenders,id'],
         'nama_sph' => ['required', 'string', 'max:255'],
-        'file_path_sph' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+        'file_path_sph' => ['required', 'file', 'max:10240'],
     ];
 
     public function mount()
@@ -36,7 +38,7 @@ class Create extends Component
         $this->file_path_sph = null;
     }
 
-    public function store()
+    public function store(CreateSPHTele $telegram)
     {
         $this->validate();
 
@@ -64,6 +66,11 @@ class Create extends Component
         $this->dispatch('modal-closed', id: 'store');
 
         $this->resetForm();
+
+        $telegram->sendMessageToManajer(
+            "Surat Penawaran Harga " . $sph->nama_sph . " telah dibuat 🚀"
+        );
+
 
         return redirect()->route('surat-penawaran-harga.active');
     }

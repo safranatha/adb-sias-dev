@@ -11,6 +11,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use App\Services\SendTelegram\Tender\Proposal\ReviseProposalTele;
 
 
 class Active extends Component
@@ -30,14 +31,15 @@ class Active extends Component
     protected $rules = [
         'tender_id' => ['required', 'exists:tenders,id'],
         'nama_proposal' => ['required', 'string', 'max:255'],
-        'file_path_proposal' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+        'file_path_proposal' => ['required', 'file', 'max:10240'],
     ];
 
     protected ApprovalTenderDocService $approvalTenderDocService;
 
-    public function boot(ApprovalTenderDocService $approvalTenderDocService)
+    public function boot(ApprovalTenderDocService $approvalTenderDocService, ReviseProposalTele $reviseProposalTele)
     {
         $this->approvalTenderDocService = $approvalTenderDocService;
+        $this->reviseProposalTele = $reviseProposalTele;
     }
 
     public function mount()
@@ -95,7 +97,7 @@ class Active extends Component
             $rules['nama_proposal'] = ['required', 'string', 'max:255'];
         }
         if ($this->file_path_proposal instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
-            $rules['file_path_proposal'] = ['file', 'mimes:pdf', 'max:10240'];
+            $rules['file_path_proposal'] = ['file', 'max:10240'];
         }
 
         if (!empty($rules)) {
@@ -130,6 +132,11 @@ class Active extends Component
                 'keterangan' => "Proposal belum diperiksa oleh Manajer Teknik",
                 'level' => 0,
             ]);
+
+            $nama_tender= $proposal->tender()->where('id', $proposal->tender_id)->value('nama_tender');
+
+            $this->reviseProposalTele->sendMessageToManajer("Proposal {$nama_tender} telah direvisi 🚀");
+
         }
 
         session()->flash('success', 'Proposal berhasil diupdate!');

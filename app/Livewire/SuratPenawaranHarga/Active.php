@@ -10,6 +10,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use App\Services\SendTelegram\Tender\SPH\ReviseSPHTele;
 
 
 class Active extends Component
@@ -29,14 +30,15 @@ class Active extends Component
     protected $rules = [
         'tender_id' => ['required', 'exists:tenders,id'],
         'nama_sph' => ['required', 'string', 'max:255'],
-        'file_path_sph' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+        'file_path_sph' => ['required', 'file', 'max:10240'],
     ];
 
     protected ApprovalTenderDocService $approvalTenderDocService;
 
-    public function boot(ApprovalTenderDocService $approvalTenderDocService)
+    public function boot(ApprovalTenderDocService $approvalTenderDocService, ReviseSPHTele $reviseSPHTele)
     {
         $this->approvalTenderDocService = $approvalTenderDocService;
+        $this->reviseSPHTele = $reviseSPHTele;
     }
 
     public function mount()
@@ -90,7 +92,7 @@ class Active extends Component
             $rules['nama_sph'] = ['required', 'string', 'max:255'];
         }
         if ($this->file_path_sph instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
-            $rules['file_path_sph'] = ['file', 'mimes:pdf', 'max:10240'];
+            $rules['file_path_sph'] = ['file', 'max:10240'];
         }
 
         if (!empty($rules)) {
@@ -125,6 +127,10 @@ class Active extends Component
                 'keterangan' => "Surat Penawaran Harga belum diperiksa oleh Manajer Admin",
                 'level' => 0,
             ]);
+
+            $nama_tender= $sph->tender()->where('id', $sph->tender_id)->value('nama_tender');
+
+            $this->reviseSPHTele->sendMessageToManajer("Ada revisi SPH untuk tender $nama_tender");
         }
 
         session()->flash('success', 'Surat Penawaran Harga berhasil diupdate!.');

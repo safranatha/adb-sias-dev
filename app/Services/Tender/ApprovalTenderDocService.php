@@ -1,11 +1,25 @@
 <?php
 namespace App\Services\Tender;
 
+use App\Models\Proposal;
+use App\Models\SuratPenawaranHarga;
+use App\Models\User;
+use App\Services\SendTelegram\Tender\Proposal\ValidateProposalTele;
+use App\Services\SendTelegram\Tender\SPH\ValidateSPHTele;
 use Illuminate\Database\Eloquent\Model;
 
 
 class ApprovalTenderDocService
 {
+
+    protected ValidateSPHTele $telegramSPH;
+    protected ValidateProposalTele $telegramPropo;
+
+    public function __construct(ValidateSPHTele $telegramSPH, ValidateProposalTele $telegramPropo)
+    {
+        $this->telegramSPH = $telegramSPH;
+        $this->telegramPropo = $telegramPropo;
+    }
     public function rejectDocumentProposal(
         string $modelClass,
         int $id,
@@ -23,6 +37,12 @@ class ApprovalTenderDocService
             return null;
         }
 
+        $createdByProposal = Proposal::where('id', $id)->first()->user_id;
+
+        $chatIdBasedOnUserId = User::where('id', $createdByProposal)->first()->telegram_chat_id;
+
+        $namaProposal = Proposal::where('id', $id)->first()->nama_proposal;
+
         $documentApproval->update([
             'user_id' => auth()->user()->id,
             'status' => false,
@@ -31,6 +51,8 @@ class ApprovalTenderDocService
             'file_path_revisi' => $path,
             'pesan_revisi' => $pesan_revisi
         ]);
+
+        $this->telegramPropo->sendMessageToStaff("Proposal $namaProposal ditolak oleh Manajer Teknik", $chatIdBasedOnUserId);
 
         return $documentApproval;
     }
@@ -46,12 +68,24 @@ class ApprovalTenderDocService
             ->latest() // Ambil yang terbaru
             ->first();
 
+
+        $createdByProposal = Proposal::where('id', $id)->first()->user_id;
+
+        $chatIdBasedOnUserId = User::where('id', $createdByProposal)->first()->telegram_chat_id;
+
+        $namaProposal = Proposal::where('id', $id)->first()->nama_proposal;
+
         $documentApproval->update([
             'user_id' => auth()->user()->id,
             'status' => true,
             'level' => ($nama_role == "Manajer Teknik") ? "2" : ($nama_role == "Direktur" ? "3" : null),
             'keterangan' => ($nama_role == "Manajer Teknik") ? "Proposal disetujui oleh Manajer Teknik" : ($nama_role == "Direktur" ? "Proposal disetujui oleh Direktur" : null),
         ]);
+
+        $this->telegramPropo->sendMessageToStaff("Proposal $namaProposal di-approve oleh Manajer Teknik", $chatIdBasedOnUserId);
+
+        $this->telegramPropo->sendMessageToDirektur("Proposal $namaProposal di-approve oleh Manajer Teknik");
+
 
         return $documentApproval;
     }
@@ -68,6 +102,12 @@ class ApprovalTenderDocService
             ->latest() // Ambil yang terbaru
             ->first();
 
+        $createdBySPH = SuratPenawaranHarga::where('id', $id)->first()->user_id;
+
+        $chatIdBasedOnUserId = User::where('id', $createdBySPH)->first()->telegram_chat_id;
+
+        $namaSPH = SuratPenawaranHarga::where('id', $id)->first()->nama_sph;
+
         $documentApproval->update([
             'user_id' => auth()->user()->id,
             'status' => false,
@@ -76,6 +116,8 @@ class ApprovalTenderDocService
             'pesan_revisi' => $pesan_revisi,
             'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga ditolak oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga ditolak oleh Direktur" : null),
         ]);
+
+        $this->telegramSPH->sendMessageToStaff("Surat Penawaran Harga $namaSPH ditolak oleh Manajer Admin", $chatIdBasedOnUserId);
         return $documentApproval;
     }
 
@@ -84,10 +126,16 @@ class ApprovalTenderDocService
         int $id,
         string $nama_role
     ) {
-         // Cari document approval berdasarkan surat_penawaran_harga_id
+        // Cari document approval berdasarkan surat_penawaran_harga_id
         $documentApproval = $modelClass::where('surat_penawaran_harga_id', $id)
             ->latest() // Ambil yang terbaru
             ->first();
+
+        $createdBySPH = SuratPenawaranHarga::where('id', $id)->first()->user_id;
+
+        $chatIdBasedOnUserId = User::where('id', $createdBySPH)->first()->telegram_chat_id;
+
+        $namaSPH = SuratPenawaranHarga::where('id', $id)->first()->nama_sph;
 
         $documentApproval->update([
             'user_id' => auth()->user()->id,
@@ -96,6 +144,9 @@ class ApprovalTenderDocService
             'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga disetujui oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga disetujui oleh Direktur" : null),
         ]);
 
+        $this->telegramSPH->sendMessageToStaff("Surat Penawaran Harga $namaSPH di-approve oleh Manajer Admin", $chatIdBasedOnUserId);
+
+        $this->telegramSPH->sendMessageToDirektur("Surat Penawaran Harga $namaSPH di-approve oleh Manajer Admin");
         return $documentApproval;
     }
 }
