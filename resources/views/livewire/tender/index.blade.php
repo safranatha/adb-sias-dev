@@ -17,9 +17,48 @@
             <table class="w-full text-sm text-center bg-white">
                 <thead class="bg-green-50 text-white">
                     <tr>
-                        <th class="px-4 py-3 font-medium">Nama Tender</th>
-                        <th class="px-4 py-3 font-medium">Nama Klien</th>
-                        <th class="px-4 py-3 font-medium">Status</th>
+                        <th class="px-4 py-3 font-medium">
+                            Nama Tender
+                        </th>
+                        <th class="px-4 py-3 font-medium text-center">
+                            <div class="flex justify-center items-center">
+                                <flux:dropdown>
+                                    <div class="flex items-center gap-1">
+                                        <flux:heading class="text-sm text-white mr-2">Nama Klien</flux:heading>
+                                        <flux:button size="sm" class="[&>svg]:text-white [&>svg]:stroke-white"
+                                            icon="chevron-down" variant="ghost" inset />
+                                    </div>
+
+                                    <flux:menu>
+                                        <flux:menu.checkbox keep-open checked>Klien 1</flux:menu.checkbox>
+                                        <flux:menu.checkbox keep-open>Klien 2</flux:menu.checkbox>
+                                        <flux:menu.checkbox keep-open>Klien 3</flux:menu.checkbox>
+                                        <flux:menu.separator />
+                                        <flux:menu.item icon="trash" variant="danger">Bersihkan</flux:menu.item>
+                                    </flux:menu>
+                                </flux:dropdown>
+                            </div>
+                        </th>
+
+                        <th class="px-4 py-3 font-medium text-center">
+                            <div class="flex justify-center items-center">
+                            <flux:dropdown>
+                                <div class="flex items-center gap-1">
+                                    <flux:heading class="text-sm text-white mr-2">Status</flux:heading>
+                                    <flux:button size="sm" class="[&>svg]:text-white [&>svg]:stroke-white"
+                                        icon="chevron-down" variant="ghost" inset />
+                                </div>
+
+                                <flux:menu>
+                                    <flux:menu.checkbox keep-open checked>Berhasil</flux:menu.checkbox>
+                                    <flux:menu.checkbox keep-open>Dalam Proses</flux:menu.checkbox>
+                                    <flux:menu.checkbox keep-open>Gagal</flux:menu.checkbox>
+                                    <flux:menu.separator />
+                                    <flux:menu.item icon="trash" variant="danger">Bersihkan</flux:menu.item>
+                                </flux:menu>
+                            </flux:dropdown>
+                            </div>
+                        </th>
                         <th class="px-4 py-3 font-medium">Edit</th>
                         <th class="px-4 py-3 font-medium">Dokumen Pra Kualifikasi</th>
                         <th class="px-4 py-3 font-medium">Detail</th>
@@ -74,33 +113,33 @@
                                     </flux:modal>
 
                                     <flux:modal name="confirm-update-{{ $item->id }}" class="min-w-[22rem]">
-                                    <form wire:submit.prevent="update">
-                                        <div class="space-y-6 text-left">
+                                        <form wire:submit.prevent="update">
+                                            <div class="space-y-6 text-left">
 
-                                            <div>
-                                                <flux:heading size="lg">Update tender?</flux:heading>
-                                                <flux:text class="mt-2">
-                                                    Anda akan memperbarui tender tersebut.<br>
-                                                    Apakah Anda yakin?
-                                                </flux:text>
-                                            </div>
+                                                <div>
+                                                    <flux:heading size="lg">Update tender?</flux:heading>
+                                                    <flux:text class="mt-2">
+                                                        Anda akan memperbarui tender tersebut.<br>
+                                                        Apakah Anda yakin?
+                                                    </flux:text>
+                                                </div>
 
-                                            <div class="flex gap-2">
-                                                <flux:spacer />
+                                                <div class="flex gap-2">
+                                                    <flux:spacer />
 
-                                                <flux:modal.close>
-                                                    <flux:button type="button" variant="ghost">
-                                                        Batal
+                                                    <flux:modal.close>
+                                                        <flux:button type="button" variant="ghost">
+                                                            Batal
+                                                        </flux:button>
+                                                    </flux:modal.close>
+
+                                                    <flux:button type="submit" variant="primary" color="emerald">
+                                                        Yakin
                                                     </flux:button>
-                                                </flux:modal.close>
-
-                                                <flux:button type="submit" variant="primary" color="emerald">
-                                                    Yakin
-                                                </flux:button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </form>
-                                </flux:modal>
+                                        </form>
+                                    </flux:modal>
 
                                 <td class="px-4 py-3">
                                     <flux:button icon="arrow-down-tray" class="mr-2"

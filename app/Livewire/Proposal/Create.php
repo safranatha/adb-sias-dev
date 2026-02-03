@@ -24,7 +24,7 @@ class Create extends Component
     protected $rules = [
         'tender_id' => ['required', 'exists:tenders,id'],
         'nama_proposal' => ['required', 'string', 'max:255'],
-        'file_path_proposal' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+        'file_path_proposal' => ['required', 'file', 'max:10240'],
     ];
 
     public function mount()

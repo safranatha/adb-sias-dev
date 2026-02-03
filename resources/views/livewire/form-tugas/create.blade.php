@@ -9,8 +9,8 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="col-span-1">
                     {{-- Penerima Selection --}}
-                    <flux:label class="mt-3">Penerima</flux:label>
-                    <flux:select wire:model="penerima" class="w-full">
+                    <flux:label class="mt-3">Penerima <x-required-badge /></flux:label>
+                    <flux:select wire:model="penerima" class="w-full mt-2">
                         <flux:select.option value="">-- Pilih penerima --</flux:select.option>
                         @if (auth()->user()->hasRole(['Direktur', 'Asisten Direktur']))
                             @foreach ($list_penerima_direktur as $item)
@@ -39,8 +39,8 @@
 
                 <div class="col-span-2">
                     {{-- Jenis Permintaan Field --}}
-                    <flux:label class="mt-3">Jenis Permintaan</flux:label>
-                    <flux:input wire:model="jenis_permintaan" class="w-full" />
+                    <flux:label class="mt-3">Jenis Permintaan <x-required-badge /></flux:label>
+                    <flux:input wire:model="jenis_permintaan" class="w-full mt-2" placeholder="Masukkan jenis permintaan" />
                     @error('jenis_permintaan')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
@@ -51,8 +51,8 @@
 
         {{-- Kegiatan Field --}}
         <flux:field>
-            <flux:label class="mt-3">Kegiatan/Pekerjaan</flux:label>
-            <flux:input wire:model="kegiatan" placeholder="Enter kegiatan" />
+            <flux:label class="mt-3">Kegiatan/Pekerjaan <x-required-badge /></flux:label>
+            <flux:input wire:model="kegiatan" placeholder="Masukkan jenis kegiatan" />
             @error('kegiatan')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
@@ -62,9 +62,9 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="col-span-2">
                     {{-- Lingkup Kerja Selection --}}
-                    <flux:label class="mt-3">Lingkup Kerja</flux:label>
+                    <flux:label class="mt-3">Lingkup Kerja <x-required-badge /></flux:label>
 
-                    <flux:input wire:model="lingkup_kerja" class="w-full" />
+                    <flux:input wire:model="lingkup_kerja" class="w-full mt-2" placeholder="Masukkan lingkup kerja"/>
                     @error('lingkup_kerja')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
@@ -73,8 +73,8 @@
 
                 <div class="col-span-1">
                     {{-- due date Field --}}
-                    <flux:label class="mt-3">Tenggat Waktu</flux:label>
-                    <flux:input type="date" max="2999-12-31" wire:model="due_date" />
+                    <flux:label class="mt-3">Tenggat Waktu <x-required-badge /></flux:label>
+                    <flux:input type="date" max="2999-12-31" wire:model="due_date" class="mt-2"/>
                     @error('lingkup_kerja')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
@@ -85,9 +85,12 @@
 
 
         {{-- File Upload Field --}}
+        <div class="bg-white rounded-2xl mt-3 p-5 shadow-md">
         <flux:field>
-            <flux:label class="mt-3">Dokumen</flux:label>
-            <flux:input type="file" wire:model="file_path_form_tugas" />
+            
+            <flux:label class="">Dokumen</flux:label>
+            <flux:input type="file" wire:model="file_path_form_tugas" class="mb-0"/>
+            <flux:description>Tipe Dokumen: .docx atau .pdf</flux:description>
             {{-- Loading indicator saat upload --}}
             <div wire:loading wire:target="file_path_form_tugas" class="text-sm text-gray-500 mt-1">
                 Uploading file...
@@ -96,11 +99,12 @@
                 <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
         </flux:field>
+        </div>
 
         {{-- Isi Internal Memo Field --}}
         <flux:field>
-            <flux:label class="mt-3">Isi Internal Memo</flux:label>
-            <flux:input wire:model="keterangan" placeholder="Enter keterangan" rows="6" />
+            <flux:label class="mt-3">Isi Internal Memo <x-required-badge /></flux:label>
+            <flux:input wire:model="keterangan" placeholder="Masukkan keterangan" rows="6" />
             @error('keterangan')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
