@@ -26,8 +26,7 @@
 
             <ol class="list-decimal ml-5 text-sm mb-4">
                 <li>Klik tombol <b>Generate Token</b></li>
-                <li>Buka bot Telegram</li>
-                <li>Kirim perintah di bawah</li>
+                <li>Kemudian, klik <b>Hubungkan</b></li>
             </ol>
 
             {{-- TOMBOL GENERATE --}}
@@ -38,10 +37,14 @@
             {{-- TAMPILKAN TOKEN --}}
             @if ($rawToken)
                 <div class="mt-4 p-3 bg-gray-100 rounded">
-                    <p class="text-sm mb-1">Kirim pesan ini ke bot:</p>
-                    <code class="block bg-white p-2 rounded text-center">
-                        /connect {{ $rawToken }}
-                    </code>
+                    <a href="https://t.me/sias_adi_banuwa_bot?text=/connect%20{{ $rawToken }}" target="_blank"
+                        class="text-blue-600 hover:underline">Hubungkan</a>
+                </div>
+            @else
+                <div class="mt-4 p-3 bg-gray-100 rounded">
+                    <span class="text-gray-400 cursor-not-allowed">
+                        Hubungkan
+                    </span>
                 </div>
             @endif
 
