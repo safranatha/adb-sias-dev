@@ -74,7 +74,7 @@ class Create extends Component
 
         // pengecekan jika ada file path maka akan update di kolom form tugas yang telah distore
         if ($this->file_path_form_tugas) {
-            $path=DokumenTenderHelper::storeFileOnStroage($this->file_path_form_tugas, 'form_tugas');
+            $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_form_tugas, 'form_tugas');
 
             // Save to database
             FormTugas::where('id', $form_tugas->id)->update([
@@ -85,7 +85,13 @@ class Create extends Component
         $chat_id = User::where('id', $this->penerima)->first()->telegram_chat_id;
 
         // send telegram to penerima
-        $this->createFormTugasTele->sendMessageToPenerima($this->jenis_permintaan, $chat_id);
+        $this->createFormTugasTele
+            ->sendMessageToPenerima(
+                $this->jenis_permintaan,
+                $this->kegiatan,
+                $chat_id,
+                $this->due_date,
+            );
 
         session()->flash('success', 'Form tugas berhasil diupload!');
 
