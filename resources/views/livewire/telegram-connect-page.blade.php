@@ -27,6 +27,8 @@
             <ol class="list-decimal ml-5 text-sm mb-4">
                 <li>Klik tombol <b>Generate Token</b></li>
                 <li>Kemudian, klik <b>Hubungkan</b></li>
+                <li>Anda akan dialihkan ke Telegram</li>
+                <li>Kemudian, pilih <b>Start Bot</b>, dan <b>Kirim Pesan</b> yang ada</li>
             </ol>
 
             {{-- TOMBOL GENERATE --}}
