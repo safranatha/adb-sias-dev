@@ -16,7 +16,10 @@ class UpdateStatusFormTugasTele
     {
         Http::post("https://api.telegram.org/bot{$this->token}/sendMessage", [
             'chat_id' => $chatId,
-            'text' =>  'Form tugas baru dengan jenis permintaan ' . $jenis_permintaan . ' telah diselesaikan oleh '.$penerima_id.', silahkan cek SIAS anda.',
+            'text' => "✅ Tugas Telah Diselesaikan\n" .
+                "Jenis Permintaan: {$jenis_permintaan}\n" .
+                "Diselesaikan oleh: {$penerima_id}\n\n" .
+                "Detail lebih lanjut, silakan cek SIAS Anda.",
         ]);
     }
 
