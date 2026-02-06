@@ -128,7 +128,7 @@ class Active extends Component
                 'level' => 0,
             ]);
 
-            $nama_tender= $sph->tender()->where('id', $sph->tender_id)->value('nama_tender');
+            $nama_tender = $sph->tender()->where('id', $sph->tender_id)->value('nama_tender');
 
             $this->reviseSPHTele->sendMessageToManajer("Ada revisi SPH untuk tender $nama_tender");
         }
@@ -164,15 +164,20 @@ class Active extends Component
 
         $rules = [
             'pesan_revisi' => ['required', 'string', 'max:255'],
-            'file_path_revisi' => ['required', 'file', 'max:10240']
+            'file_path_revisi' => ['nullable', 'file', 'max:10240']
         ];
 
         $this->validate($rules);
 
-        // call helper for upload file revisi
-        $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi SPH');
+        $path = "";
+
+        if ($this->file_path_revisi) {
+            // call helper for upload file revisi
+            $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi SPH');
+        }
 
         $documentApproval = $this->approvalTenderDocService->rejectDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
+
 
         if (!$documentApproval) {
             session()->flash('error', 'Proses approval proposal gagal!');
