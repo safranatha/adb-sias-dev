@@ -66,7 +66,7 @@
                     </div>
 
                     <flux:button icon="magnifying-glass" variant="primary" color="emerald"
-                        href="{{ route('tracking-document.detail', $tender->id) }}">
+                        href="{{ route('tracking-document.maintenance') }}">
                         Detail Tender
                     </flux:button>
                 </div>

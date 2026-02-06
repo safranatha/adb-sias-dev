@@ -128,9 +128,12 @@ class Active extends Component
                 'level' => 0,
             ]);
 
-            $nama_tender = $sph->tender()->where('id', $sph->tender_id)->value('nama_tender');
+            $message = "✏️ *Revisi SPH*\n\n"
+                . "📁 *Tender* : {$sph->tender->nama_tender}\n"
+                . "📄 *Nama SPH* : {$sph->nama_sph}\n\n"
+                . "_Terdapat revisi SPH, silakan lakukan pemeriksaan ulang di SIAS._";
 
-            $this->reviseSPHTele->sendMessageToManajer("Ada revisi SPH untuk tender $nama_tender");
+            $this->reviseSPHTele->sendMessageToManajer($message);
         }
 
         session()->flash('success', 'Surat Penawaran Harga berhasil diupdate!.');

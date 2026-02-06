@@ -94,3 +94,130 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0) translateX(0);
+        }
+        50% {
+            transform: translateY(-15px) translateX(10px);
+        }
+    }
+
+    @keyframes pulse-custom {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 0.1;
+        }
+        50% {
+            transform: scale(1.1);
+            opacity: 0.15;
+        }
+    }
+
+    @keyframes rotate-slow {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes slideDown {
+        0%, 100% {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        50% {
+            transform: translateY(200%);
+            opacity: 0.8;
+        }
+    }
+
+    @keyframes slideLeft {
+        0%, 100% {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        50% {
+            transform: translateX(-100%);
+            opacity: 0.8;
+        }
+    }
+
+    @keyframes twinkle {
+        0%, 100% {
+            opacity: 0.3;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+    }
+
+    .animate-float {
+        animation: float 20s ease-in-out infinite;
+    }
+
+    .animate-float-reverse {
+        animation: float 15s ease-in-out infinite reverse;
+    }
+
+    .animate-float-slow {
+        animation: float 18s ease-in-out infinite;
+    }
+
+    .animate-pulse-custom {
+        animation: pulse-custom 8s ease-in-out infinite;
+    }
+
+    .animate-rotate-slow {
+        animation: rotate-slow 25s linear infinite;
+    }
+
+    .animate-rotate-reverse {
+        animation: rotate-slow 20s linear infinite reverse;
+    }
+
+    .animate-rotate-slower {
+        animation: rotate-slow 30s linear infinite;
+    }
+
+    .animate-slide-down {
+        animation: slideDown 15s ease-in-out infinite;
+    }
+
+    .animate-slide-left {
+        animation: slideLeft 12s ease-in-out infinite;
+    }
+
+    .animate-twinkle {
+        animation: twinkle 3s ease-in-out infinite;
+    }
+
+    .hexagon {
+        width: 50px;
+        height: 28.87px;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .hexagon:before,
+    .hexagon:after {
+        content: "";
+        position: absolute;
+        width: 0;
+        border-left: 25px solid transparent;
+        border-right: 25px solid transparent;
+    }
+
+    .hexagon:before {
+        bottom: 100%;
+        border-bottom: 14.43px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .hexagon:after {
+        top: 100%;
+        border-top: 14.43px solid rgba(255, 255, 255, 0.1);
+    }

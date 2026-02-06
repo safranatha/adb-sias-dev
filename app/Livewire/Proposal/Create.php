@@ -66,7 +66,9 @@ class Create extends Component
         $this->resetForm();
 
         $telegram->sendMessageToManajer(
-            "Proposal " . $proposal->nama_proposal . " telah dibuat 🚀"
+            auth()->user()->name,
+            $proposal->nama_proposal,
+            Tender::find($this->tender_id)->nama_tender
         );
 
 

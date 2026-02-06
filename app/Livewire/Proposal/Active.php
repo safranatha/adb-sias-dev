@@ -135,7 +135,16 @@ class Active extends Component
 
             $nama_tender = $proposal->tender()->where('id', $proposal->tender_id)->value('nama_tender');
 
-            $this->reviseProposalTele->sendMessageToManajer("Proposal {$nama_tender} telah direvisi 🚀");
+            $namaStaff = auth()->user()->name;
+            $namaProposal = $proposal->nama_proposal;
+            $namaTender = $proposal->tender->nama_tender;
+
+            $this->reviseProposalTele->sendMessageToManajer(
+                $namaStaff,
+                $namaProposal,
+                $namaTender
+            );
+
 
         }
 

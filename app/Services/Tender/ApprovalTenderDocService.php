@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\SendTelegram\Tender\Proposal\ValidateProposalTele;
 use App\Services\SendTelegram\Tender\SPH\ValidateSPHTele;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Tender;
 
 
 class ApprovalTenderDocService
@@ -40,7 +41,8 @@ class ApprovalTenderDocService
         $createdByProposal = Proposal::where('id', $id)->first()->user_id;
 
         $chatIdBasedOnUserId = User::where('id', $createdByProposal)->first()->telegram_chat_id;
-
+        
+        $tender_name = Tender::where('id', Proposal::where('id', $id)->first()->tender_id)->first()->nama_tender;
         $namaProposal = Proposal::where('id', $id)->first()->nama_proposal;
 
         $documentApproval->update([
@@ -52,7 +54,15 @@ class ApprovalTenderDocService
             'pesan_revisi' => $pesan_revisi
         ]);
 
-        $this->telegramPropo->sendMessageToStaff("Proposal $namaProposal ditolak oleh Manajer Teknik", $chatIdBasedOnUserId);
+        $message = "❌ *Proposal Ditolak*\n\n"
+            . "📌 *Tender* : {$tender_name}\n"
+            . "📄 *Nama Proposal* : {$namaProposal}\n"
+            . "👤 *Ditolak oleh* : {$nama_role}\n"
+            . "📝 *Alasan Revisi* :\n"
+            . "{$pesan_revisi}\n"
+            . "Silahkan cek dan revisi kembali proposal Anda melalui SIAS.";
+
+        $this->telegramPropo->sendMessageToStaff($message, $chatIdBasedOnUserId);
 
         return $documentApproval;
     }
@@ -72,7 +82,7 @@ class ApprovalTenderDocService
         $createdByProposal = Proposal::where('id', $id)->first()->user_id;
 
         $chatIdBasedOnUserId = User::where('id', $createdByProposal)->first()->telegram_chat_id;
-
+        $tender_name = Tender::where('id', Proposal::where('id', $id)->first()->tender_id)->first()->nama_tender;
         $namaProposal = Proposal::where('id', $id)->first()->nama_proposal;
 
         $documentApproval->update([
@@ -82,10 +92,15 @@ class ApprovalTenderDocService
             'keterangan' => ($nama_role == "Manajer Teknik") ? "Proposal disetujui oleh Manajer Teknik" : ($nama_role == "Direktur" ? "Proposal disetujui oleh Direktur" : null),
         ]);
 
-        $this->telegramPropo->sendMessageToStaff("Proposal $namaProposal di-approve oleh Manajer Teknik", $chatIdBasedOnUserId);
+        // Format pesan Telegram
+        $message = "✅ *Proposal Disetujui*\n\n"
+            . "📌 *Tender* : {$tender_name}\n"
+            . "📄 *Nama Proposal* : {$namaProposal}\n"
+            . "👤 *Disetujui oleh* : {$nama_role}\n"
+            . " Silahkan cek proposal Anda melalui SIAS.";
 
-        $this->telegramPropo->sendMessageToDirektur("Proposal $namaProposal di-approve oleh Manajer Teknik");
-
+        $this->telegramPropo->sendMessageToStaff($message, $chatIdBasedOnUserId);
+        $this->telegramSPH->sendMessageToDirektur($message);
 
         return $documentApproval;
     }
@@ -107,6 +122,7 @@ class ApprovalTenderDocService
         $chatIdBasedOnUserId = User::where('id', $createdBySPH)->first()->telegram_chat_id;
 
         $namaSPH = SuratPenawaranHarga::where('id', $id)->first()->nama_sph;
+        $tender_name = Tender::where('id', $id)->first()->nama_tender;
 
         $documentApproval->update([
             'user_id' => auth()->user()->id,
@@ -117,7 +133,16 @@ class ApprovalTenderDocService
             'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga ditolak oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga ditolak oleh Direktur" : null),
         ]);
 
-        $this->telegramSPH->sendMessageToStaff("Surat Penawaran Harga $namaSPH ditolak oleh Manajer Admin", $chatIdBasedOnUserId);
+        // Format pesan Telegram
+        $message = "❌ *Surat Penawaran Harga Ditolak*\n\n"
+            . "📌 *Tender* : {$tender_name}\n"
+            . "📄 *Nama SPH* : {$namaSPH}\n"
+            . "👤 *Ditolak oleh* : {$nama_role}\n\n"
+            . "📝 *Alasan Revisi* :\n"
+            . "{$pesan_revisi}\n"
+            . " Silahkan cek dan revisi kembali Surat Penawaran Harga Anda melalui SIAS.";
+
+        $this->telegramSPH->sendMessageToStaff($message, $chatIdBasedOnUserId);
         return $documentApproval;
     }
 
@@ -134,7 +159,7 @@ class ApprovalTenderDocService
         $createdBySPH = SuratPenawaranHarga::where('id', $id)->first()->user_id;
 
         $chatIdBasedOnUserId = User::where('id', $createdBySPH)->first()->telegram_chat_id;
-
+        $tender_name = Tender::where('id', $id)->first()->nama_tender;
         $namaSPH = SuratPenawaranHarga::where('id', $id)->first()->nama_sph;
 
         $documentApproval->update([
@@ -144,9 +169,16 @@ class ApprovalTenderDocService
             'keterangan' => ($nama_role == "Manajer Admin") ? "Surat Penawaran Harga disetujui oleh Manajer Admin" : ($nama_role == "Direktur" ? "Surat Penawaran Harga disetujui oleh Direktur" : null),
         ]);
 
-        $this->telegramSPH->sendMessageToStaff("Surat Penawaran Harga $namaSPH di-approve oleh Manajer Admin", $chatIdBasedOnUserId);
+        // Format pesan Telegram
+        $message = "✅ *Surat Penawaran Harga Disetujui*\n\n"
+            . "📌 *Tender* : {$tender_name}\n"
+            . "📄 *Nama SPH* : {$namaSPH}\n"
+            . "👤 *Disetujui oleh* : {$nama_role}\n"
+            ." Silahkan cek Surat Penawaran Harga Anda melalui SIAS.";
 
-        $this->telegramSPH->sendMessageToDirektur("Surat Penawaran Harga $namaSPH di-approve oleh Manajer Admin");
+        $this->telegramSPH->sendMessageToStaff($message, $chatIdBasedOnUserId);
+        $this->telegramSPH->sendMessageToDirektur($message);
+
         return $documentApproval;
     }
 }

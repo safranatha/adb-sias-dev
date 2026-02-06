@@ -42,7 +42,7 @@ class Create extends Component
     {
         $this->validate();
 
-        $path=DokumenTenderHelper::storeFileOnStroage($this->file_path_sph, 'surat_penawaran_hargas');
+        $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_sph, 'surat_penawaran_hargas');
 
 
         // save to database
@@ -67,10 +67,16 @@ class Create extends Component
 
         $this->resetForm();
 
-        $telegram->sendMessageToManajer(
-            "Surat Penawaran Harga " . $sph->nama_sph . " telah dibuat 🚀"
-        );
+        $text =
+            "📄 *SPH Baru Diajukan*\n\n"
+            . "👤 *Dibuat oleh* : {$sph->user->name}\n"
+            . "📌 *Nama SPH* : {$sph->nama_sph}\n"
+            . "📁 *Tender* : {$sph->tender->nama_tender}\n\n"
+            . "_Silakan lakukan pemeriksaan SPH melalui SIAS._";
 
+        $telegram->sendMessageToManajer(
+            $text
+        );
 
         return redirect()->route('surat-penawaran-harga.active');
     }
