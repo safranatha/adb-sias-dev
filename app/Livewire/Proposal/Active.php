@@ -133,7 +133,7 @@ class Active extends Component
                 'level' => 0,
             ]);
 
-            $nama_tender= $proposal->tender()->where('id', $proposal->tender_id)->value('nama_tender');
+            $nama_tender = $proposal->tender()->where('id', $proposal->tender_id)->value('nama_tender');
 
             $this->reviseProposalTele->sendMessageToManajer("Proposal {$nama_tender} telah direvisi 🚀");
 
@@ -166,16 +166,23 @@ class Active extends Component
 
         $rules = [
             'pesan_revisi' => ['nullable', 'string', 'max:255'],
-            'file_path_revisi' => ['required', 'file', 'max:10240']
+            'file_path_revisi' => ['nullable', 'file', 'max:10240']
         ];
 
         $this->validate($rules);
 
-        // call helper for upload file revisi
-        $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi Proposal');
+        // set path to null
+
+        $path = "";
+
+        if ($this->file_path_revisi) {
+            // call helper for upload file revisi
+            $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi Proposal');
+        }
 
         // panggil helper untuk reject document proposal
         $documentApproval = $this->approvalTenderDocService->rejectDocumentProposal(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
+
 
         if (!$documentApproval) {
             session()->flash('error', 'Proses approval proposal gagal!');

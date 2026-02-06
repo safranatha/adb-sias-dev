@@ -131,14 +131,22 @@ class Detail extends Component
         $nama_role = auth()->user()->roles->first()->name;
 
         $rules = [
-            'pesan_revisi' => ['nullable', 'string', 'max:255'],
-            'file_path_revisi' => ['required', 'file', 'max:10240']
+            'pesan_revisi' => ['required', 'string', 'max:255'],
+            'file_path_revisi' => ['nullable', 'file', 'max:10240']
         ];
 
         $this->validate($rules);
 
-        // call helper for upload file revisi
-        $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi Proposal');
+        // set path to null
+
+        $path = "";
+
+        if ($this->file_path_revisi) {
+
+            // call helper for upload file revisi
+            $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi Proposal');
+
+        }
 
         // panggil helper untuk reject document proposal
         $documentApproval = $this->approvalTenderDocServiceDirektur->rejectDocumentProposal(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
@@ -175,13 +183,17 @@ class Detail extends Component
 
         $rules = [
             'pesan_revisi' => ['required', 'string', 'max:255'],
-            'file_path_revisi' => ['required', 'file', 'max:10240']
+            'file_path_revisi' => ['nullable', 'file', 'max:10240']
         ];
 
         $this->validate($rules);
 
-        // call helper for upload file revisi
-        $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi SPH');
+        $path = "";
+
+        if ($this->file_path_revisi) {
+            // call helper for upload file revisi
+            $path = DokumenTenderHelper::storeFileOnStroage($this->file_path_revisi, 'Document Tender Approval/Revisi SPH');
+        }
 
         $documentApproval = $this->approvalTenderDocServiceDirektur->rejectDocumentSPH(DocumentApprovalWorkflow::class, $id, $nama_role, $this->pesan_revisi, $path);
 
