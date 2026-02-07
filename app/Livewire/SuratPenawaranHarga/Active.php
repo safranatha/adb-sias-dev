@@ -190,6 +190,19 @@ class Active extends Component
         session()->flash('success', 'Surat Penawaran Harga berhasil di tolak!');
 
     }
+    
+    public function hasFileRevisi($sphId): bool
+    {
+        $data = DocumentApprovalWorkflow::where('surat_penawaran_harga_id', $sphId)
+            ->latest()
+            ->first();
+
+        if (!$data || empty($data->file_path_revisi)) {
+            return false;
+        }
+
+        return file_exists(public_path('storage/' . $data->file_path_revisi));
+    }
 
     public function render()
     {

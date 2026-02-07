@@ -122,7 +122,8 @@ class ApprovalTenderDocService
         $chatIdBasedOnUserId = User::where('id', $createdBySPH)->first()->telegram_chat_id;
 
         $namaSPH = SuratPenawaranHarga::where('id', $id)->first()->nama_sph;
-        $tender_name = Tender::where('id', $id)->first()->nama_tender;
+        // $tender_name = Tender::where('id', $id)->first()->nama_tender;
+        $tender_name = Tender::where('id', SuratPenawaranHarga::where('id', $id)->first()->tender_id)->first()->nama_tender;
 
         $documentApproval->update([
             'user_id' => auth()->user()->id,
@@ -159,7 +160,8 @@ class ApprovalTenderDocService
         $createdBySPH = SuratPenawaranHarga::where('id', $id)->first()->user_id;
 
         $chatIdBasedOnUserId = User::where('id', $createdBySPH)->first()->telegram_chat_id;
-        $tender_name = Tender::where('id', $id)->first()->nama_tender;
+        // $tender_name = Tender::where('id', $id)->first()->nama_tender;
+        $tender_name = Tender::where('id', SuratPenawaranHarga::where('id', $id)->first()->tender_id)->first()->nama_tender;
         $namaSPH = SuratPenawaranHarga::where('id', $id)->first()->nama_sph;
 
         $documentApproval->update([

@@ -248,13 +248,15 @@
                                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                                 @enderror --}}
                                             </flux:field>
-
+                                            
+                                            @if ($this->hasFileRevisi($item->id))
                                             <flux:field>
                                                 <flux:label class="mt-3">Doc Rev</flux:label>
                                                 <flux:button icon="arrow-down-tray" class="mr-2"
                                                     wire:click="downloadFileRevisi({{ $item->id }})">
                                                 </flux:button>
                                             </flux:field>
+                                            @endif
 
                                             <flux:field>
                                                 <flux:label class="mt-3">Upload Proposal Revisi  <x-required-badge /></flux:label>

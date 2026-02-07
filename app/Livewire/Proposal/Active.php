@@ -174,7 +174,7 @@ class Active extends Component
         $nama_role = auth()->user()->roles->first()->name;
 
         $rules = [
-            'pesan_revisi' => ['nullable', 'string', 'max:255'],
+            'pesan_revisi' => ['required', 'string', 'max:255'],
             'file_path_revisi' => ['nullable', 'file', 'max:10240']
         ];
 
@@ -201,6 +201,19 @@ class Active extends Component
 
         session()->flash('success', 'Proposal berhasil di tolak!');
 
+    }
+    
+        public function hasFileRevisi($proposalId): bool
+    {
+        $data = DocumentApprovalWorkflow::where('proposal_id', $proposalId)
+            ->latest()
+            ->first();
+
+        if (!$data || empty($data->file_path_revisi)) {
+            return false;
+        }
+
+        return file_exists(public_path('storage/' . $data->file_path_revisi));
     }
 
     public function render()

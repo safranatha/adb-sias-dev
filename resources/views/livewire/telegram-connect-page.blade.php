@@ -26,9 +26,9 @@
 
             <ol class="list-decimal ml-5 text-sm mb-4">
                 <li>Klik tombol <b>Generate Token</b></li>
-                <li>Kemudian, klik <b>Hubungkan</b></li>
-                <li>Anda akan dialihkan ke Telegram</li>
-                <li>Kemudian, pilih <b>Start Bot</b>, dan <b>Kirim Pesan</b> yang ada</li>
+                <li>Anda akan melihat sebuah kode</li>
+                <li>Kemudian, klik <b>Buka Telegram</b></li>
+                <li>Kemudian, pilih <b>Start Bot</b>, dan <b>Kirim Kode</b> yang ada</li>
             </ol>
 
             {{-- TOMBOL GENERATE --}}
@@ -38,9 +38,19 @@
 
             {{-- TAMPILKAN TOKEN --}}
             @if ($rawToken)
+            <div class="mt-4 p-3 bg-gray-100 rounded">
+                        <small class="text-gray-500">Copy dan paste kode berikut ke Telegram</small>
+                        <p class="text-blue-600 font-bold">/connect {{ $rawToken }}</p>
+                    </div>
                 <div class="mt-4 p-3 bg-gray-100 rounded">
-                    <a href="https://t.me/sias_adi_banuwa_bot?text=/connect%20{{ $rawToken }}" target="_blank"
-                        class="text-blue-600 hover:underline">Hubungkan</a>
+                    <a 
+                        href="https://t.me/sias_adi_banuwa_bot"
+                        target="_blank"
+                        class="flex items-center gap-2 text-blue-600 hover:underline"
+                    >
+                        <flux:icon.chat-bubble-bottom-center-text />
+                        <span>Buka Telegram</span>
+                    </a>
                 </div>
             @else
                 <div class="mt-4 p-3 bg-gray-100 rounded">
